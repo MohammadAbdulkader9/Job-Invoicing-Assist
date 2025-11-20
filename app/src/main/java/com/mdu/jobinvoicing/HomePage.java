@@ -1,7 +1,11 @@
 package com.mdu.jobinvoicing;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -13,6 +17,10 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.card.MaterialCardView;
 
 public class HomePage extends AppCompatActivity {
+
+    // synced
+    private TextView syncedUnsynced;
+    private ImageView syncedDot;
 
     // Middle cards
     private MaterialCardView cardCreateWorkPlan, cardViewJobs, cardTimeTracking;
@@ -41,6 +49,9 @@ public class HomePage extends AppCompatActivity {
         navNewJobs         = findViewById(R.id.navNewJobs);
         navCreateInvoices  = findViewById(R.id.navCreateInvoices);
         navSyncNow         = findViewById(R.id.navSyncNow);
+
+        syncedUnsynced = findViewById((R.id.SyncText));
+        syncedDot = findViewById((R.id.statusDot));
 
         // ----- Middle cards: main actions -----
 
@@ -88,6 +99,8 @@ public class HomePage extends AppCompatActivity {
 
         navSyncNow.setOnClickListener(v -> {
             // TODO: Call your sync logic here (e.g., ViewModel → Repository → API).
+            syncedDot.setImageTintList(ColorStateList.valueOf(Color.GREEN));
+            syncedUnsynced.setText("Synced");
             Toast.makeText(this, "Bottom: Sync Now", Toast.LENGTH_SHORT).show();
         });
     }
