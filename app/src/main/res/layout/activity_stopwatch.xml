@@ -24,21 +24,21 @@
             android:layout_weight="1"
             android:layout_marginHorizontal="5sp"
 
-            android:id="@id/stopwatch_start"
+            android:id="@+id/stopwatch_start"
             android:text="Start"/>
         <com.google.android.material.button.MaterialButton
             android:layout_width="0sp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginHorizontal="5sp"
-            android:id="@id/stopwatch_pause"
+            android:id="@+id/stopwatch_pause"
             android:text="Pause"/>
         <com.google.android.material.button.MaterialButton
             android:layout_width="0sp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginHorizontal="5sp"
-            android:id="@id/stopwatch_reset"
+            android:id="@+id/stopwatch_reset"
             android:text="Reset"/>
     </LinearLayout>
 
