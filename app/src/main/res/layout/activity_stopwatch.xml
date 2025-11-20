@@ -1,45 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="54sp"
         android:layout_centerInParent="true"
-        android:id="@+id/stopwatch"
+        android:id="@+id/stopwatch_timer"
         android:textStyle="bold"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/stopwatch_timer"
         android:layout_margin="20sp"
-        android:padding="10sp"
 
-        android:layout_below="@id/stopwatch"
-        android:orientation="horizontal">
+        android:layout_marginTop="58dp"
+        android:layout_marginBottom="20sp"
+        android:orientation="horizontal"
+        android:padding="10sp">
+
         <com.google.android.material.button.MaterialButton
-            android:layout_width="0sp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginHorizontal="5sp"
-
             android:id="@+id/stopwatch_start"
-            android:text="Start"/>
-        <com.google.android.material.button.MaterialButton
             android:layout_width="0sp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="2sp"
             android:layout_weight="1"
-            android:layout_marginHorizontal="5sp"
+            android:backgroundTint="@android:color/transparent"
+            android:elevation="2dp"
+            app:strokeWidth="2dp"
+            android:text="Start"
+            android:textColor="@color/black"
+            app:icon="@drawable/baseline_play_arrow_24"
+            app:iconTint="@color/black"/>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/stopwatch_pause"
-            android:text="Pause"/>
-        <com.google.android.material.button.MaterialButton
             android:layout_width="0sp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="1sp"
             android:layout_weight="1"
-            android:layout_marginHorizontal="5sp"
+            android:backgroundTint="@android:color/transparent"
+            android:elevation="2dp"
+            app:strokeWidth="2dp"
+            android:text="Pause"
+            android:textColor="@color/black"
+            app:icon="@drawable/outline_autopause_24"
+            app:iconTint="@color/black"/>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/stopwatch_reset"
-            android:text="Reset"/>
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="2sp"
+            android:layout_weight="1"
+            android:backgroundTint="@android:color/background_dark"
+            android:elevation="2dp"
+            android:text="Reset"
+            app:icon="@drawable/outline_autorenew_24" />
     </LinearLayout>
 
 </RelativeLayout>
