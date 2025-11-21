@@ -17,7 +17,7 @@ public class Operator {
     public String name;
     public String phone;
     public String email;
-    public String role; // e.g., "Operator", "Manager"
+    public String role; // e.g., "Operator",
     public boolean isActive;
 
     public Operator(@NonNull String id, String name, String phone, String email, String role, boolean isActive) {
