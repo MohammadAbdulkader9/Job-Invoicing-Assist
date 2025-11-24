@@ -29,6 +29,9 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity android:name=".StopWatchTimer" />
+        <activity android:name=".Workplan">
+
+        </activity>
 
     </application>
 
