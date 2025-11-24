@@ -5,12 +5,13 @@ junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 appcompat = "1.7.1"
 material = "1.13.0"
-activity = "1.11.0"
+activity = "1.12.0"
 constraintlayout = "2.2.1"
-roomCommonJvm = "2.8.3"
-roomRuntime = "2.8.3"
-roomCompiler = "2.8.3"
+roomCommonJvm = "2.8.4"
+roomRuntime = "2.8.4"
+roomCompiler = "2.8.4"
 gson = "2.13.2"
+lifecycle = "2.10.0"
 retrofit = "3.0.0"
 coreI18n = "1.0.0"
 
@@ -26,6 +27,8 @@ room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.r
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "lifecycle" }
+lifecycle-livedata = { group = "androidx.lifecycle", name = "lifecycle-livedata", version.ref = "lifecycle" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 core-i18n = { group = "androidx.core", name = "core-i18n", version.ref = "coreI18n" }

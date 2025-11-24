@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PromptTemplates">
+    <option name="builtInPromptOverrides">
+      <list>
+        <BuiltInPromptOverride>
+          <option name="groupId" value="rules" />
+          <option name="promptId" value="project" />
+          <option name="text" value="this project is about a Job and Invoicing assist system, keep this in mind.&#10;I'm developing a simple job and invoicing system for a tablet that is built in a wheel loader machine,&#10;it’s really simple app.&#10;-  enables machine owners (operators) to manage their work planning and invoicing directly from the machine.&#10;- The app should allow operators to create, edit and saving work plans&#10;- register worked hours, materials and services&#10;- view existing work plans&#10;- through Fortnox API generate invoices and send it via mail.&#10;&#10;Job Invoicing Assistant project:&#10;•Target Device: A tablet mounted in a wheel loader. This implies the UI should be simple, with large, easy-to-press buttons and clear text, usable in potentially bright or shaky conditions.&#10;•Core User: The machine operator. The workflow must be straightforward and intuitive for someone whose primary job is operating heavy machinery, not data entry.&#10;•Main Features:&#10;i. Work Plan Management: Create, view, and modify job plans directly on the device.&#10;ii. Data Logging: Easily log work hours, materials used (like gravel, sand, etc.), and services performed.&#10;iii. Invoice Generation: through Fortnox API generate invoices.&#10;•Technology Stack: The app is a native Android application using Java and the Room persistence library for offline data storage, which is crucial for a vehicle that might have intermittent connectivity." />
+        </BuiltInPromptOverride>
+      </list>
+    </option>
+  </component>
+</project>
