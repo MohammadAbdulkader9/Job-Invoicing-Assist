@@ -1,5 +1,6 @@
 package com.mdu.jobinvoicing;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -44,7 +45,7 @@ public class HomePage extends AppCompatActivity {
         // ----- Find views -----
         cardCreateWorkPlan = findViewById(R.id.cardCreateWorkPlan);
         cardViewJobs       = findViewById(R.id.cardViewJobs);
-        cardTimeTracking   = findViewById(R.id.cardTimeTracking);
+        //cardTimeTracking   = findViewById(R.id.cardTimeTracking);
 
         navNewJobs         = findViewById(R.id.navNewJobs);
         navCreateInvoices  = findViewById(R.id.navCreateInvoices);
@@ -70,12 +71,12 @@ public class HomePage extends AppCompatActivity {
             Toast.makeText(this, "View Jobs clicked", Toast.LENGTH_SHORT).show();
         });
 
+        MaterialCardView cardTimeTracking = findViewById(R.id.cardTimeTracking);
         cardTimeTracking.setOnClickListener(v -> {
-            // TODO: Navigate to "Time Tracking" screen.
-            // Intent intent = new Intent(HomePage.this, TimeTrackingActivity.class);
-            // startActivity(intent);
-            Toast.makeText(this, "Time Tracking clicked", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(HomePage.this, StopWatchTimer.class);
+            startActivity(intent);
         });
+
 
         // ----- Bottom navigation bar -----
 
