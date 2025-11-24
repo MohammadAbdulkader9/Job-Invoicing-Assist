@@ -17,6 +17,16 @@ public class Workplan extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EditText inputStartTime, inputEndTime;
         setContentView(R.layout.activity_workplan);
+        ImageView backBtn = findViewById(R.id.back_button);
+
+        backBtn.setOnClickListener(v -> {
+            finish();
+        });
+        Button cancelBtn = findViewById(R.id.btnCancel);
+
+        cancelBtn.setOnClickListener(v -> {
+            finish();
+        });
 
         // ===============================
         // Billing Model Dropdown
