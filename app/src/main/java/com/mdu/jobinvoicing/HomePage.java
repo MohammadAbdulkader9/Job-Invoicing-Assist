@@ -63,7 +63,11 @@ public class HomePage extends AppCompatActivity {
             // startActivity(intent);
             Toast.makeText(this, "Create Work plan clicked", Toast.LENGTH_SHORT).show();
         });
-
+        MaterialCardView  cardCreateWorkPlan = findViewById(R.id.cardCreateWorkPlan);
+        cardCreateWorkPlan.setOnClickListener(v -> {
+            Intent intent = new Intent(HomePage.this, Workplan.class);
+            startActivity(intent);
+        });
         cardViewJobs.setOnClickListener(v -> {
             // TODO: Navigate to "View Jobs" screen.
             // Intent intent = new Intent(HomePage.this, ViewJobsActivity.class);
