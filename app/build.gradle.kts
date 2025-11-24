@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.retrofit.converter.gson)
     implementation(libs.lifecycle.viewmodel)
     implementation(libs.lifecycle.livedata)
+    implementation(libs.core.i18n)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

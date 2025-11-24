@@ -1,3 +1,33 @@
 <resources>
     <string name="app_name">Job Invoicing Assist</string>
+    <string name="create_work_plan">Create Work Plan</string>
+    <string name="log_new_job">Log a new job on-site</string>
+    <string name="back">Back</string>
+    <string name="client">Client Name</string>
+    <string name="enter_client">Enter Client Name</string>
+    <string name="job_title">Job Title</string>
+    <string name="enter_job_title">Enter Job Title</string>
+    <string name="job_des">Job Description</string>
+    <string name="enter_job_des">Write details about job....</string>
+    <string name="location">Job Location</string>
+    <string name="Billing">Billing Model</string>
+    <string name="enter_location">Find your Location</string>
+    <string name="Materials">Materials Used</string>
+    <string name="select_billing_model">Select billing model</string>
+    <string name="what_materials_are_you_used">What materials are you used?</string>
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+    <string-array name="Billing_List">
+        <item>Hourly</item>
+        <item>Distance</item>
+        <item>Weight</item>
+    </string-array>
+    <string-array name="Material_List">
+        <item>item1</item>
+        <item>item2</item>
+        <item>item3</item>
+    </string-array>
+
 </resources>
