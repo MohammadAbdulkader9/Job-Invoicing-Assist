@@ -1,77 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="50dp">
+    tools:context=".MainActivity">
 
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/create_workplan"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:text="Create Work Plan"
-        android:textSize="34sp"
-        android:gravity="center"
-        app:cornerRadius="50dp"
-        android:backgroundTint="#BDBDBD"
-        app:icon="@drawable/outline_add_circle_24"
-        app:iconGravity="top"
-        app:iconSize="80dp"
-        app:iconTint="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/textView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/view_jobs"/>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/view_jobs"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:text="View Jobs"
-        android:textSize="34sp"
-        android:gravity="center"
-        app:cornerRadius="50dp"
-        android:backgroundTint="#BDBDBD"
-        app:icon="@drawable/outline_assignment_24"
-        app:iconGravity="top"
-        app:iconSize="80dp"
-        app:iconTint="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/create_workplan"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/go_to_stopwatch"/>
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Job Invoicing Assistant"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/go_to_stopwatch"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:text="Time Tracking"
-        android:textSize="34sp"
-        android:gravity="center"
-        app:cornerRadius="50dp"
-        android:backgroundTint="#BDBDBD"
-        app:icon="@drawable/outline_av_timer_24"
-        app:iconGravity="top"
-        app:iconSize="80dp"
-        app:iconTint="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/view_jobs"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+    <Button
+        android:id="@+id/button"
+        android:layout_width="158dp"
+        android:layout_height="82dp"
+        android:onClick="GoToHome"
+        android:text="Home Page"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_chainStyle="spread" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.471" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
