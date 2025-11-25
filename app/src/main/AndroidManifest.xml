@@ -12,7 +12,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.JobInvoicingAssist">
+        android:theme="@style/Theme.JobInvoicingAssist"
+        android:usesCleartextTraffic="true">
+        <!-- ^^Needed for api test^^ -->
 
         <!-- HomePage is now the launcher -->
         <activity
@@ -29,9 +31,8 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity android:name=".StopWatchTimer" />
-        <activity android:name=".Workplan">
-
-        </activity>
+        <activity android:name=".Workplan"/>
+        <activity android:name=".Invoices"/>
 
     </application>
 

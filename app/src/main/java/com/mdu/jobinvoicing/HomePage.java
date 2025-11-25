@@ -97,9 +97,9 @@ public class HomePage extends AppCompatActivity {
 
         navCreateInvoices.setOnClickListener(v -> {
             // TODO: Bottom navigation destination: CreateInvoicesActivity.
-            // Intent intent = new Intent(HomePage.this, CreateInvoicesActivity.class);
-            // startActivity(intent);
-            Toast.makeText(this, "Bottom: Create Invoices", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(HomePage.this, Invoices.class);
+            startActivity(intent);
+            //Toast.makeText(this, "Bottom: Create Invoices", Toast.LENGTH_SHORT).show();
         });
 
         navSyncNow.setOnClickListener(v -> {
