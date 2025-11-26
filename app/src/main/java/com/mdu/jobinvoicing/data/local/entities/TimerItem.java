@@ -2,10 +2,20 @@ package com.mdu.jobinvoicing.data.local.entities;
 
 import android.os.SystemClock;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "timer_items")
 public class TimerItem {
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private String name;
     private long timeBuff;    // accumulated millis while paused
+
+    @Ignore
     private long startTime;   // SystemClock.uptimeMillis() when started
+    @Ignore
     private boolean running;
 
     public TimerItem(String name) {
@@ -35,8 +45,28 @@ public class TimerItem {
         running = false;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public long getTimeBuff() {
+        return timeBuff;
+    }
+
+    public void setTimeBuff(long timeBuff) {
+        this.timeBuff = timeBuff;
     }
 
     // convenience to get total elapsed millis depending on running state

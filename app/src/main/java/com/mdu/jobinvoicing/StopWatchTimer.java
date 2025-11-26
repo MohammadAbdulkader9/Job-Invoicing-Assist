@@ -21,10 +21,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.mdu.jobinvoicing.data.local.AppDatabase;
+import com.mdu.jobinvoicing.data.local.daos.TimerItemDao;
 import com.mdu.jobinvoicing.data.local.entities.TimerItem;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class StopWatchTimer extends AppCompatActivity {
 
@@ -34,10 +39,13 @@ public class StopWatchTimer extends AppCompatActivity {
     private RecyclerView timersRecyclerView;
 
     private Handler handler;
-    private final ArrayList<TimerItem> timers = new ArrayList<>();
+    private List<TimerItem> timers = new ArrayList<>();
     private TimerAdapter timerAdapter;
     private int currentIndex = -1;
     private boolean isRunning = false;
+
+    private ExecutorService executor;
+    private TimerItemDao timerItemDao;
 
     private final Runnable runnable = new Runnable() {
         @Override
@@ -59,6 +67,10 @@ public class StopWatchTimer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stopwatch);
 
+        executor = Executors.newSingleThreadExecutor();
+        AppDatabase db = AppDatabase.getInstance(this);
+        timerItemDao = db.timerItemDao();
+
         // Initialize top-half views
         stopwatchTimer = findViewById(R.id.stopwatch_timer);
         entryName = findViewById(R.id.entry_name);
@@ -73,6 +85,27 @@ public class StopWatchTimer extends AppCompatActivity {
         timersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         timerAdapter = new TimerAdapter();
         timersRecyclerView.setAdapter(timerAdapter);
+
+        timerItemDao.getAllTimerItems().observe(this, timerItems -> {
+            int selectedId = -1;
+            if (currentIndex != -1 && currentIndex < timers.size()) {
+                selectedId = timers.get(currentIndex).getId();
+            }
+
+            this.timers = timerItems;
+            timerAdapter.notifyDataSetChanged();
+
+            if (selectedId != -1) {
+                currentIndex = -1; // Default to -1 if not found
+                for (int i = 0; i < this.timers.size(); i++) {
+                    if (this.timers.get(i).getId() == selectedId) {
+                        currentIndex = i;
+                        break;
+                    }
+                }
+            }
+            updateUI();
+        });
 
         // Set up handler
         handler = new Handler(Looper.getMainLooper());
@@ -96,7 +129,9 @@ public class StopWatchTimer extends AppCompatActivity {
         resetButton.setOnClickListener(v -> {
             if (currentIndex != -1) {
                 pauseTimer();
-                timers.get(currentIndex).reset();
+                TimerItem currentTimer = timers.get(currentIndex);
+                currentTimer.reset();
+                executor.execute(() -> timerItemDao.update(currentTimer));
                 stopwatchTimer.setText("00:00:00");
                 updateUI();
             }
@@ -115,7 +150,9 @@ public class StopWatchTimer extends AppCompatActivity {
 
     private void pauseTimer() {
         if (currentIndex != -1 && isRunning) {
-            timers.get(currentIndex).pause();
+            TimerItem currentTimer = timers.get(currentIndex);
+            currentTimer.pause();
+            executor.execute(() -> timerItemDao.update(currentTimer));
             isRunning = false;
             updateUI();
         }
@@ -173,9 +210,7 @@ public class StopWatchTimer extends AppCompatActivity {
         builder.setPositiveButton("Create", (dialog, which) -> {
             String name = input.getText().toString().trim();
             if (!name.isEmpty()) {
-                timers.add(new TimerItem(name));
-                // Automatically select the new timer
-                selectTimer(timers.size() - 1);
+                executor.execute(() -> timerItemDao.insert(new TimerItem(name)));
             } else {
                 Toast.makeText(this, "Entry name cannot be empty.", Toast.LENGTH_SHORT).show();
             }
@@ -189,13 +224,7 @@ public class StopWatchTimer extends AppCompatActivity {
                 .setTitle("Confirm Delete")
                 .setMessage("Are you sure you want to delete '" + timers.get(position).getName() + "'?")
                 .setPositiveButton("Delete", (dialog, which) -> {
-                    timers.remove(position);
-                    if (currentIndex == position) {
-                        currentIndex = -1; // Reset selection if the current one is deleted
-                    } else if (currentIndex > position) {
-                        currentIndex--; // Adjust index if an item before it was deleted
-                    }
-                    updateUI();
+                    executor.execute(() -> timerItemDao.delete(timers.get(position)));
                     Toast.makeText(this, "Entry deleted.", Toast.LENGTH_SHORT).show();
                 })
                 .setNegativeButton("Cancel", null)
@@ -206,6 +235,7 @@ public class StopWatchTimer extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacks(runnable);
+        executor.shutdown();
     }
 
     // --- RecyclerView Adapter --- //
