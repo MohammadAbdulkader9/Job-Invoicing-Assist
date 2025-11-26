@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class StopWatchTimer extends AppCompatActivity {
 
@@ -46,6 +47,7 @@ public class StopWatchTimer extends AppCompatActivity {
 
     private ExecutorService executor;
     private TimerItemDao timerItemDao;
+    private final AtomicLong newTimerId = new AtomicLong(-1);
 
     private final Runnable runnable = new Runnable() {
         @Override
@@ -87,24 +89,34 @@ public class StopWatchTimer extends AppCompatActivity {
         timersRecyclerView.setAdapter(timerAdapter);
 
         timerItemDao.getAllTimerItems().observe(this, timerItems -> {
-            int selectedId = -1;
+            long newId = newTimerId.getAndSet(-1);
+            int previousSelectedId = -1;
             if (currentIndex != -1 && currentIndex < timers.size()) {
-                selectedId = timers.get(currentIndex).getId();
+                previousSelectedId = timers.get(currentIndex).getId();
             }
 
             this.timers = timerItems;
             timerAdapter.notifyDataSetChanged();
 
-            if (selectedId != -1) {
-                currentIndex = -1; // Default to -1 if not found
+            if (newId != -1) {
                 for (int i = 0; i < this.timers.size(); i++) {
-                    if (this.timers.get(i).getId() == selectedId) {
+                    if (this.timers.get(i).getId() == newId) {
+                        selectTimer(i);
+                        break;
+                    }
+                }
+            } else if (previousSelectedId != -1) {
+                currentIndex = -1;
+                for (int i = 0; i < this.timers.size(); i++) {
+                    if (this.timers.get(i).getId() == previousSelectedId) {
                         currentIndex = i;
                         break;
                     }
                 }
+                updateUI();
+            } else {
+                updateUI();
             }
-            updateUI();
         });
 
         // Set up handler
@@ -210,7 +222,10 @@ public class StopWatchTimer extends AppCompatActivity {
         builder.setPositiveButton("Create", (dialog, which) -> {
             String name = input.getText().toString().trim();
             if (!name.isEmpty()) {
-                executor.execute(() -> timerItemDao.insert(new TimerItem(name)));
+                executor.execute(() -> {
+                    long insertedId = timerItemDao.insert(new TimerItem(name));
+                    newTimerId.set(insertedId);
+                });
             } else {
                 Toast.makeText(this, "Entry name cannot be empty.", Toast.LENGTH_SHORT).show();
             }

@@ -14,7 +14,7 @@ import java.util.List;
 @Dao
 public interface TimerItemDao {
     @Insert
-    void insert(TimerItem timerItem);
+    long insert(TimerItem timerItem);
 
     @Update
     void update(TimerItem timerItem);
