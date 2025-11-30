@@ -17,14 +17,16 @@ public class MyListAdapter extends ArrayAdapter<String> {
     private final String[] cost;
     private final String[] title;
     private final String[] status;
+    private final String[] startTime; // Added for date
 
-    public MyListAdapter(Activity context, String[] id, String[] cost, String[] title, String[] status) {
+    public MyListAdapter(Activity context, String[] id, String[] cost, String[] title, String[] status, String[] startTime) {
         super(context, R.layout.list_item_layout, id);
         this.context = context;
         this.id = id;
         this.cost = cost;
         this.title = title;
         this.status = status;
+        this.startTime = startTime; // Save the start time
     }
 
     @NonNull
@@ -37,11 +39,13 @@ public class MyListAdapter extends ArrayAdapter<String> {
         TextView costText = rowView.findViewById(R.id.job_cost);
         TextView titleText = rowView.findViewById(R.id.job_title);
         TextView statusText = rowView.findViewById(R.id.job_status);
+        TextView dateText = rowView.findViewById(R.id.job_date); // New TextView for the date
 
         idText.setText(id[position]);
         costText.setText(cost[position]);
         titleText.setText(title[position]);
         statusText.setText(status[position]);
+        dateText.setText(startTime[position].split(" ")[0]); // Show only the date part
 
         if(status[position].equalsIgnoreCase("Closed")){
             statusText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.jobbs_list_status_closed, 0, 0, 0);

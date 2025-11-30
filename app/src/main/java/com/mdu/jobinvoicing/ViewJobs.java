@@ -1,5 +1,6 @@
 package com.mdu.jobinvoicing;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -40,46 +41,62 @@ public class ViewJobs extends AppCompatActivity {
         //should be filled in from database later
         ListView jobsList;
 
-        //Arrays: Id, Cost, Title, Status
-        String jobbId[] = {"01.02.2021",
-        "02.43435.23",
-        "044.232.546.4",
-        "2.1354.453.2",
-        "42.5423.32"};
+        //Arrays: Id, Cost, Title, Status, StartTime, EndTime
+        final String jobbId[] = {"12345", "54321", "98765", "56789", "13579"};
 
-        //should be an int or double?
-        String cost[] = {"$1000,00",
-        "$20.000,00",
-        "$30.000,00",
-        "$40.000,00",
-        "$50.000,00"};
+        final String cost[] = {"$1000,00",
+        "$20.000",
+        "$30.000",
+        "$40.000",
+        "$50.000"};
 
-        String title[] = { "Snow Cleaning",
+        final String title[] = { "Snow Cleaning",
         "Brick Moving",
         "Brick Moving",
         "Digging",
         "Lifting"};
 
-        String status[] = {"In Progress",
+        final String status[] = {"In Progress",
         "Closed",
         "In Progress",
         "Closed",
         "Closed"};
 
+        final String startTime[] = {"01.01.2021 11:21",
+        "02.01.2021 09:00",
+        "03.01.2021 13:00",
+        "04.01.2021 08:30",
+        "05.01.2021 10:00"};
+
+        final String endTime[] = {"01.01.2021 17:30",
+        "02.01.2021 16:00",
+        "03.01.2021 18:00",
+        "04.01.2021 17:00",
+        "05.01.2021 15:30"};
+
 
         //Create/add custom adapter to list view
         jobsList = findViewById(R.id.JobsList);
-        MyListAdapter customAdapter = new MyListAdapter(this, jobbId, cost, title, status);
+        // Pass all arrays to the adapter, including start and end times, though they are not used in the list view itself
+        MyListAdapter customAdapter = new MyListAdapter(this, jobbId, cost, title, status, startTime);
         jobsList.setAdapter(customAdapter);
 
         jobsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedJobId = jobbId[position];
-                String selectedJobTitle = title[position];
+                // Create an Intent to start JobDetailsActivity
+                Intent intent = new Intent(ViewJobs.this, JobDetailsActivity.class);
 
-                // Example action: Toast message, do something with the selected job
-                Toast.makeText(ViewJobs.this, "Clicked: " + selectedJobId + " " + selectedJobTitle, Toast.LENGTH_SHORT).show();
+                // Put the data of the clicked job into the Intent
+                intent.putExtra("JOB_ID", jobbId[position]);
+                intent.putExtra("JOB_TITLE", title[position]);
+                intent.putExtra("JOB_COST", cost[position]);
+                intent.putExtra("JOB_STATUS", status[position]);
+                intent.putExtra("JOB_START_TIME", startTime[position]);
+                intent.putExtra("JOB_END_TIME", endTime[position]);
+
+                // Start the activity
+                startActivity(intent);
             }
         });
 

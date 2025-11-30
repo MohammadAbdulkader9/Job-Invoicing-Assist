@@ -31,6 +31,7 @@
         <activity android:name=".StopWatchTimer" />
         <activity android:name=".Workplan"/>
         <activity android:name=".ViewJobs"/>
+        <activity android:name=".JobDetailsActivity"/>
         <activity android:name=".Workplan">
 
         </activity>
