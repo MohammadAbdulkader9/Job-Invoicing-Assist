@@ -1,0 +1,57 @@
+package com.mdu.jobinvoicing.data.network.financeApi;
+
+import com.mdu.jobinvoicing.data.network.financeApi.fortnox.FortnoxInstance;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+public class ApiServiceManager {
+    public enum ApiProvider {
+        FORTNOX("http://10.0.2.2:5000/"),
+        BOKIO("http://10.0.2.2:5000/");
+
+        private final String baseURL;
+        ApiProvider(String baseUrl){
+            this.baseURL = baseUrl;
+        }
+
+    }
+    ApiInterface api;
+    Retrofit retrofit;
+
+    private static String baseURL;
+
+    public ApiServiceManager(ApiProvider provider){
+        this.baseURL = provider.baseURL;
+        this.retrofit = getInstance();
+        if(provider == ApiProvider.FORTNOX)
+            this.api = new FortnoxInstance("123abc", retrofit);
+
+    }
+    private Retrofit getInstance(){
+        if (retrofit == null) {
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .addInterceptor(logging)
+                    .build();
+
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(baseURL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(client)
+                    .build();
+        }
+        return retrofit;
+    }
+
+    public  void getAllInvoices(ApiCallback<InvoiceResponse> callback){
+        api.getAllInvoices(callback);
+    }
+    public void getInvoiceById(String id, ApiCallback<InvoiceResponse> callback){
+        api.getInvoiceById(id, callback);
+    }
+
+}

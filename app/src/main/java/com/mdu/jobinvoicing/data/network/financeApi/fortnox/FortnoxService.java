@@ -17,10 +17,11 @@ public interface FortnoxService {
     @POST("/3/invoices")
     Call<InvoiceResponse> createInvoice(@HeaderMap Map<String, String> headers,
                                         @Body InvoiceResponse invoice);
-
     //Get invoice
     @GET("/3/invoices/{id}")
-    Call<InvoiceResponse> getInvoice(@HeaderMap Map<String, String> headers,
+    Call<InvoiceResponse> getInvoiceById(@HeaderMap Map<String, String> headers,
                                      @Path("id") String id);
+    @GET("/3/invoices")
+    Call<InvoiceResponse> getAllInvoices(@HeaderMap Map<String, String> headers);
 
 }

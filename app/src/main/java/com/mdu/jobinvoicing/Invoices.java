@@ -11,6 +11,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.mdu.jobinvoicing.data.network.financeApi.ApiCallback;
+import com.mdu.jobinvoicing.data.network.financeApi.ApiServiceManager;
 import com.mdu.jobinvoicing.data.network.financeApi.InvoiceResponse;
 import com.mdu.jobinvoicing.data.network.financeApi.fortnox.FortnoxInstance;
 
@@ -24,7 +26,12 @@ public class Invoices extends AppCompatActivity {
     }
 
     public void TestApi(View v){
-        FortnoxInstance instance = new FortnoxInstance("");
-        InvoiceResponse in = instance.getInvoice("6");
+        ApiServiceManager sm = new ApiServiceManager(ApiServiceManager.ApiProvider.FORTNOX);
+        sm.getInvoiceById("4", new ApiCallback<InvoiceResponse>() {
+            @Override
+            public void onSuccess(InvoiceResponse response) {
+                System.out.println(response.getAddress1());
+            }
+        });
     }
 }
