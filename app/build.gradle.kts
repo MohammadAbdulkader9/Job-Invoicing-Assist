@@ -35,6 +35,8 @@ android {
 }
 
 dependencies {
+    implementation("com.squareup.retrofit2:retrofit")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.3.0")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
