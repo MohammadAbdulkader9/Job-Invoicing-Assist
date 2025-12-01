@@ -68,16 +68,16 @@ public class HomePage extends AppCompatActivity {
             Intent intent = new Intent(HomePage.this, Workplan.class);
             startActivity(intent);
         });
-        cardViewJobs.setOnClickListener(v -> {
-            // TODO: Navigate to "View Jobs" screen.
-            // Intent intent = new Intent(HomePage.this, ViewJobsActivity.class);
-            // startActivity(intent);
-            Toast.makeText(this, "View Jobs clicked", Toast.LENGTH_SHORT).show();
-        });
 
         MaterialCardView cardTimeTracking = findViewById(R.id.cardTimeTracking);
         cardTimeTracking.setOnClickListener(v -> {
             Intent intent = new Intent(HomePage.this, StopWatchTimer.class);
+            startActivity(intent);
+        });
+
+        MaterialCardView cardViewJobs = findViewById(R.id.cardViewJobs);
+        cardViewJobs.setOnClickListener(v -> {
+            Intent intent = new Intent(HomePage.this, ViewJobs.class);
             startActivity(intent);
         });
 
