@@ -21,8 +21,9 @@ import com.mdu.jobinvoicing.data.local.entities.*;
         Invoice.class,
         InvoiceLineItem.class,
         SyncQueue.class,
-        Operator.class
-}, version = 1, exportSchema = false)
+        Operator.class,
+        TimerItem.class
+}, version = 2, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase INSTANCE;
 
@@ -34,6 +35,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract InvoiceLineItemDao invoiceLineItemDao();
     public abstract SyncQueueDao syncQueueDao();
     public abstract OperatorDao operatorDao();
+    public abstract TimerItemDao timerItemDao();
 
     public static AppDatabase getInstance(final Context context) {
         if (INSTANCE == null) {
@@ -41,6 +43,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     AppDatabase.class, "job_invoicing_db")
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }
