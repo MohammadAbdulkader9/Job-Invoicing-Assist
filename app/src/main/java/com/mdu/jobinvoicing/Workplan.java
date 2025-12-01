@@ -1,5 +1,8 @@
 package com.mdu.jobinvoicing;
 
+import static com.google.firebase.firestore.FieldValue.*;
+import static com.google.firebase.firestore.FirebaseFirestore.*;
+
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -9,9 +12,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -123,12 +128,12 @@ public class Workplan extends AppCompatActivity {
         workplan.put("materialsUsed", materialsUsed);
         workplan.put("startTime", startTime);
         workplan.put("endTime", endTime);
-        workplan.put("createdAt", FieldValue.serverTimestamp());
+        workplan.put("createdAt", serverTimestamp());
 
         // ===============================
         // Save to Firestore
         // ===============================
-        FirebaseFirestore.getInstance()
+        Task<DocumentReference> workplans = getInstance()
                 .collection("workplans")
                 .add(workplan)
                 .addOnSuccessListener(doc -> {
