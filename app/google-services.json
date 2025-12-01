@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1017557377322",
+    "project_id": "jobandinvoiceassist",
+    "storage_bucket": "jobandinvoiceassist.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1017557377322:android:c6dbda52c86069500efe53",
+        "android_client_info": {
+          "package_name": "com.mdu.jobinvoicing"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0caMIEurtztRqxS5yjPWgnAgmyDMQcHk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
