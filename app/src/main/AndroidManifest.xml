@@ -34,8 +34,8 @@
         <activity android:name=".Workplan"/>
         <activity android:name=".Invoices"/>
         <activity android:name=".ViewJobs"/>
-        <activity android:name=".WorkPlanDetailsActivity"/>
-        <activity android:name=".Workplan">
+        <activity android:name=".WorkPlanDetailsActivity">
+
 
         </activity>
 
