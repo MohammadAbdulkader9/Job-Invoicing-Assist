@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".JobDetailsActivity">
+    tools:context=".WorkPlanDetailsActivity">
 
     <!-- Top bar -->
     <LinearLayout
@@ -69,147 +69,87 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Job Title, ID, and Status -->
             <TextView
-                android:id="@+id/jobDetailsTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Digging Service"
-                android:textSize="17sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:text="Customer Name"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/jobDetailsId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                tools:text="Job ID: 12345"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/jobDetailsTitle" />
-
-            <TextView
-                android:id="@+id/jobDetailsStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                tools:text="Closed"
-                tools:drawableStart="@drawable/jobbs_list_status_closed"
-                android:drawablePadding="4dp"
-                app:layout_constraintBottom_toBottomOf="@+id/jobDetailsTitle"
-                app:layout_constraintStart_toEndOf="@+id/jobDetailsTitle"
-                app:layout_constraintTop_toTopOf="@+id/jobDetailsTitle" />
-
-            <!-- Start/End Time Cards -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/startTimeCard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:cardElevation="2dp"
-                app:cardCornerRadius="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Start Time"
-                        android:textSize="12sp"/>
-
-                    <TextView
-                        android:id="@+id/startTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="01.01.2021 11:21"
-                        android:textSize="16sp"
-                        android:textStyle="bold"/>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/endTimeCard"
-                android:layout_width="0dp"
+            <EditText
+                android:id="@+id/customerNameEditText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:cardElevation="2dp"
-                app:cardCornerRadius="8dp"
-                app:layout_constraintStart_toStartOf="@id/startTimeCard"
-                app:layout_constraintEnd_toEndOf="@id/startTimeCard"
-                app:layout_constraintTop_toBottomOf="@id/startTimeCard">
+                android:inputType="textPersonName"
+                android:textSize="16sp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="End Time"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/endTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        tools:text="01.01.2021 17:30" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Customer and Operator Info Cards -->
-
-            <!-- Buttons -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/customerCard"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
-                android:layout_marginEnd="8dp"
-                app:cardElevation="4dp"
-                app:layout_constraintEnd_toStartOf="@+id/startTimeCard"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/jobDetailsId">
-                <!-- Customer Info Content -->
-            </com.google.android.material.card.MaterialCardView>
-
-            <Button
-                android:id="@+id/viewInvoiceBtn"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="View Invoice"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/generateInvoiceBtn" />
+                android:layout_marginTop="16dp"
+                android:text="Job Description"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+            <EditText
+                android:id="@+id/jobDescriptionEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:gravity="top"
+                android:textSize="16sp"/>
 
-            <Button
-                android:id="@+id/generateInvoiceBtn"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Generate Invoice"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/viewInvoiceBtn"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:layout_marginTop="16dp"
+                android:text="Job Location"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+            <EditText
+                android:id="@+id/addressEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:inputType="textPostalAddress"
+                android:textSize="16sp"/>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Date"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+            <EditText
+                android:id="@+id/dateEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:focusable="false"
+                android:clickable="true"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/saveButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Save Changes"
+                android:textSize="18sp"
+                android:background="@drawable/button_rectangle"
+                android:textColor="@android:color/white"/>
+
+        </LinearLayout>
+
     </ScrollView>
 
     <!-- Bottom navigation bar: industrial grey with icon + text -->

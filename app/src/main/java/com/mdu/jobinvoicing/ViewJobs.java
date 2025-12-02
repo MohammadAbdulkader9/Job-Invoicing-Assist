@@ -85,7 +85,7 @@ public class ViewJobs extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Create an Intent to start JobDetailsActivity
-                Intent intent = new Intent(ViewJobs.this, JobDetailsActivity.class);
+                Intent intent = new Intent(ViewJobs.this, WorkPlanDetailsActivity.class);
 
                 // Put the data of the clicked job into the Intent
                 intent.putExtra("JOB_ID", jobbId[position]);
