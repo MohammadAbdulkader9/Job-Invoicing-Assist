@@ -27,7 +27,7 @@ public class Invoices extends AppCompatActivity {
 
     public void TestApi(View v){
         ApiServiceManager sm = new ApiServiceManager(ApiServiceManager.ApiProvider.FORTNOX);
-        sm.getInvoiceById("4", new ApiCallback<InvoiceResponse>() {
+        sm.getInvoiceById("6", new ApiCallback<InvoiceResponse>() {
             @Override
             public void onSuccess(InvoiceResponse response) {
                 System.out.println(response.getAddress1());

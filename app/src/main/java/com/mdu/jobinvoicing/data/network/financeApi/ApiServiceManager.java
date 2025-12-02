@@ -2,6 +2,8 @@ package com.mdu.jobinvoicing.data.network.financeApi;
 
 import com.mdu.jobinvoicing.data.network.financeApi.fortnox.FortnoxInstance;
 
+import java.util.List;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -32,6 +34,7 @@ public class ApiServiceManager {
     }
     private Retrofit getInstance(){
         if (retrofit == null) {
+            // Logging \/ \/
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
             OkHttpClient client = new OkHttpClient.Builder()
@@ -47,7 +50,7 @@ public class ApiServiceManager {
         return retrofit;
     }
 
-    public  void getAllInvoices(ApiCallback<InvoiceResponse> callback){
+    public  void getAllInvoices(ApiCallback<List<InvoiceResponse>> callback){
         api.getAllInvoices(callback);
     }
     public void getInvoiceById(String id, ApiCallback<InvoiceResponse> callback){

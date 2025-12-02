@@ -4,6 +4,8 @@ import com.mdu.jobinvoicing.data.network.financeApi.ApiInterface;
 import com.mdu.jobinvoicing.data.network.financeApi.InvoiceResponse;
 
 import java.util.HashMap;
+import java.util.List;
+
 import retrofit2.Retrofit;
 
 
@@ -20,7 +22,7 @@ public class FortnoxInstance implements ApiInterface {
     }
 
 
-    public void getAllInvoices(ApiCallback<InvoiceResponse> callback) {
+    public void getAllInvoices(ApiCallback<List<InvoiceResponse>> callback) {
         service.getAllInvoices(headers).enqueue(callback);
     }
     public void getInvoiceById(String id, ApiCallback<InvoiceResponse> callback){
