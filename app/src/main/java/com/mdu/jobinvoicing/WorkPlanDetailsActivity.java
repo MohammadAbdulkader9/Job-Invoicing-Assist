@@ -10,6 +10,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -35,6 +36,10 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
     private String currentJobId;
+
+    private RelativeLayout timeEntryHeader, materialHeader, serviceItemHeader;
+    private LinearLayout timeEntryContent, materialContent, serviceItemContent;
+    private ImageView timeEntryToggle, materialToggle, serviceItemToggle;
 
 
     @Override
@@ -64,6 +69,16 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
         navCreateInvoices = findViewById(R.id.navCreateInvoices);
         navSyncNow = findViewById(R.id.navSyncNow);
 
+        timeEntryHeader = findViewById(R.id.timeEntryHeader);
+        timeEntryContent = findViewById(R.id.timeEntryContent);
+        timeEntryToggle = findViewById(R.id.timeEntryToggle);
+        materialHeader = findViewById(R.id.materialHeader);
+        materialContent = findViewById(R.id.materialContent);
+        materialToggle = findViewById(R.id.materialToggle);
+        serviceItemHeader = findViewById(R.id.serviceItemHeader);
+        serviceItemContent = findViewById(R.id.serviceItemContent);
+        serviceItemToggle = findViewById(R.id.serviceItemToggle);
+
 
         // Set OnClickListener for the back button
         backButton.setOnClickListener(v -> finish());
@@ -77,6 +92,10 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
             Toast.makeText(WorkPlanDetailsActivity.this, "Save Changes Clicked", Toast.LENGTH_SHORT).show();
         });
 
+        timeEntryHeader.setOnClickListener(v -> toggleSection(timeEntryContent, timeEntryToggle));
+        materialHeader.setOnClickListener(v -> toggleSection(materialContent, materialToggle));
+        serviceItemHeader.setOnClickListener(v -> toggleSection(serviceItemContent, serviceItemToggle));
+
         // Get the intent that started this activity
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("JOB_ID")) {
@@ -84,6 +103,16 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
             if (currentJobId != null && !currentJobId.isEmpty()) {
                 loadWorkPlanData(currentJobId);
             }
+        }
+    }
+
+    private void toggleSection(LinearLayout content, ImageView toggle) {
+        if (content.getVisibility() == View.VISIBLE) {
+            content.setVisibility(View.GONE);
+            toggle.setImageResource(android.R.drawable.ic_input_add);
+        } else {
+            content.setVisibility(View.VISIBLE);
+            toggle.setImageResource(android.R.drawable.ic_delete);
         }
     }
 

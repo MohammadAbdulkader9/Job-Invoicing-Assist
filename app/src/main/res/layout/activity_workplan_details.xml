@@ -201,149 +201,230 @@
                 android:textColor="@android:color/white"/>
 
             <!-- Time Entry Section -->
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/timeEntryHeader"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Time Entry"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:padding="16dp">
 
-            <EditText
-                android:id="@+id/timeEntryHoursEditText"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Time Entry"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/timeEntryToggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@android:drawable/ic_input_add" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/timeEntryContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Hours"
-                android:inputType="numberDecimal" />
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
 
-            <EditText
-                android:id="@+id/timeEntryHourRateEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Hour Rate"
-                android:inputType="numberDecimal" />
+                <EditText
+                    android:id="@+id/timeEntryHoursEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Hours"
+                    android:inputType="numberDecimal" />
 
-            <EditText
-                android:id="@+id/timeEntryNotesEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Notes"
-                android:inputType="textMultiLine"
-                android:minLines="2"
-                android:gravity="top"/>
+                <EditText
+                    android:id="@+id/timeEntryHourRateEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Hour Rate"
+                    android:inputType="numberDecimal" />
 
-            <Button
-                android:id="@+id/addTimeEntryButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add Time Entry"
-                android:layout_gravity="end"/>
+                <EditText
+                    android:id="@+id/timeEntryNotesEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Notes"
+                    android:inputType="textMultiLine"
+                    android:minLines="2"
+                    android:gravity="top"/>
+
+                <Button
+                    android:id="@+id/addTimeEntryButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Time Entry"
+                    android:layout_gravity="end"/>
+            </LinearLayout>
 
             <!-- Material Section -->
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/materialHeader"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Material"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:padding="16dp">
 
-            <EditText
-                android:id="@+id/materialNameEditText"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Material"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <ImageView
+                    android:id="@+id/materialToggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@android:drawable/ic_input_add" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/materialContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Material Name"
-                android:inputType="text" />
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
 
-            <EditText
-                android:id="@+id/materialQuantityEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Quantity"
-                android:inputType="numberDecimal" />
+                <EditText
+                    android:id="@+id/materialNameEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Material Name"
+                    android:inputType="text" />
 
-            <EditText
-                android:id="@+id/materialUnitEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Unit (e.g., pcs, m, kg)"
-                android:inputType="text" />
+                <EditText
+                    android:id="@+id/materialQuantityEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Quantity"
+                    android:inputType="numberDecimal" />
 
-            <EditText
-                android:id="@+id/materialUnitPriceEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Unit Price"
-                android:inputType="numberDecimal" />
+                <EditText
+                    android:id="@+id/materialUnitEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Unit (e.g., pcs, m, kg)"
+                    android:inputType="text" />
 
-            <EditText
-                android:id="@+id/materialNotesEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Notes"
-                android:inputType="textMultiLine"
-                android:minLines="2"
-                android:gravity="top"/>
+                <EditText
+                    android:id="@+id/materialUnitPriceEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Unit Price"
+                    android:inputType="numberDecimal" />
 
-            <Button
-                android:id="@+id/addMaterialButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add Material"
-                android:layout_gravity="end"/>
+                <EditText
+                    android:id="@+id/materialNotesEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Notes"
+                    android:inputType="textMultiLine"
+                    android:minLines="2"
+                    android:gravity="top"/>
+
+                <Button
+                    android:id="@+id/addMaterialButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Material"
+                    android:layout_gravity="end"/>
+            </LinearLayout>
 
             <!-- Service Item Section -->
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/serviceItemHeader"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Service Item"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:padding="16dp">
 
-            <EditText
-                android:id="@+id/serviceItemDescriptionEditText"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Service Item"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <ImageView
+                    android:id="@+id/serviceItemToggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@android:drawable/ic_input_add" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/serviceItemContent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Description"
-                android:inputType="text" />
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
 
-            <EditText
-                android:id="@+id/serviceItemQuantityEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Quantity"
-                android:inputType="numberDecimal" />
+                <EditText
+                    android:id="@+id/serviceItemDescriptionEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Description"
+                    android:inputType="text" />
 
-            <EditText
-                android:id="@+id/serviceItemUnitEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Unit (e.g., hour, service)"
-                android:inputType="text" />
+                <EditText
+                    android:id="@+id/serviceItemQuantityEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Quantity"
+                    android:inputType="numberDecimal" />
 
-            <EditText
-                android:id="@+id/serviceItemUnitPriceEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Unit Price"
-                android:inputType="numberDecimal" />
+                <EditText
+                    android:id="@+id/serviceItemUnitEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Unit (e.g., hour, service)"
+                    android:inputType="text" />
 
-            <EditText
-                android:id="@+id/serviceItemNotesEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Notes"
-                android:inputType="textMultiLine"
-                android:minLines="2"
-                android:gravity="top"/>
+                <EditText
+                    android:id="@+id/serviceItemUnitPriceEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Unit Price"
+                    android:inputType="numberDecimal" />
 
-            <Button
-                android:id="@+id/addServiceItemButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add Service Item"
-                android:layout_gravity="end"/>
+                <EditText
+                    android:id="@+id/serviceItemNotesEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Notes"
+                    android:inputType="textMultiLine"
+                    android:minLines="2"
+                    android:gravity="top"/>
+
+                <Button
+                    android:id="@+id/addServiceItemButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Service Item"
+                    android:layout_gravity="end"/>
+            </LinearLayout>
 
         </LinearLayout>
 
