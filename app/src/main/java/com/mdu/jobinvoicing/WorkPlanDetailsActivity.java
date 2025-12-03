@@ -18,19 +18,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.mdu.jobinvoicing.data.local.entities.Material;
+import com.mdu.jobinvoicing.data.local.entities.ServiceItem;
+import com.mdu.jobinvoicing.data.local.entities.TimerItem;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.UUID;
 
 public class WorkPlanDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "WorkPlanDetailsActivity";
 
     private EditText customerNameEditText, jobDescriptionEditText, addressEditText, dateEditText;
-    private Button saveButton;
+    private Button saveButton, addTimeEntryButton, addMaterialButton, addServiceItemButton;
     private ImageView backButton;
     private LinearLayout navNewJobs, navCreateInvoices, navSyncNow;
 
@@ -41,6 +47,13 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
     private LinearLayout timeEntryContent, materialContent, serviceItemContent;
     private ImageView timeEntryToggle, materialToggle, serviceItemToggle;
 
+    private RecyclerView timeEntriesRecyclerView, materialsRecyclerView, serviceItemsRecyclerView;
+    private TimeEntryAdapter timeEntryAdapter;
+    private MaterialAdapter materialAdapter;
+    private ServiceItemAdapter serviceItemAdapter;
+    private EditText timeEntryHoursEditText, timeEntryHourRateEditText, timeEntryNotesEditText;
+    private EditText materialNameEditText, materialQuantityEditText, materialUnitEditText, materialUnitPriceEditText, materialNotesEditText;
+    private EditText serviceItemDescriptionEditText, serviceItemQuantityEditText, serviceItemUnitEditText, serviceItemUnitPriceEditText, serviceItemNotesEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +92,38 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
         serviceItemContent = findViewById(R.id.serviceItemContent);
         serviceItemToggle = findViewById(R.id.serviceItemToggle);
 
+        addTimeEntryButton = findViewById(R.id.addTimeEntryButton);
+        addMaterialButton = findViewById(R.id.addMaterialButton);
+        addServiceItemButton = findViewById(R.id.addServiceItemButton);
+
+        timeEntryHoursEditText = findViewById(R.id.timeEntryHoursEditText);
+        timeEntryHourRateEditText = findViewById(R.id.timeEntryHourRateEditText);
+        timeEntryNotesEditText = findViewById(R.id.timeEntryNotesEditText);
+
+        materialNameEditText = findViewById(R.id.materialNameEditText);
+        materialQuantityEditText = findViewById(R.id.materialQuantityEditText);
+        materialUnitEditText = findViewById(R.id.materialUnitEditText);
+        materialUnitPriceEditText = findViewById(R.id.materialUnitPriceEditText);
+        materialNotesEditText = findViewById(R.id.materialNotesEditText);
+
+        serviceItemDescriptionEditText = findViewById(R.id.serviceItemDescriptionEditText);
+        serviceItemQuantityEditText = findViewById(R.id.serviceItemQuantityEditText);
+        serviceItemUnitEditText = findViewById(R.id.serviceItemUnitEditText);
+        serviceItemUnitPriceEditText = findViewById(R.id.serviceItemUnitPriceEditText);
+        serviceItemNotesEditText = findViewById(R.id.serviceItemNotesEditText);
+
+        timeEntriesRecyclerView = findViewById(R.id.timeEntriesRecyclerView);
+        timeEntryAdapter = new TimeEntryAdapter(new ArrayList<>());
+        timeEntriesRecyclerView.setAdapter(timeEntryAdapter);
+
+        materialsRecyclerView = findViewById(R.id.materialsRecyclerView);
+        materialAdapter = new MaterialAdapter(new ArrayList<>());
+        materialsRecyclerView.setAdapter(materialAdapter);
+
+        serviceItemsRecyclerView = findViewById(R.id.serviceItemsRecyclerView);
+        serviceItemAdapter = new ServiceItemAdapter(new ArrayList<>());
+        serviceItemsRecyclerView.setAdapter(serviceItemAdapter);
+
 
         // Set OnClickListener for the back button
         backButton.setOnClickListener(v -> finish());
@@ -95,6 +140,65 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
         timeEntryHeader.setOnClickListener(v -> toggleSection(timeEntryContent, timeEntryToggle));
         materialHeader.setOnClickListener(v -> toggleSection(materialContent, materialToggle));
         serviceItemHeader.setOnClickListener(v -> toggleSection(serviceItemContent, serviceItemToggle));
+
+        addTimeEntryButton.setOnClickListener(v -> {
+            Log.d(TAG, "Add Time Entry button clicked");
+            String notes = timeEntryNotesEditText.getText().toString();
+            if (!notes.isEmpty()) {
+                TimerItem newTimeEntry = new TimerItem(notes);
+                timeEntryAdapter.addTimeEntry(newTimeEntry);
+                timeEntryNotesEditText.setText("");
+                timeEntryHoursEditText.setText("");
+                timeEntryHourRateEditText.setText("");
+
+            }
+        });
+
+        addMaterialButton.setOnClickListener(v -> {
+            Log.d(TAG, "Add Material button clicked");
+            String name = materialNameEditText.getText().toString();
+            String quantityStr = materialQuantityEditText.getText().toString();
+            String unit = materialUnitEditText.getText().toString();
+            String unitPriceStr = materialUnitPriceEditText.getText().toString();
+            String notes = materialNotesEditText.getText().toString();
+
+            if (!name.isEmpty() && !quantityStr.isEmpty() && !unit.isEmpty() && !unitPriceStr.isEmpty()) {
+                double quantity = Double.parseDouble(quantityStr);
+                double unitPrice = Double.parseDouble(unitPriceStr);
+
+                Material newMaterial = new Material(UUID.randomUUID().toString(), currentJobId, name, quantity, unit, unitPrice, notes);
+                materialAdapter.addMaterial(newMaterial);
+
+                materialNameEditText.setText("");
+                materialQuantityEditText.setText("");
+                materialUnitEditText.setText("");
+                materialUnitPriceEditText.setText("");
+                materialNotesEditText.setText("");
+            }
+        });
+
+        addServiceItemButton.setOnClickListener(v -> {
+            Log.d(TAG, "Add Service Item button clicked");
+            String description = serviceItemDescriptionEditText.getText().toString();
+            String quantityStr = serviceItemQuantityEditText.getText().toString();
+            String unit = serviceItemUnitEditText.getText().toString();
+            String unitPriceStr = serviceItemUnitPriceEditText.getText().toString();
+            String notes = serviceItemNotesEditText.getText().toString();
+
+            if (!description.isEmpty() && !quantityStr.isEmpty() && !unit.isEmpty() && !unitPriceStr.isEmpty()) {
+                double quantity = Double.parseDouble(quantityStr);
+                double unitPrice = Double.parseDouble(unitPriceStr);
+
+                ServiceItem newServiceItem = new ServiceItem(UUID.randomUUID().toString(), currentJobId, description, quantity, unit, unitPrice, notes);
+                serviceItemAdapter.addServiceItem(newServiceItem);
+
+                serviceItemDescriptionEditText.setText("");
+                serviceItemQuantityEditText.setText("");
+                serviceItemUnitEditText.setText("");
+                serviceItemUnitPriceEditText.setText("");
+                serviceItemNotesEditText.setText("");
+            }
+        });
 
         // Get the intent that started this activity
         Intent intent = getIntent();

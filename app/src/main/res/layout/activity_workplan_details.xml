@@ -42,20 +42,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="2dp"
-                android:text="Job Details"
+                android:text="Work Plan Details"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@id/back_button"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/businessIdText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="See the jobs' details"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="@id/titleText"
-                app:layout_constraintTop_toBottomOf="@id/titleText" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
@@ -94,7 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Job Description"
+                android:text="Work Description"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
             <EditText
@@ -111,7 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Job Location"
+                android:text="Work Location"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
             <EditText
@@ -200,6 +192,7 @@
                 android:background="@drawable/button_rectangle"
                 android:textColor="@android:color/white"/>
 
+
             <!-- Time Entry Section -->
             <RelativeLayout
                 android:id="@+id/timeEntryHeader"
@@ -264,6 +257,15 @@
                     android:layout_height="wrap_content"
                     android:text="Add Time Entry"
                     android:layout_gravity="end"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/timeEntriesRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_time_entry" />
+
             </LinearLayout>
 
             <!-- Material Section -->
@@ -344,6 +346,15 @@
                     android:layout_height="wrap_content"
                     android:text="Add Material"
                     android:layout_gravity="end"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/materialsRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_material" />
+
             </LinearLayout>
 
             <!-- Service Item Section -->
@@ -424,6 +435,15 @@
                     android:layout_height="wrap_content"
                     android:text="Add Service Item"
                     android:layout_gravity="end"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/serviceItemsRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_service_item" />
+
             </LinearLayout>
 
         </LinearLayout>
