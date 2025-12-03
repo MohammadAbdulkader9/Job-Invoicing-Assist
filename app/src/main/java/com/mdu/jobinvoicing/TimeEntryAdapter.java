@@ -6,14 +6,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.mdu.jobinvoicing.data.local.entities.TimerItem;
+import com.mdu.jobinvoicing.data.local.entities.TimeEntry;
 import java.util.List;
 
 public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.TimeEntryViewHolder> {
 
-    private List<TimerItem> timeEntries;
+    private List<TimeEntry> timeEntries;
 
-    public TimeEntryAdapter(List<TimerItem> timeEntries) {
+    public TimeEntryAdapter(List<TimeEntry> timeEntries) {
         this.timeEntries = timeEntries;
     }
 
@@ -26,10 +26,10 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
 
     @Override
     public void onBindViewHolder(@NonNull TimeEntryViewHolder holder, int position) {
-        TimerItem timeEntry = timeEntries.get(position);
-        holder.timeEntryHoursTextView.setText("Hours: 1"); // Placeholder
-        holder.timeEntryRateTextView.setText("Rate: $50/hr"); // Placeholder
-        holder.timeEntryNotesTextView.setText("Notes: " + timeEntry.getName());
+        TimeEntry timeEntry = timeEntries.get(position);
+        holder.timeEntryHoursTextView.setText("Hours: " + timeEntry.hours);
+        holder.timeEntryRateTextView.setText("Rate: $" + timeEntry.hourRate + "/hr");
+        holder.timeEntryNotesTextView.setText("Notes: " + timeEntry.notes);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
         return timeEntries.size();
     }
 
-    public void addTimeEntry(TimerItem timeEntry) {
+    public void addTimeEntry(TimeEntry timeEntry) {
         timeEntries.add(timeEntry);
         notifyItemInserted(timeEntries.size() - 1);
     }

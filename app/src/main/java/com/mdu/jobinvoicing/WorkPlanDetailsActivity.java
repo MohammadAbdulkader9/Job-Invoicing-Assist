@@ -25,7 +25,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mdu.jobinvoicing.data.local.entities.Material;
 import com.mdu.jobinvoicing.data.local.entities.ServiceItem;
-import com.mdu.jobinvoicing.data.local.entities.TimerItem;
+import com.mdu.jobinvoicing.data.local.entities.TimeEntry;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -143,14 +143,35 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
 
         addTimeEntryButton.setOnClickListener(v -> {
             Log.d(TAG, "Add Time Entry button clicked");
+            String hoursStr = timeEntryHoursEditText.getText().toString();
+            String hourRateStr = timeEntryHourRateEditText.getText().toString();
             String notes = timeEntryNotesEditText.getText().toString();
-            if (!notes.isEmpty()) {
-                TimerItem newTimeEntry = new TimerItem(notes);
-                timeEntryAdapter.addTimeEntry(newTimeEntry);
-                timeEntryNotesEditText.setText("");
-                timeEntryHoursEditText.setText("");
-                timeEntryHourRateEditText.setText("");
 
+            if (!hoursStr.isEmpty() && !hourRateStr.isEmpty()) {
+                try {
+                    double hours = Double.parseDouble(hoursStr);
+                    double hourRate = Double.parseDouble(hourRateStr);
+
+                    TimeEntry newTimeEntry = new TimeEntry(
+                            UUID.randomUUID().toString(),
+                            currentJobId,
+                            null, // operatorId
+                            System.currentTimeMillis(), // startTimeMillis
+                            0,    // endTimeMillis
+                            hours,
+                            hourRate,
+                            notes
+                    );
+                    timeEntryAdapter.addTimeEntry(newTimeEntry);
+
+                    timeEntryHoursEditText.setText("");
+                    timeEntryHourRateEditText.setText("");
+                    timeEntryNotesEditText.setText("");
+                } catch (NumberFormatException e) {
+                    Toast.makeText(WorkPlanDetailsActivity.this, "Invalid number format for hours or rate.", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(WorkPlanDetailsActivity.this, "Hours and rate cannot be empty.", Toast.LENGTH_SHORT).show();
             }
         });
 
