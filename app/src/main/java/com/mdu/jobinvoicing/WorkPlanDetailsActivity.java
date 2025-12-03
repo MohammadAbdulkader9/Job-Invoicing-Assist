@@ -213,10 +213,10 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
     private void toggleSection(LinearLayout content, ImageView toggle) {
         if (content.getVisibility() == View.VISIBLE) {
             content.setVisibility(View.GONE);
-            toggle.setImageResource(android.R.drawable.ic_input_add);
+            toggle.animate().rotation(0).setDuration(200).start();
         } else {
             content.setVisibility(View.VISIBLE);
-            toggle.setImageResource(android.R.drawable.ic_delete);
+            toggle.animate().rotation(180).setDuration(200).start();
         }
     }
 

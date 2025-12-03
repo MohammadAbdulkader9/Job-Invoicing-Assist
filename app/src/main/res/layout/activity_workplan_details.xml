@@ -241,7 +241,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:src="@android:drawable/ic_input_add" />
+                    android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+                    />
             </RelativeLayout>
 
             <LinearLayout
@@ -308,7 +309,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:src="@android:drawable/ic_input_add" />
+                    android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+                    />
             </RelativeLayout>
 
             <LinearLayout
@@ -389,7 +391,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:src="@android:drawable/ic_input_add" />
+                    android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+                    />
             </RelativeLayout>
 
             <LinearLayout
