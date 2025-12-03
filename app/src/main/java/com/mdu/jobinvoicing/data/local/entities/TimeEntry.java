@@ -34,6 +34,7 @@ public class TimeEntry {
     public long endTimeMillis; // 0 if still running
     public double hours; // computed value stored for convenience
     public double hourRate;
+    public double total;
     public String notes;
 
     public TimeEntry(@NonNull String id, String workPlanId, String operatorId,
@@ -45,6 +46,7 @@ public class TimeEntry {
         this.endTimeMillis = endTimeMillis;
         this.hours = hours;
         this.hourRate = hourRate;
+        this.total = hours * hourRate;
         this.notes = notes;
     }
 }

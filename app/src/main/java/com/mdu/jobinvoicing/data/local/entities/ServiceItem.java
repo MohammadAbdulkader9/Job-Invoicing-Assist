@@ -23,19 +23,17 @@ public class ServiceItem {
 
     public String workPlanId;
     public String description;
-    public double quantity;
-    public String unit; // e.g., "hour", "service"
-    public double unitPrice;
+
+    public double serviceFee;
+
     public String notes;
 
     public ServiceItem(@NonNull String id, String workPlanId, String description,
-                       double quantity, String unit, double unitPrice, String notes) {
+                       double serviceFee, String notes) {
         this.id = id;
         this.workPlanId = workPlanId;
         this.description = description;
-        this.quantity = quantity;
-        this.unit = unit;
-        this.unitPrice = unitPrice;
+        this.serviceFee = serviceFee;
         this.notes = notes;
     }
 }

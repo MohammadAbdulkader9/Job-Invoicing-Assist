@@ -28,7 +28,7 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
     public void onBindViewHolder(@NonNull ServiceItemViewHolder holder, int position) {
         ServiceItem serviceItem = serviceItems.get(position);
         holder.serviceItemDescriptionTextView.setText("Service: " + serviceItem.description);
-        holder.serviceItemCostTextView.setText("Cost: $" + (serviceItem.quantity * serviceItem.unitPrice));
+        holder.serviceItemCostTextView.setText("Fee: SEK " + serviceItem.serviceFee);
         holder.serviceItemNotesTextView.setText("Notes: " + serviceItem.notes);
     }
 

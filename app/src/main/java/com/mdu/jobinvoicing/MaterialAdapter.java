@@ -29,7 +29,8 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.Materi
         Material material = materials.get(position);
         holder.materialNameTextView.setText("Material: " + material.name);
         holder.materialQuantityTextView.setText("Quantity: " + material.quantity + " " + material.unit);
-        holder.materialUnitPriceTextView.setText("Unit Price: $" + material.unitPrice);
+        holder.materialUnitPriceTextView.setText("Unit Price: SEK " + material.unitPrice);
+        holder.materialTotalTextView.setText("Total: SEK " + material.total);
         holder.materialNotesTextView.setText("Notes: " + material.notes);
     }
 
@@ -47,6 +48,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.Materi
         TextView materialNameTextView;
         TextView materialQuantityTextView;
         TextView materialUnitPriceTextView;
+        TextView materialTotalTextView;
         TextView materialNotesTextView;
 
         public MaterialViewHolder(@NonNull View itemView) {
@@ -54,6 +56,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.Materi
             materialNameTextView = itemView.findViewById(R.id.materialNameTextView);
             materialQuantityTextView = itemView.findViewById(R.id.materialQuantityTextView);
             materialUnitPriceTextView = itemView.findViewById(R.id.materialUnitPriceTextView);
+            materialTotalTextView = itemView.findViewById(R.id.materialTotalTextView);
             materialNotesTextView = itemView.findViewById(R.id.materialNotesTextView);
         }
     }

@@ -28,7 +28,8 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
     public void onBindViewHolder(@NonNull TimeEntryViewHolder holder, int position) {
         TimeEntry timeEntry = timeEntries.get(position);
         holder.timeEntryHoursTextView.setText("Hours: " + timeEntry.hours);
-        holder.timeEntryRateTextView.setText("Rate: $" + timeEntry.hourRate + "/hr");
+        holder.timeEntryRateTextView.setText("Rate: SEK " + timeEntry.hourRate + "/hr");
+        holder.timeEntryTotalTextView.setText("Total: SEK" + timeEntry.total);
         holder.timeEntryNotesTextView.setText("Notes: " + timeEntry.notes);
     }
 
@@ -45,12 +46,14 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
     static class TimeEntryViewHolder extends RecyclerView.ViewHolder {
         TextView timeEntryHoursTextView;
         TextView timeEntryRateTextView;
+        TextView timeEntryTotalTextView;
         TextView timeEntryNotesTextView;
 
         public TimeEntryViewHolder(@NonNull View itemView) {
             super(itemView);
             timeEntryHoursTextView = itemView.findViewById(R.id.timeEntryHoursTextView);
             timeEntryRateTextView = itemView.findViewById(R.id.timeEntryRateTextView);
+            timeEntryTotalTextView = itemView.findViewById(R.id.timeEntryTotalTextView);
             timeEntryNotesTextView = itemView.findViewById(R.id.timeEntryNotesTextView);
         }
     }

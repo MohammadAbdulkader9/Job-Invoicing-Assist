@@ -48,6 +48,14 @@
                 tools:text="Unit Price: $5.00" />
 
             <TextView
+                android:id="@+id/materialTotalTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="16sp"
+                tools:text="Total: $50.00" />
+
+            <TextView
                 android:id="@+id/materialNotesTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

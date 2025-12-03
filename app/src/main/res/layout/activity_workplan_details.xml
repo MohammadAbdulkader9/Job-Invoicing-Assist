@@ -367,7 +367,7 @@
 
             </LinearLayout>
 
-            <!-- Service Item Section -->
+            <!-- Service Section -->
             <RelativeLayout
                 android:id="@+id/serviceItemHeader"
                 android:layout_width="match_parent"
@@ -381,7 +381,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="Service Item"
+                    android:text="Service"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
 
@@ -411,24 +411,10 @@
                     android:inputType="text" />
 
                 <EditText
-                    android:id="@+id/serviceItemQuantityEditText"
+                    android:id="@+id/serviceItemFeeEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Quantity"
-                    android:inputType="numberDecimal" />
-
-                <EditText
-                    android:id="@+id/serviceItemUnitEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Unit (e.g., hour, service)"
-                    android:inputType="text" />
-
-                <EditText
-                    android:id="@+id/serviceItemUnitPriceEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Unit Price"
+                    android:hint="Service Fee"
                     android:inputType="numberDecimal" />
 
                 <EditText
@@ -444,7 +430,7 @@
                     android:id="@+id/addServiceItemButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add Service Item"
+                    android:text="Add Service"
                     android:layout_gravity="end"/>
 
             </LinearLayout>
@@ -530,7 +516,7 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@android:drawable/ic_popup_sync"
+                android.src="@android:drawable/ic_popup_sync"
                 app:tint="#FFFFFF" />
 
             <TextView

@@ -53,7 +53,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
     private ServiceItemAdapter serviceItemAdapter;
     private EditText timeEntryHoursEditText, timeEntryHourRateEditText, timeEntryNotesEditText;
     private EditText materialNameEditText, materialQuantityEditText, materialUnitEditText, materialUnitPriceEditText, materialNotesEditText;
-    private EditText serviceItemDescriptionEditText, serviceItemQuantityEditText, serviceItemUnitEditText, serviceItemUnitPriceEditText, serviceItemNotesEditText;
+    private EditText serviceItemDescriptionEditText, serviceItemFeeEditText, serviceItemNotesEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,9 +107,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
         materialNotesEditText = findViewById(R.id.materialNotesEditText);
 
         serviceItemDescriptionEditText = findViewById(R.id.serviceItemDescriptionEditText);
-        serviceItemQuantityEditText = findViewById(R.id.serviceItemQuantityEditText);
-        serviceItemUnitEditText = findViewById(R.id.serviceItemUnitEditText);
-        serviceItemUnitPriceEditText = findViewById(R.id.serviceItemUnitPriceEditText);
+        serviceItemFeeEditText = findViewById(R.id.serviceItemFeeEditText);
         serviceItemNotesEditText = findViewById(R.id.serviceItemNotesEditText);
 
         timeEntriesRecyclerView = findViewById(R.id.timeEntriesRecyclerView);
@@ -201,22 +199,17 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
         addServiceItemButton.setOnClickListener(v -> {
             Log.d(TAG, "Add Service Item button clicked");
             String description = serviceItemDescriptionEditText.getText().toString();
-            String quantityStr = serviceItemQuantityEditText.getText().toString();
-            String unit = serviceItemUnitEditText.getText().toString();
-            String unitPriceStr = serviceItemUnitPriceEditText.getText().toString();
+            String feeStr = serviceItemFeeEditText.getText().toString();
             String notes = serviceItemNotesEditText.getText().toString();
 
-            if (!description.isEmpty() && !quantityStr.isEmpty() && !unit.isEmpty() && !unitPriceStr.isEmpty()) {
-                double quantity = Double.parseDouble(quantityStr);
-                double unitPrice = Double.parseDouble(unitPriceStr);
+            if (!description.isEmpty() && !feeStr.isEmpty()) {
+                double fee = Double.parseDouble(feeStr);
 
-                ServiceItem newServiceItem = new ServiceItem(UUID.randomUUID().toString(), currentJobId, description, quantity, unit, unitPrice, notes);
+                ServiceItem newServiceItem = new ServiceItem(UUID.randomUUID().toString(), currentJobId, description, fee, notes);
                 serviceItemAdapter.addServiceItem(newServiceItem);
 
                 serviceItemDescriptionEditText.setText("");
-                serviceItemQuantityEditText.setText("");
-                serviceItemUnitEditText.setText("");
-                serviceItemUnitPriceEditText.setText("");
+                serviceItemFeeEditText.setText("");
                 serviceItemNotesEditText.setText("");
             }
         });
