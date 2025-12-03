@@ -192,6 +192,30 @@
                 android:background="@drawable/button_rectangle"
                 android:textColor="@android:color/white"/>
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/timeEntriesRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_time_entry" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/materialsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_material" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/serviceItemsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_service_item" />
+
 
             <!-- Time Entry Section -->
             <RelativeLayout
@@ -257,14 +281,6 @@
                     android:layout_height="wrap_content"
                     android:text="Add Time Entry"
                     android:layout_gravity="end"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/timeEntriesRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/item_time_entry" />
 
             </LinearLayout>
 
@@ -347,14 +363,6 @@
                     android:text="Add Material"
                     android:layout_gravity="end"/>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/materialsRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/item_material" />
-
             </LinearLayout>
 
             <!-- Service Item Section -->
@@ -435,14 +443,6 @@
                     android:layout_height="wrap_content"
                     android:text="Add Service Item"
                     android:layout_gravity="end"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/serviceItemsRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/item_service_item" />
 
             </LinearLayout>
 
