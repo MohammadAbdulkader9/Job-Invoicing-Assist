@@ -37,5 +37,13 @@ public class Invoices extends AppCompatActivity {
                 System.out.println("this is a custom error callback function");
             }
         });
+        asm.postInvoice(new InvoiceResponse("wow","e","se",
+                "","sek", "Marcus", "3319",
+                3200,3100), new ApiCallback<InvoiceResponse>(){
+            @Override
+            public void onSuccess(InvoiceResponse response){
+                System.out.println(response.getCustomerName());
+            }
+        });
     }
 }

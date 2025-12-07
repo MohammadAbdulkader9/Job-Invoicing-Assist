@@ -1,9 +1,15 @@
 package com.mdu.jobinvoicing.data.network.financeApi;
 
 import com.mdu.jobinvoicing.data.network.financeApi.fortnox.FortnoxInstance;
+
+import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.util.List;
 import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Converter;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -22,7 +28,7 @@ public class ApiServiceManager {
 
     private static ApiServiceManager instance;
     private ApiInterface api;
-    private Retrofit retrofit;
+    private static Retrofit retrofit;
 
     private static String token;
     private static String baseURL;
@@ -66,7 +72,7 @@ public class ApiServiceManager {
 
     public static ErrorResponse parseErrorResponse(Response<?> response) {
         Converter<ResponseBody, ErrorResponse> converter =
-            RetrofitClientInstance.getRetrofitInstance().responseBodyConverter(
+            retrofit.responseBodyConverter(
                 ErrorResponse.class,
                 new Annotation[0]
             );
@@ -74,20 +80,30 @@ public class ApiServiceManager {
         try {
             errorResponse = converter.convert(response.errorBody());
         } catch (IOException e) {
-            return new ErrorResponse();
+            return new ErrorResponse("Unknown", "unknown", "unknown");
         }
 
         return errorResponse;
     }
 
+    public void getInvoiceById(
+            String id,
+            ApiCallback<InvoiceResponse> callback
+    ) {
+        api.getInvoiceById(id, callback);
+    }
     public void getAllInvoices(ApiCallback<List<InvoiceResponse>> callback) {
         api.getAllInvoices(callback);
     }
-
-    public void getInvoiceById(
-        String id,
-        ApiCallback<InvoiceResponse> callback
-    ) {
-        api.getInvoiceById(id, callback);
+    public void postInvoice(InvoiceResponse body,
+                            ApiCallback<InvoiceResponse> callback){
+        api.postInvoice(body, callback);
+    }
+    public void putInvoiceById(String id, InvoiceResponse body,
+                               ApiCallback<InvoiceResponse> callback){
+        api.putInvoiceById(id,body,callback);
+    }
+    public void getCustomerById(String id, ApiCallback<CustomerResponse> callback){
+        api.getCustomerById(id, callback);
     }
 }
