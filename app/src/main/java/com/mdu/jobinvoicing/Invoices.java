@@ -32,6 +32,10 @@ public class Invoices extends AppCompatActivity {
             public void onSuccess(InvoiceResponse response) {
                 System.out.println(response.getAddress1());
             }
+            @Override
+            public void onError(String errorMessage){
+                System.out.println("this is a custom error callback function");
+            }
         });
     }
 }
