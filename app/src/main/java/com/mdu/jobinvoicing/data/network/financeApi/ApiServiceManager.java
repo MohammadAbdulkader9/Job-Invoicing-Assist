@@ -20,19 +20,32 @@ public class ApiServiceManager {
         }
 
     }
-    ApiInterface api;
-    Retrofit retrofit;
+    private static ApiServiceManager instance;
+    private ApiInterface api;
+    private Retrofit retrofit;
 
+
+    private static String token;
     private static String baseURL;
 
-    public ApiServiceManager(ApiProvider provider){
+    public static synchronized ApiServiceManager getInstance(){
+        return instance;
+    }
+
+    public static void createInstance(ApiProvider provider){
+        if (instance == null){
+            instance = new ApiServiceManager(provider);
+        }
+    }
+
+    private ApiServiceManager(ApiProvider provider){
         this.baseURL = provider.baseURL;
-        this.retrofit = getInstance();
+        this.retrofit = getRetrofitInstance();
         if(provider == ApiProvider.FORTNOX)
             this.api = new FortnoxInstance("123abc", retrofit);
 
     }
-    private Retrofit getInstance(){
+    private Retrofit getRetrofitInstance(){
         if (retrofit == null) {
             // Logging \/ \/
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
