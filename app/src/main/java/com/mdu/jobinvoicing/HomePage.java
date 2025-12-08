@@ -101,6 +101,29 @@ public class HomePage extends AppCompatActivity {
             startActivity(intent);
             //Toast.makeText(this, "Bottom: Create Invoices", Toast.LENGTH_SHORT).show();
         });
+        setupNetworkCallback();
+    }
+    private void setupNetworkCallback() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm == null) return;
+
+        networkCallback = new ConnectivityManager.NetworkCallback() {
+            @Override
+            public void onAvailable(Network network) {
+                runOnUiThread(() -> updateStatus(true));
+            }
+
+            @Override
+            public void onLost(Network network) {
+                runOnUiThread(() -> updateStatus(false));
+            }
+        };
+
+        cm.registerDefaultNetworkCallback(networkCallback);
+
+        // Set initial status
+        updateStatus(isOnline());
+    }
 
     private boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
