@@ -37,7 +37,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class WorkPlanDetailsActivity extends AppCompatActivity {
+public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEntryAdapter.OnDeleteClickListener, MaterialAdapter.OnDeleteClickListener, ServiceItemAdapter.OnDeleteClickListener {
 
     private static final String TAG = "WorkPlanDetailsActivity";
 
@@ -141,18 +141,75 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
     private void setupRecyclerViews() {
         timeEntriesRecyclerView = findViewById(R.id.timeEntriesRecyclerView);
         timeEntriesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        timeEntryAdapter = new TimeEntryAdapter(timeEntryList);
+        timeEntryAdapter = new TimeEntryAdapter(timeEntryList, this);
         timeEntriesRecyclerView.setAdapter(timeEntryAdapter);
 
         materialsRecyclerView = findViewById(R.id.materialsRecyclerView);
         materialsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        materialAdapter = new MaterialAdapter(materialList);
+        materialAdapter = new MaterialAdapter(materialList, this);
         materialsRecyclerView.setAdapter(materialAdapter);
 
         serviceItemsRecyclerView = findViewById(R.id.serviceItemsRecyclerView);
         serviceItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        serviceItemAdapter = new ServiceItemAdapter(serviceItemList);
+        serviceItemAdapter = new ServiceItemAdapter(serviceItemList, this);
         serviceItemsRecyclerView.setAdapter(serviceItemAdapter);
+    }
+
+    @Override
+    public void onDeleteClick(TimeEntry timeEntry) {
+        deleteTimeEntry(timeEntry);
+    }
+
+    @Override
+    public void onDeleteClick(Material material) {
+        deleteMaterial(material);
+    }
+
+    @Override
+    public void onDeleteClick(ServiceItem serviceItem) {
+        deleteServiceItem(serviceItem);
+    }
+
+    private void deleteTimeEntry(TimeEntry timeEntry) {
+        if (timeEntry.id == null || timeEntry.id.isEmpty()) {
+            Toast.makeText(this, "Cannot delete, time entry ID is missing.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        db.collection("time_entries").document(timeEntry.id)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(WorkPlanDetailsActivity.this, "Time entry deleted successfully!", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> Toast.makeText(WorkPlanDetailsActivity.this, "Error deleting time entry: " + e.getMessage(), Toast.LENGTH_LONG).show());
+    }
+
+    private void deleteMaterial(Material material) {
+        if (material.id == null || material.id.isEmpty()) {
+            Toast.makeText(this, "Cannot delete, material ID is missing.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        db.collection("materials").document(material.id)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(WorkPlanDetailsActivity.this, "Material deleted successfully!", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> Toast.makeText(WorkPlanDetailsActivity.this, "Error deleting material: " + e.getMessage(), Toast.LENGTH_LONG).show());
+    }
+
+    private void deleteServiceItem(ServiceItem serviceItem) {
+        if (serviceItem.id == null || serviceItem.id.isEmpty()) {
+            Toast.makeText(this, "Cannot delete, service item ID is missing.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        db.collection("service_items").document(serviceItem.id)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(WorkPlanDetailsActivity.this, "Service item deleted successfully!", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> Toast.makeText(WorkPlanDetailsActivity.this, "Error deleting service item: " + e.getMessage(), Toast.LENGTH_LONG).show());
     }
 
     private void loadWorkPlanData(String workPlanId) {

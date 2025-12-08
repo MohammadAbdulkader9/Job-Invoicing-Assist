@@ -3,6 +3,7 @@ package com.mdu.jobinvoicing;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,9 +13,15 @@ import java.util.List;
 public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.TimeEntryViewHolder> {
 
     private List<TimeEntry> timeEntries;
+    private OnDeleteClickListener onDeleteClickListener;
 
-    public TimeEntryAdapter(List<TimeEntry> timeEntries) {
+    public interface OnDeleteClickListener {
+        void onDeleteClick(TimeEntry timeEntry);
+    }
+
+    public TimeEntryAdapter(List<TimeEntry> timeEntries, OnDeleteClickListener onDeleteClickListener) {
         this.timeEntries = timeEntries;
+        this.onDeleteClickListener = onDeleteClickListener;
     }
 
     @NonNull
@@ -31,6 +38,11 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
         holder.timeEntryRateTextView.setText("Rate: SEK " + timeEntry.hourRate + "/hr");
         holder.timeEntryTotalTextView.setText("Total: SEK" + timeEntry.total);
         holder.timeEntryNotesTextView.setText("Notes: " + timeEntry.notes);
+        holder.deleteButton.setOnClickListener(v -> {
+            if (onDeleteClickListener != null) {
+                onDeleteClickListener.onDeleteClick(timeEntry);
+            }
+        });
     }
 
     @Override
@@ -48,6 +60,7 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
         TextView timeEntryRateTextView;
         TextView timeEntryTotalTextView;
         TextView timeEntryNotesTextView;
+        ImageButton deleteButton;
 
         public TimeEntryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -55,6 +68,7 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
             timeEntryRateTextView = itemView.findViewById(R.id.timeEntryRateTextView);
             timeEntryTotalTextView = itemView.findViewById(R.id.timeEntryTotalTextView);
             timeEntryNotesTextView = itemView.findViewById(R.id.timeEntryNotesTextView);
+            deleteButton = itemView.findViewById(R.id.delete_button);
         }
     }
 }

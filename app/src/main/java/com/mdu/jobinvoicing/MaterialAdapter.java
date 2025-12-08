@@ -3,6 +3,7 @@ package com.mdu.jobinvoicing;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,9 +13,15 @@ import java.util.List;
 public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.MaterialViewHolder> {
 
     private List<Material> materials;
+    private OnDeleteClickListener onDeleteClickListener;
 
-    public MaterialAdapter(List<Material> materials) {
+    public interface OnDeleteClickListener {
+        void onDeleteClick(Material material);
+    }
+
+    public MaterialAdapter(List<Material> materials, OnDeleteClickListener onDeleteClickListener) {
         this.materials = materials;
+        this.onDeleteClickListener = onDeleteClickListener;
     }
 
     @NonNull
@@ -32,6 +39,11 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.Materi
         holder.materialUnitPriceTextView.setText("Unit Price: SEK " + material.unitPrice);
         holder.materialTotalTextView.setText("Total: SEK " + material.total);
         holder.materialNotesTextView.setText("Notes: " + material.notes);
+        holder.deleteButton.setOnClickListener(v -> {
+            if (onDeleteClickListener != null) {
+                onDeleteClickListener.onDeleteClick(material);
+            }
+        });
     }
 
     @Override
@@ -50,6 +62,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.Materi
         TextView materialUnitPriceTextView;
         TextView materialTotalTextView;
         TextView materialNotesTextView;
+        ImageButton deleteButton;
 
         public MaterialViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -58,6 +71,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.Materi
             materialUnitPriceTextView = itemView.findViewById(R.id.materialUnitPriceTextView);
             materialTotalTextView = itemView.findViewById(R.id.materialTotalTextView);
             materialNotesTextView = itemView.findViewById(R.id.materialNotesTextView);
+            deleteButton = itemView.findViewById(R.id.delete_button);
         }
     }
 }

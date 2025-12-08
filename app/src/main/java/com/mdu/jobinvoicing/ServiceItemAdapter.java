@@ -3,6 +3,7 @@ package com.mdu.jobinvoicing;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,9 +13,15 @@ import java.util.List;
 public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.ServiceItemViewHolder> {
 
     private List<ServiceItem> serviceItems;
+    private OnDeleteClickListener onDeleteClickListener;
 
-    public ServiceItemAdapter(List<ServiceItem> serviceItems) {
+    public interface OnDeleteClickListener {
+        void onDeleteClick(ServiceItem serviceItem);
+    }
+
+    public ServiceItemAdapter(List<ServiceItem> serviceItems, OnDeleteClickListener onDeleteClickListener) {
         this.serviceItems = serviceItems;
+        this.onDeleteClickListener = onDeleteClickListener;
     }
 
     @NonNull
@@ -30,6 +37,11 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
         holder.serviceItemDescriptionTextView.setText("Service: " + serviceItem.description);
         holder.serviceItemCostTextView.setText("Fee: SEK " + serviceItem.serviceFee);
         holder.serviceItemNotesTextView.setText("Notes: " + serviceItem.notes);
+        holder.deleteButton.setOnClickListener(v -> {
+            if (onDeleteClickListener != null) {
+                onDeleteClickListener.onDeleteClick(serviceItem);
+            }
+        });
     }
 
     @Override
@@ -46,12 +58,14 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
         TextView serviceItemDescriptionTextView;
         TextView serviceItemCostTextView;
         TextView serviceItemNotesTextView;
+        ImageButton deleteButton;
 
         public ServiceItemViewHolder(@NonNull View itemView) {
             super(itemView);
             serviceItemDescriptionTextView = itemView.findViewById(R.id.serviceItemDescriptionTextView);
             serviceItemCostTextView = itemView.findViewById(R.id.serviceItemCostTextView);
             serviceItemNotesTextView = itemView.findViewById(R.id.serviceItemNotesTextView);
+            deleteButton = itemView.findViewById(R.id.delete_button);
         }
     }
 }
