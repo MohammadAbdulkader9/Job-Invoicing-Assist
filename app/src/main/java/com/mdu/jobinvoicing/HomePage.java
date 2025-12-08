@@ -1,9 +1,14 @@
 package com.mdu.jobinvoicing;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,15 +24,17 @@ import com.google.android.material.card.MaterialCardView;
 
 public class HomePage extends AppCompatActivity {
 
-    // synced
-    private TextView syncedUnsynced;
-    private ImageView syncedDot;
+
+    private TextView statusText;
+    private ImageView statusDot;
 
     // Middle cards
     private MaterialCardView cardCreateWorkPlan, cardViewJobs, cardTimeTracking;
 
     // Bottom navigation items
     private LinearLayout navNewJobs, navCreateInvoices, navSyncNow;
+
+    private ConnectivityManager.NetworkCallback networkCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +56,12 @@ public class HomePage extends AppCompatActivity {
 
         navNewJobs         = findViewById(R.id.navNewJobs);
         navCreateInvoices  = findViewById(R.id.navCreateInvoices);
-        navSyncNow         = findViewById(R.id.navSyncNow);
+        //navSyncNow         = findViewById(R.id.navSyncNow);Commenting it out as no longer needed
+         //offline-online functionality
+        statusText = findViewById(R.id.SyncText);
+        statusDot = findViewById(R.id.statusDot);
 
-        syncedUnsynced = findViewById((R.id.SyncText));
-        syncedDot = findViewById((R.id.statusDot));
+
 
         // ----- Middle cards: main actions -----
 
@@ -101,12 +110,60 @@ public class HomePage extends AppCompatActivity {
             startActivity(intent);
             //Toast.makeText(this, "Bottom: Create Invoices", Toast.LENGTH_SHORT).show();
         });
+        setupNetworkCallback();
+    }
+    private void setupNetworkCallback() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm == null) return;
 
-        navSyncNow.setOnClickListener(v -> {
-            // TODO: Call your sync logic here (e.g., ViewModel → Repository → API).
-            syncedDot.setImageTintList(ColorStateList.valueOf(Color.GREEN));
-            syncedUnsynced.setText("Synced");
-            Toast.makeText(this, "Bottom: Sync Now", Toast.LENGTH_SHORT).show();
-        });
+        networkCallback = new ConnectivityManager.NetworkCallback() {
+            @Override
+            public void onAvailable(Network network) {
+                runOnUiThread(() -> updateStatus(true));
+            }
+
+            @Override
+            public void onLost(Network network) {
+                runOnUiThread(() -> updateStatus(false));
+            }
+        };
+
+        cm.registerDefaultNetworkCallback(networkCallback);
+
+        // Set initial status
+        updateStatus(isOnline());
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            Network network = cm.getActiveNetwork();
+            if (network != null) {
+                NetworkCapabilities capabilities = cm.getNetworkCapabilities(network);
+                return capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+            }
+        }
+        return false;
+    }
+
+    private void updateStatus(boolean online) {
+        if (statusDot != null && statusText != null) {
+            if (online) {
+                statusDot.setColorFilter(Color.parseColor("#4CAF50")); // green
+                statusText.setText("Online");
+            } else {
+                statusDot.setColorFilter(Color.parseColor("#9E9E9E")); // grey
+                statusText.setText("Offline");
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null && networkCallback != null) {
+            cm.unregisterNetworkCallback(networkCallback);
+        }
     }
 }
