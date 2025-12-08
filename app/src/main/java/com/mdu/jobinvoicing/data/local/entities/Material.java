@@ -29,6 +29,10 @@ public class Material {
     public double total;
     public String notes;
 
+    public Material() {
+        // No-argument constructor required for Firestore deserialization
+    }
+
     public Material(@NonNull String id, String workPlanId, String name,
                     double quantity, String unit, double unitPrice, String notes) {
         this.id = id;

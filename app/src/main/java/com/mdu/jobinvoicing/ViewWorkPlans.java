@@ -29,7 +29,7 @@ public class ViewWorkPlans extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_work_plans);
+        setContentView(R.layout.activity_view_workplans);
 
         db = FirebaseFirestore.getInstance();
 

@@ -37,6 +37,10 @@ public class TimeEntry {
     public double total;
     public String notes;
 
+    public TimeEntry() {
+        // No-argument constructor required for Firestore deserialization
+    }
+
     public TimeEntry(@NonNull String id, String workPlanId, String operatorId,
                      long startTimeMillis, long endTimeMillis, double hours, double hourRate, String notes) {
         this.id = id;

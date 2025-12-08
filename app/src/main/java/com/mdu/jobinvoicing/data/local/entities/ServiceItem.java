@@ -28,6 +28,10 @@ public class ServiceItem {
 
     public String notes;
 
+    public ServiceItem() {
+        // No-argument constructor required for Firestore deserialization
+    }
+
     public ServiceItem(@NonNull String id, String workPlanId, String description,
                        double serviceFee, String notes) {
         this.id = id;

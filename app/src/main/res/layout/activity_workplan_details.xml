@@ -90,7 +90,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold"/>
             <EditText
-                android:id="@+id/jobDescriptionEditText"
+                android:id="@+id/workDescriptionEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -516,7 +516,7 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android.src="@android:drawable/ic_popup_sync"
+                android:src="@android:drawable/ic_popup_sync"
                 app:tint="#FFFFFF" />
 
             <TextView
