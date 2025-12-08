@@ -61,8 +61,7 @@ public class HomePage extends AppCompatActivity {
         statusText = findViewById(R.id.SyncText);
         statusDot = findViewById(R.id.statusDot);
 
-        syncedUnsynced = findViewById((R.id.SyncText));
-        syncedDot = findViewById((R.id.statusDot));
+
 
         // ----- Middle cards: main actions -----
 
