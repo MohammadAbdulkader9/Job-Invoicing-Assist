@@ -41,7 +41,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "WorkPlanDetailsActivity";
 
-    private EditText customerNameEditText, workDescriptionEditText, locationEditText, dateEditText;
+    private EditText customerNameEditText, workTitleEditText, workDescriptionEditText, locationEditText, dateEditText;
     private Button saveButton, addTimeEntryButton, addMaterialButton, addServiceItemButton;
     private ImageView backButton;
     private RadioGroup statusRadioGroup;
@@ -75,6 +75,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         customerNameEditText = findViewById(R.id.customerNameEditText);
+        workTitleEditText = findViewById(R.id.workTitleEditText);
         workDescriptionEditText = findViewById(R.id.workDescriptionEditText);
         locationEditText = findViewById(R.id.addressEditText);
         dateEditText = findViewById(R.id.dateEditText);
@@ -161,6 +162,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
                 DocumentSnapshot document = task.getResult();
                 if (document != null && document.exists()) {
                     customerNameEditText.setText(document.getString("clientName"));
+                    workTitleEditText.setText(document.getString("workTitle"));
                     workDescriptionEditText.setText(document.getString("workDescription"));
                     locationEditText.setText(document.getString("workLocation"));
 
@@ -197,6 +199,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
         }
 
         String clientName = customerNameEditText.getText().toString().trim();
+        String workTitle = workTitleEditText.getText().toString().trim();
         String workDescription = workDescriptionEditText.getText().toString().trim();
         String workLocation = locationEditText.getText().toString().trim();
         String dateStr = dateEditText.getText().toString().trim();
@@ -208,6 +211,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
 
         Map<String, Object> updatedWorkPlan = new HashMap<>();
         updatedWorkPlan.put("clientName", clientName);
+        updatedWorkPlan.put("workTitle", workTitle);
         updatedWorkPlan.put("workDescription", workDescription);
         updatedWorkPlan.put("workLocation", workLocation);
         updatedWorkPlan.put("status", status);
@@ -260,6 +264,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
             timeEntryHourRateEditText.setText("");
             timeEntryNotesEditText.setText("");
         }).addOnFailureListener(e -> Toast.makeText(this, "Error adding time entry", Toast.LENGTH_SHORT).show());
+        fetchSubCollections(currentWorkPlanId);
     }
 
     private void addMaterial() {
@@ -294,6 +299,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
             materialUnitPriceEditText.setText("");
             materialNotesEditText.setText("");
         }).addOnFailureListener(e -> Toast.makeText(this, "Error adding material", Toast.LENGTH_SHORT).show());
+        fetchSubCollections(currentWorkPlanId);
     }
 
     private void addServiceItem() {
@@ -318,6 +324,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
             serviceItemFeeEditText.setText("");
             serviceItemNotesEditText.setText("");
         }).addOnFailureListener(e -> Toast.makeText(this, "Error adding service item", Toast.LENGTH_SHORT).show());
+        fetchSubCollections(currentWorkPlanId);
     }
 
     private void fetchSubCollections(String workPlanId) {
