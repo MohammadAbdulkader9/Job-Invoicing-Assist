@@ -23,6 +23,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.mdu.jobinvoicing.data.local.entities.Material;
 import com.mdu.jobinvoicing.data.local.entities.ServiceItem;
 import com.mdu.jobinvoicing.data.local.entities.TimeEntry;
@@ -48,6 +49,9 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
     private RadioButton statusOpen, statusInProgress, statusClosed;
 
     private FirebaseFirestore db;
+    private ListenerRegistration timeEntriesListener;
+    private ListenerRegistration materialsListener;
+    private ListenerRegistration serviceItemsListener;
     private String currentWorkPlanId;
 
     private RelativeLayout timeEntryHeader, materialHeader, serviceItemHeader;
@@ -436,27 +440,37 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
     }
 
     private void fetchTimeEntries(String workPlanId) {
-        db.collection("time_entries").whereEqualTo("workPlanId", workPlanId).orderBy("createdAt", Query.Direction.DESCENDING).addSnapshotListener((snapshots, e) -> {
-            if (e != null) {
-                Log.w(TAG, "Listen failed.", e);
-                return;
-            }
-            timeEntryList.clear();
-            if (snapshots != null) {
-                for (DocumentSnapshot doc : snapshots) {
-                    TimeEntry entry = doc.toObject(TimeEntry.class);
-                    if (entry != null) {
-                        entry.id = doc.getId();
-                        timeEntryList.add(entry);
+        if (timeEntriesListener != null) timeEntriesListener.remove();
+
+        timeEntriesListener = db.collection("time_entries")
+                .whereEqualTo("workPlanId", workPlanId)
+                .orderBy("createdAt", Query.Direction.DESCENDING)
+                .addSnapshotListener((snapshots, e) -> {
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
                     }
-                }
-            }
-            timeEntryAdapter.notifyDataSetChanged();
-        });
+                    timeEntryList.clear();
+                    if (snapshots != null) {
+                        for (DocumentSnapshot doc : snapshots) {
+                            TimeEntry entry = doc.toObject(TimeEntry.class);
+                            if (entry != null) {
+                                entry.id = doc.getId();
+                                timeEntryList.add(entry);
+                            }
+                        }
+                    }
+                    timeEntryAdapter.notifyDataSetChanged();
+                });
     }
 
     private void fetchMaterials(String workPlanId) {
-        db.collection("materials").whereEqualTo("workPlanId", workPlanId).orderBy("createdAt", Query.Direction.DESCENDING).addSnapshotListener((snapshots, e) -> {
+        if (materialsListener != null) materialsListener.remove();
+
+        materialsListener = db.collection("materials")
+                .whereEqualTo("workPlanId", workPlanId)
+                .orderBy("createdAt", Query.Direction.DESCENDING)
+                .addSnapshotListener((snapshots, e) -> {
             if (e != null) {
                 Log.w(TAG, "Listen failed.", e);
                 return;
@@ -476,7 +490,12 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
     }
 
     private void fetchServiceItems(String workPlanId) {
-        db.collection("service_items").whereEqualTo("workPlanId", workPlanId).orderBy("createdAt", Query.Direction.DESCENDING).addSnapshotListener((snapshots, e) -> {
+        if (serviceItemsListener != null) serviceItemsListener.remove();
+
+        serviceItemsListener = db.collection("service_items")
+                .whereEqualTo("workPlanId", workPlanId)
+                .orderBy("createdAt", Query.Direction.DESCENDING)
+                .addSnapshotListener((snapshots, e) -> {
             if (e != null) {
                 Log.w(TAG, "Listen failed.", e);
                 return;
@@ -516,5 +535,13 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
             content.setVisibility(View.VISIBLE);
             toggle.animate().rotation(180).setDuration(200).start();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (timeEntriesListener != null) timeEntriesListener.remove();
+        if (materialsListener != null) materialsListener.remove();
+        if (serviceItemsListener != null) serviceItemsListener.remove();
+        super.onDestroy();
     }
 }
