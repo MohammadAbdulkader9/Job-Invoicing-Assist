@@ -61,7 +61,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/ic_baseline_delete_24"
-            android:contentDescription="Delete Timer Entry"
+            android:contentDescription="Delete Time Entry"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true" />

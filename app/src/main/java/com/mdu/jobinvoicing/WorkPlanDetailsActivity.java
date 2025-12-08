@@ -179,6 +179,21 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
         db.collection("time_entries").document(timeEntry.id)
                 .delete()
                 .addOnSuccessListener(aVoid -> {
+                    // remove locally and update adapter immediately
+                    int indexToRemove = -1;
+                    for (int i = 0; i < timeEntryList.size(); i++) {
+                        if (timeEntry.id.equals(timeEntryList.get(i).id)) {
+                            indexToRemove = i;
+                            break;
+                        }
+                    }
+                    if (indexToRemove != -1) {
+                        timeEntryList.remove(indexToRemove);
+                        timeEntryAdapter.notifyItemRemoved(indexToRemove);
+                    } else {
+                        // fallback to full refresh
+                        timeEntryAdapter.notifyDataSetChanged();
+                    }
                     Toast.makeText(WorkPlanDetailsActivity.this, "Time entry deleted successfully!", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> Toast.makeText(WorkPlanDetailsActivity.this, "Error deleting time entry: " + e.getMessage(), Toast.LENGTH_LONG).show());
@@ -193,6 +208,21 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
         db.collection("materials").document(material.id)
                 .delete()
                 .addOnSuccessListener(aVoid -> {
+                    // remove locally and update adapter immediately
+                    int indexToRemove = -1;
+                    for (int i = 0; i < materialList.size(); i++) {
+                        if (material.id.equals(materialList.get(i).id)) {
+                            indexToRemove = i;
+                            break;
+                        }
+                    }
+                    if (indexToRemove != -1) {
+                        materialList.remove(indexToRemove);
+                        materialAdapter.notifyItemRemoved(indexToRemove);
+                    } else {
+                        // fallback to full refresh
+                        materialAdapter.notifyDataSetChanged();
+                    }
                     Toast.makeText(WorkPlanDetailsActivity.this, "Material deleted successfully!", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> Toast.makeText(WorkPlanDetailsActivity.this, "Error deleting material: " + e.getMessage(), Toast.LENGTH_LONG).show());
@@ -207,6 +237,21 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
         db.collection("service_items").document(serviceItem.id)
                 .delete()
                 .addOnSuccessListener(aVoid -> {
+                    // remove locally and update adapter immediately
+                    int indexToRemove = -1;
+                    for (int i = 0; i < serviceItemList.size(); i++) {
+                        if (serviceItem.id.equals(serviceItemList.get(i).id)) {
+                            indexToRemove = i;
+                            break;
+                        }
+                    }
+                    if (indexToRemove != -1) {
+                        serviceItemList.remove(indexToRemove);
+                        serviceItemAdapter.notifyItemRemoved(indexToRemove);
+                    } else {
+                        // fallback to full refresh
+                        serviceItemAdapter.notifyDataSetChanged();
+                    }
                     Toast.makeText(WorkPlanDetailsActivity.this, "Service item deleted successfully!", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> Toast.makeText(WorkPlanDetailsActivity.this, "Error deleting service item: " + e.getMessage(), Toast.LENGTH_LONG).show());
