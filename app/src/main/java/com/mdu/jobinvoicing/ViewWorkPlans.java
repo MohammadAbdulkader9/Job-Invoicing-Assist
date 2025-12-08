@@ -37,7 +37,7 @@ public class ViewWorkPlans extends AppCompatActivity {
         workPlansRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         workPlanList = new ArrayList<>();
-        workPlanAdapter = new WorkPlanAdapter(workPlanList);
+        workPlanAdapter = new WorkPlanAdapter(this, workPlanList);
         workPlansRecyclerView.setAdapter(workPlanAdapter);
 
         fetchWorkPlans();

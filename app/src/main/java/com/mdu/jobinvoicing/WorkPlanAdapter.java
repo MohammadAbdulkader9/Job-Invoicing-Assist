@@ -1,5 +1,7 @@
 package com.mdu.jobinvoicing;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +20,10 @@ import java.util.Locale;
 public class WorkPlanAdapter extends RecyclerView.Adapter<WorkPlanAdapter.WorkPlanViewHolder> {
 
     private List<WorkPlan> workPlans;
+    private Context context;
 
-    public WorkPlanAdapter(List<WorkPlan> workPlans) {
+    public WorkPlanAdapter(Context context, List<WorkPlan> workPlans) {
+        this.context = context;
         this.workPlans = workPlans;
     }
 
@@ -46,6 +50,12 @@ public class WorkPlanAdapter extends RecyclerView.Adapter<WorkPlanAdapter.WorkPl
         if (workPlan.status != null) {
             holder.statusTextView.setText(workPlan.status.name());
         }
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, WorkPlanDetailsActivity.class);
+            intent.putExtra("WORK_PLAN_ID", workPlan.id);
+            context.startActivity(intent);
+        });
     }
 
     @Override
