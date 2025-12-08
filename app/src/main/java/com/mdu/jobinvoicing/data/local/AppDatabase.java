@@ -24,7 +24,7 @@ import com.mdu.jobinvoicing.data.local.entities.*;
         SyncQueue.class,
         Operator.class,
         TimerItem.class
-}, version = 6, exportSchema = false)
+}, version = 7, exportSchema = false)
 @TypeConverters({WorkPlanStatusConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase INSTANCE;

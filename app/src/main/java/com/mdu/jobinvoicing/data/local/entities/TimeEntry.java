@@ -17,21 +17,15 @@ import androidx.room.PrimaryKey;
                         parentColumns = "id",
                         childColumns = "workPlanId",
                         onDelete = ForeignKey.CASCADE),
-                @ForeignKey(entity = Operator.class,
-                        parentColumns = "id",
-                        childColumns = "operatorId",
-                        onDelete = ForeignKey.SET_NULL)
+
         },
-        indices = {@Index("workPlanId"), @Index("operatorId")})
+        indices = {@Index("workPlanId")})
 public class TimeEntry {
     @PrimaryKey
     @NonNull
     private String id;
 
     private String workPlanId; // FK -> WorkPlan.id
-    private String operatorId; // FK -> Operator.id (nullable if operator removed)
-    private long startTimeMillis;
-    private long endTimeMillis; // 0 if still running
     private double hours; // computed value stored for convenience
     private double hourRate;
     private double total;
@@ -42,13 +36,9 @@ public class TimeEntry {
         // No-argument constructor required for Firestore deserialization
     }
 
-    public TimeEntry(@NonNull String id, String workPlanId, String operatorId,
-                     long startTimeMillis, long endTimeMillis, double hours, double hourRate, String notes) {
+    public TimeEntry(@NonNull String id, String workPlanId, double hours, double hourRate, String notes) {
         this.id = id;
         this.workPlanId = workPlanId;
-        this.operatorId = operatorId;
-        this.startTimeMillis = startTimeMillis;
-        this.endTimeMillis = endTimeMillis;
         this.hours = hours;
         this.hourRate = hourRate;
         this.total = hours * hourRate;
@@ -70,30 +60,6 @@ public class TimeEntry {
 
     public void setWorkPlanId(String workPlanId) {
         this.workPlanId = workPlanId;
-    }
-
-    public String getOperatorId() {
-        return operatorId;
-    }
-
-    public void setOperatorId(String operatorId) {
-        this.operatorId = operatorId;
-    }
-
-    public long getStartTimeMillis() {
-        return startTimeMillis;
-    }
-
-    public void setStartTimeMillis(long startTimeMillis) {
-        this.startTimeMillis = startTimeMillis;
-    }
-
-    public long getEndTimeMillis() {
-        return endTimeMillis;
-    }
-
-    public void setEndTimeMillis(long endTimeMillis) {
-        this.endTimeMillis = endTimeMillis;
     }
 
     public double getHours() {

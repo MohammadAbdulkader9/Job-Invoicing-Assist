@@ -176,17 +176,17 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
     }
 
     private void deleteTimeEntry(TimeEntry timeEntry) {
-        if (timeEntry.getTimeEntryId() == null || timeEntry.getTimeEntryId().isEmpty()) {
+        if (timeEntry.getId() == null || timeEntry.getId().isEmpty()) {
             Toast.makeText(this, "Cannot delete, time entry ID is missing.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        db.collection("workplans").document(currentWorkPlanId).collection("time_entries").document(timeEntry.getTimeEntryId())
+        db.collection("workplans").document(currentWorkPlanId).collection("time_entries").document(timeEntry.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                     int indexToRemove = -1;
                     for (int i = 0; i < timeEntryList.size(); i++) {
-                        if (timeEntry.getTimeEntryId().equals(timeEntryList.get(i).getTimeEntryId())) {
+                        if (timeEntry.getId().equals(timeEntryList.get(i).getId())) {
                             indexToRemove = i;
                             break;
                         }
@@ -203,17 +203,17 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
     }
 
     private void deleteMaterial(Material material) {
-        if (material.getMaterialId() == null || material.getMaterialId().isEmpty()) {
+        if (material.getId() == null || material.getId().isEmpty()) {
             Toast.makeText(this, "Cannot delete, material ID is missing.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        db.collection("workplans").document(currentWorkPlanId).collection("materials").document(material.getMaterialId())
+        db.collection("workplans").document(currentWorkPlanId).collection("materials").document(material.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                     int indexToRemove = -1;
                     for (int i = 0; i < materialList.size(); i++) {
-                        if (material.getMaterialId().equals(materialList.get(i).getMaterialId())) {
+                        if (material.getId().equals(materialList.get(i).getId())) {
                             indexToRemove = i;
                             break;
                         }
@@ -230,17 +230,17 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
     }
 
     private void deleteServiceItem(ServiceItem serviceItem) {
-        if (serviceItem.getServiceItemId() == null || serviceItem.getServiceItemId().isEmpty()) {
+        if (serviceItem.getId() == null || serviceItem.getId().isEmpty()) {
             Toast.makeText(this, "Cannot delete, service item ID is missing.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        db.collection("workplans").document(currentWorkPlanId).collection("service_items").document(serviceItem.getServiceItemId())
+        db.collection("workplans").document(currentWorkPlanId).collection("service_items").document(serviceItem.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                     int indexToRemove = -1;
                     for (int i = 0; i < serviceItemList.size(); i++) {
-                        if (serviceItem.getServiceItemId().equals(serviceItemList.get(i).getServiceItemId())) {
+                        if (serviceItem.getId().equals(serviceItemList.get(i).getId())) {
                             indexToRemove = i;
                             break;
                         }

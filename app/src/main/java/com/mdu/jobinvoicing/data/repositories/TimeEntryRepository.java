@@ -29,9 +29,6 @@ public class TimeEntryRepository {
         return dao.getForWorkPlan(workPlanId);
     }
 
-    public LiveData<List<TimeEntry>> getForOperator(String operatorId) {
-        return dao.getForOperator(operatorId);
-    }
 
     public LiveData<TimeEntry> getTimeEntryById(String id) {
         return dao.getTimeEntryById(id);

@@ -93,7 +93,7 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
 
     private void updateTimeEntryInFirebase(TimeEntry timeEntry) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("work_plans").document(workPlanId)
+        db.collection("workplans").document(workPlanId)
                 .collection("time_entries").document(timeEntry.getTimeEntryId())
                 .set(timeEntry)
                 .addOnSuccessListener(aVoid -> {

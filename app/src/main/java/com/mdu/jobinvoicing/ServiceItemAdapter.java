@@ -91,7 +91,7 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
 
     private void updateServiceItemInFirebase(ServiceItem serviceItem) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("work_plans").document(workPlanId)
+        db.collection("workplans").document(workPlanId)
                 .collection("service_items").document(serviceItem.getServiceItemId())
                 .set(serviceItem)
                 .addOnSuccessListener(aVoid -> {

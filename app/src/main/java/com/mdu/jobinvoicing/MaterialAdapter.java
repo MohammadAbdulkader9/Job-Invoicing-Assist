@@ -101,7 +101,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.Materi
 
     private void updateMaterialInFirebase(Material material) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("work_plans").document(workPlanId)
+        db.collection("workplans").document(workPlanId)
                 .collection("materials").document(material.getMaterialId())
                 .set(material)
                 .addOnSuccessListener(aVoid -> {
