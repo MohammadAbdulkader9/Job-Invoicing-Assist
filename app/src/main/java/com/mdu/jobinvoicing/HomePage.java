@@ -36,6 +36,8 @@ public class HomePage extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_homepage);
 
+        // Init ApiService Manager, This should only be done ones through out the app
+        // Refer to README.md under FinanceApi for examples of how to make api calls
         ApiServiceManager.createInstance(ApiServiceManager.ApiProvider.FORTNOX);
 
         // Apply padding for system bars (status bar / navigation bar)

@@ -1,5 +1,6 @@
 import json
 
+import dummydata
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
@@ -12,58 +13,8 @@ errorResponse = {
     }
 }
 
-invoices = [
-    {
-        "id": 1,
-        "Address1": "123 Main St",
-        "Address2": "Suite 100",
-        "City": "Anytown",
-        "Country": "Sweden",
-        "CustomerName": "John Doe",
-        "CustomerNumber": "12345",
-        "Currency": "SEK",
-    },
-    {
-        "id": 2,
-        "Address1": "456 Oak Ave",
-        "Address2": "Apartment 20B",
-        "City": "Gothenburg",
-        "Country": "Sweden",
-        "CustomerName": "Jane Smith",
-        "CustomerNumber": "67890",
-        "Currency": "SEK",
-    },
-    {
-        "id": 3,
-        "Address1": "789 Pine Ln",
-        "Address2": "Unit 5",
-        "City": "Malmo",
-        "Country": "Sweden",
-        "CustomerName": "Peter Jones",
-        "CustomerNumber": "11223",
-        "Currency": "EUR",
-    },
-    {
-        "id": 4,
-        "Address1": "101 Elm Rd",
-        "Address2": "Building C",
-        "City": "Stockholm",
-        "Country": "Sweden",
-        "CustomerName": "Anna Karlsson",
-        "CustomerNumber": "44556",
-        "Currency": "SEK",
-    },
-    {
-        "id": 5,
-        "Address1": "222 Birch St",
-        "Address2": "Floor 3",
-        "City": "Uppsala",
-        "Country": "Sweden",
-        "CustomerName": "Erik Svensson",
-        "CustomerNumber": "77889",
-        "Currency": "SEK",
-    },
-]
+invoices = dummydata.invoices
+customers = dummydata.customers
 
 
 @app.route("/3/invoices", methods=["POST"])
