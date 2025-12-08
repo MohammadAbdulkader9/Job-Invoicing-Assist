@@ -21,6 +21,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.card.MaterialCardView;
+import com.mdu.jobinvoicing.data.network.financeApi.ApiServiceManager;
 
 public class HomePage extends AppCompatActivity {
 
@@ -41,6 +42,10 @@ public class HomePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_homepage);
+
+        // Init ApiService Manager, This should only be done ones through out the app
+        // Refer to README.md under FinanceApi for examples of how to make api calls
+        ApiServiceManager.createInstance(ApiServiceManager.ApiProvider.FORTNOX);
 
         // Apply padding for system bars (status bar / navigation bar)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
