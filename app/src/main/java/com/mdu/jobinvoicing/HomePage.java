@@ -19,9 +19,9 @@ import com.google.android.material.card.MaterialCardView;
 
 public class HomePage extends AppCompatActivity {
 
-    // synced
-    private TextView syncedUnsynced;
-    private ImageView syncedDot;
+
+    private TextView statusText;
+    private ImageView statusDot;
 
     // Middle cards
     private MaterialCardView cardCreateWorkPlan, cardViewJobs, cardTimeTracking;
