@@ -56,7 +56,10 @@ public class HomePage extends AppCompatActivity {
 
         navNewJobs         = findViewById(R.id.navNewJobs);
         navCreateInvoices  = findViewById(R.id.navCreateInvoices);
-        navSyncNow         = findViewById(R.id.navSyncNow);
+        //navSyncNow         = findViewById(R.id.navSyncNow);Commenting it out as no longer needed
+         //offline-online functionality
+        statusText = findViewById(R.id.SyncText);
+        statusDot = findViewById(R.id.statusDot);
 
         syncedUnsynced = findViewById((R.id.SyncText));
         syncedDot = findViewById((R.id.statusDot));
