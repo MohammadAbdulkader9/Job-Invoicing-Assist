@@ -34,6 +34,8 @@ public class HomePage extends AppCompatActivity {
     // Bottom navigation items
     private LinearLayout navNewJobs, navCreateInvoices, navSyncNow;
 
+    private ConnectivityManager.NetworkCallback networkCallback;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
