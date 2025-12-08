@@ -3,6 +3,7 @@ package com.mdu.jobinvoicing.data.local.entities;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 /**
  * WorkPlan entity represents a work plan.
@@ -15,19 +16,20 @@ public class WorkPlan {
 
     public String title;
     public String clientName;
+    public String description;
     public String location;
-    public long startDateMillis;
-    public long endDateMillis;
-    public String status; // e.g., "OPEN", "IN_PROGRESS", "CLOSED"
+    public long startDate;
+    public long endDate;
+    public WorkPlanStatus status;
 
     public WorkPlan(@NonNull String id, String title, String clientName, String location,
-                    long startDateMillis, long endDateMillis, String status) {
+                    long startDate, long endDate, WorkPlanStatus status) {
         this.id = id;
         this.title = title;
         this.clientName = clientName;
         this.location = location;
-        this.startDateMillis = startDateMillis;
-        this.endDateMillis = endDateMillis;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.status = status;
     }
 }
