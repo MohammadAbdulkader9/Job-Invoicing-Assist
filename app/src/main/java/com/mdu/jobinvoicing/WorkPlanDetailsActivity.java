@@ -242,10 +242,15 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
             return;
         }
 
+        double hours = Double.parseDouble(hoursStr);
+        double hourRate = Double.parseDouble(hourRateStr);
+        double total = hours * hourRate;
+
         Map<String, Object> timeEntry = new HashMap<>();
         timeEntry.put("workPlanId", currentWorkPlanId);
-        timeEntry.put("hours", Double.parseDouble(hoursStr));
-        timeEntry.put("hourRate", Double.parseDouble(hourRateStr));
+        timeEntry.put("hours", hours);
+        timeEntry.put("hourRate", hourRate);
+        timeEntry.put("total", total);
         timeEntry.put("notes", timeEntryNotesEditText.getText().toString());
         timeEntry.put("createdAt", new Timestamp(new Date()));
 
@@ -267,12 +272,17 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
             return;
         }
 
+        double quantity = Double.parseDouble(quantityStr);
+        double unitPrice = Double.parseDouble(unitPriceStr);
+        double total = quantity * unitPrice;
+
         Map<String, Object> material = new HashMap<>();
         material.put("workPlanId", currentWorkPlanId);
         material.put("name", name);
-        material.put("quantity", Double.parseDouble(quantityStr));
+        material.put("quantity", quantity);
         material.put("unit", materialUnitEditText.getText().toString());
-        material.put("unitPrice", Double.parseDouble(unitPriceStr));
+        material.put("unitPrice", unitPrice);
+        material.put("total", total);
         material.put("notes", materialNotesEditText.getText().toString());
         material.put("createdAt", new Timestamp(new Date()));
 
