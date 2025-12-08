@@ -13,8 +13,12 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.mdu.jobinvoicing.data.network.financeApi.ApiCallback;
 import com.mdu.jobinvoicing.data.network.financeApi.ApiServiceManager;
+import com.mdu.jobinvoicing.data.network.financeApi.ErrorResponse;
 import com.mdu.jobinvoicing.data.network.financeApi.InvoiceResponse;
 import com.mdu.jobinvoicing.data.network.financeApi.fortnox.FortnoxInstance;
+
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 public class Invoices extends AppCompatActivity {
     TextView textView;
@@ -33,16 +37,22 @@ public class Invoices extends AppCompatActivity {
                 System.out.println(response.getAddress1());
             }
             @Override
-            public void onError(String errorMessage){
+            public void onError(String errorMessage, ErrorResponse err){
                 System.out.println("this is a custom error callback function");
             }
         });
         asm.postInvoice(new InvoiceResponse("wow","e","se",
-                "","sek", "Marcus", "3319",
+                "","sek", "Marcus", "33",
                 3200,3100), new ApiCallback<InvoiceResponse>(){
             @Override
             public void onSuccess(InvoiceResponse response){
                 System.out.println(response.getCustomerName());
+            }
+            @Override
+            public void onError(String errorMessage, ErrorResponse err){
+                System.out.println(errorMessage);
+                System.out.println(err.getCode());
+
             }
         });
     }

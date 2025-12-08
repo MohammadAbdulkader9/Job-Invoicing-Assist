@@ -72,18 +72,18 @@ public class ApiServiceManager {
 
     public static ErrorResponse parseErrorResponse(Response<?> response) {
         Converter<ResponseBody, ErrorResponse> converter =
-            retrofit.responseBodyConverter(
-                ErrorResponse.class,
-                new Annotation[0]
-            );
-        ErrorResponse errorResponse;
+                retrofit.responseBodyConverter(ErrorResponse.class, new Annotation[0]);
+
+        ErrorResponse error;
+
         try {
-            errorResponse = converter.convert(response.errorBody());
+            error = converter.convert(response.errorBody());
         } catch (IOException e) {
-            return new ErrorResponse("Unknown", "unknown", "unknown");
+            return new ErrorResponse();
         }
 
-        return errorResponse;
+        return error;
+
     }
 
     public void getInvoiceById(

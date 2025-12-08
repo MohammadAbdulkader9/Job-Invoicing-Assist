@@ -10,9 +10,7 @@ public class ErrorResponse {
     @SerializedName("Message")
     private String Message;
 
-    public ErrorResponse(String Code, String Error, String Message){
-        this.Code = Code;
-        this.Error = Error;
-        this.Message = Message;
+    public ErrorResponse(){
     }
+    public String getCode() {return this.Code;}
 }

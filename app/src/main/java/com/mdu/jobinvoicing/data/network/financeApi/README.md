@@ -13,14 +13,16 @@ The function **onSuccess(...)** needs to be implemented to handle the successful
 **onError(...)** or **onFailure(...)** are only invoked when the API call fails. That means that if the API call is successful, the **onSuccess(...)** function will be invoked, even if the response is not successful.
 
 ```java
+import com.mdu.jobinvoicing.data.network.financeApi.ErrorResponse;
+
 ApiServiceManager asm = ApiServiceManager.getInstance();
-asm.getInvoiceById("4", new ApiCallback<InvoiceResponse>() {
+asm.getInvoiceById("4",new ApiCallback<InvoiceResponse>() {
     @Override
-    public void onSuccess(InvoiceResponse response) {
+    public void onSuccess (InvoiceResponse response){
         System.out.println(response.getAddress1());
     }
     @Override
-    public void onError(String errorMessage){
+    public void onError (String errorMessage, ErrorResponse err){
         System.out.println("this is a custom error callback function");
     }
 });
