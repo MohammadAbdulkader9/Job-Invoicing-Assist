@@ -241,9 +241,9 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
-        <!-- Sync Now -->
+        <!-- Operator Profile -->
         <LinearLayout
-            android:id="@+id/navSyncNow"
+            android:id="@+id/navOperatorProfile"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -255,13 +255,13 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@android:drawable/ic_popup_sync"
+                android:src="@drawable/outline_person_book_24"
                 app:tint="#FFFFFF" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sync Now"
+                android:text="Profile"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp" />
         </LinearLayout>

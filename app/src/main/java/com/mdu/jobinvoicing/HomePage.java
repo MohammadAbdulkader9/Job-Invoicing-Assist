@@ -27,7 +27,7 @@ public class HomePage extends AppCompatActivity {
     private MaterialCardView cardCreateWorkPlan, cardViewJobs, cardTimeTracking;
 
     // Bottom navigation items
-    private LinearLayout navNewJobs, navCreateInvoices, navSyncNow;
+    private LinearLayout navNewJobs, navCreateInvoices, navProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class HomePage extends AppCompatActivity {
 
         navNewJobs         = findViewById(R.id.navNewJobs);
         navCreateInvoices  = findViewById(R.id.navCreateInvoices);
-        navSyncNow         = findViewById(R.id.navSyncNow);
+        navProfile        = findViewById(R.id.navOperatorProfile);
 
         syncedUnsynced = findViewById((R.id.SyncText));
         syncedDot = findViewById((R.id.statusDot));
@@ -102,11 +102,9 @@ public class HomePage extends AppCompatActivity {
             //Toast.makeText(this, "Bottom: Create Invoices", Toast.LENGTH_SHORT).show();
         });
 
-        navSyncNow.setOnClickListener(v -> {
-            // TODO: Call your sync logic here (e.g., ViewModel → Repository → API).
-            syncedDot.setImageTintList(ColorStateList.valueOf(Color.GREEN));
-            syncedUnsynced.setText("Synced");
-            Toast.makeText(this, "Bottom: Sync Now", Toast.LENGTH_SHORT).show();
+        navProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(HomePage.this, OperatorProfile.class);
+            startActivity(intent);
         });
     }
 }
