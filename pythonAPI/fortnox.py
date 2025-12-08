@@ -2,6 +2,7 @@ import json
 
 import dummydata
 from flask import Flask, jsonify, request
+from flask.helpers import send_file
 
 app = Flask(__name__)
 
@@ -49,3 +50,12 @@ def getInvoice(invoice_id):
             }
         }
     ), 404
+
+
+@app.route("/3/invoices/<int:invoice_id>/preview", methods=["GET"])
+def getInvoicePreview(invoice_id):
+    for invoice in invoices:
+        if invoice["id"] == invoice_id:
+            return send_file("./assets/sample.pdf")
+
+    return jsonify(errorResponse), 400

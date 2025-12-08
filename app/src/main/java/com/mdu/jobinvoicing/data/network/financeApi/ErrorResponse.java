@@ -13,4 +13,6 @@ public class ErrorResponse {
     public ErrorResponse(){
     }
     public String getCode() {return this.Code;}
+    public String getError() {return  this.Error;}
+    public String getMessage() {return this.Message;}
 }
