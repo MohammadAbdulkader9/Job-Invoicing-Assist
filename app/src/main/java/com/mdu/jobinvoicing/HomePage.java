@@ -1,7 +1,9 @@
 package com.mdu.jobinvoicing;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -9,6 +11,8 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.os.Bundle;
 import android.view.View;
+import android.os.Bundle;
+import android.os.IBinder;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,6 +39,25 @@ public class HomePage extends AppCompatActivity {
     private LinearLayout navNewJobs, navCreateInvoices, navSyncNow;
 
     private ConnectivityManager.NetworkCallback networkCallback;
+    private MockLoadAssistService service;
+    private boolean bound = false;
+    private final ServiceConnection conn = new ServiceConnection(){
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder binder) {
+            MockLoadAssistService.LocalBinder b = (MockLoadAssistService.LocalBinder) binder;
+            service = b.getService();
+
+            // Set listener to feed tickets into repository in real-time
+            service.setOnReceiptCompletedListener(ticket -> TicketRepository.addTicket(ticket));
+
+            bound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            bound = false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +113,13 @@ public class HomePage extends AppCompatActivity {
             startActivity(intent);
         });
 
+        MaterialCardView cardLoadTicket = findViewById(R.id.cardLoadTicket);
+        cardLoadTicket.setOnClickListener(v -> {
+            Intent intent = new Intent(HomePage.this, TicketListActivity.class);
+            startActivity(intent);
+        });
+
+
 
         // ----- Bottom navigation bar -----
 
@@ -111,6 +141,20 @@ public class HomePage extends AppCompatActivity {
             //Toast.makeText(this, "Bottom: Create Invoices", Toast.LENGTH_SHORT).show();
         });
         setupNetworkCallback();
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Bind the MockLoadAssistService to start reading CSV
+        Intent intent = new Intent(this, MockLoadAssistService.class);
+        bindService(intent, conn, BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (bound) unbindService(conn);
+        bound = false;
     }
     private void setupNetworkCallback() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

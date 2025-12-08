@@ -34,10 +34,12 @@
         <activity android:name=".WorkPlanActivity"/>
         <activity android:name=".Invoices"/>
         <activity android:name=".ViewWorkPlans"/>
-        <activity android:name=".WorkPlanDetailsActivity">
+        <activity android:name=".WorkPlanDetailsActivity"/>
+            <activity android:name=".TicketListActivity" />
 
 
-        </activity>
+
+
 
     </application>
 
