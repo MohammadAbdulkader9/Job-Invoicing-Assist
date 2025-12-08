@@ -102,11 +102,36 @@ public class HomePage extends AppCompatActivity {
             //Toast.makeText(this, "Bottom: Create Invoices", Toast.LENGTH_SHORT).show();
         });
 
-        navSyncNow.setOnClickListener(v -> {
-            // TODO: Call your sync logic here (e.g., ViewModel → Repository → API).
-            syncedDot.setImageTintList(ColorStateList.valueOf(Color.GREEN));
-            syncedUnsynced.setText("Synced");
-            Toast.makeText(this, "Bottom: Sync Now", Toast.LENGTH_SHORT).show();
-        });
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            Network network = cm.getActiveNetwork();
+            if (network != null) {
+                NetworkCapabilities capabilities = cm.getNetworkCapabilities(network);
+                return capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+            }
+        }
+        return false;
+    }
+
+    private void updateStatus(boolean online) {
+        if (statusDot != null && statusText != null) {
+            if (online) {
+                statusDot.setColorFilter(Color.parseColor("#4CAF50")); // green
+                statusText.setText("Online");
+            } else {
+                statusDot.setColorFilter(Color.parseColor("#9E9E9E")); // grey
+                statusText.setText("Offline");
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null && networkCallback != null) {
+            cm.unregisterNetworkCallback(networkCallback);
+        }
     }
 }
