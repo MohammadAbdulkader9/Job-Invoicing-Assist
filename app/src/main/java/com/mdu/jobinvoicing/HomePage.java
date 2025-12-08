@@ -65,7 +65,7 @@ public class HomePage extends AppCompatActivity {
         });
         MaterialCardView  cardCreateWorkPlan = findViewById(R.id.cardCreateWorkPlan);
         cardCreateWorkPlan.setOnClickListener(v -> {
-            Intent intent = new Intent(HomePage.this, Workplan.class);
+            Intent intent = new Intent(HomePage.this, WorkPlanActivity.class);
             startActivity(intent);
         });
 
@@ -77,7 +77,7 @@ public class HomePage extends AppCompatActivity {
 
         MaterialCardView cardViewJobs = findViewById(R.id.cardViewJobs);
         cardViewJobs.setOnClickListener(v -> {
-            Intent intent = new Intent(HomePage.this, ViewJobs.class);
+            Intent intent = new Intent(HomePage.this, ViewWorkPlans.class);
             startActivity(intent);
         });
 
