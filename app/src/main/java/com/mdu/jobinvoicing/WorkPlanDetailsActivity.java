@@ -136,6 +136,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
         if (intent != null && intent.hasExtra("WORK_PLAN_ID")) {
             currentWorkPlanId = intent.getStringExtra("WORK_PLAN_ID");
             if (currentWorkPlanId != null && !currentWorkPlanId.isEmpty()) {
+                setupRecyclerViews(); //Re-initialize adapters with the work plan ID
                 loadWorkPlanData(currentWorkPlanId);
                 fetchSubCollections(currentWorkPlanId);
             }
@@ -145,17 +146,17 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
     private void setupRecyclerViews() {
         timeEntriesRecyclerView = findViewById(R.id.timeEntriesRecyclerView);
         timeEntriesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        timeEntryAdapter = new TimeEntryAdapter(timeEntryList, this);
+        timeEntryAdapter = new TimeEntryAdapter(timeEntryList, currentWorkPlanId, this);
         timeEntriesRecyclerView.setAdapter(timeEntryAdapter);
 
         materialsRecyclerView = findViewById(R.id.materialsRecyclerView);
         materialsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        materialAdapter = new MaterialAdapter(materialList, this);
+        materialAdapter = new MaterialAdapter(materialList, currentWorkPlanId, this);
         materialsRecyclerView.setAdapter(materialAdapter);
 
         serviceItemsRecyclerView = findViewById(R.id.serviceItemsRecyclerView);
         serviceItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        serviceItemAdapter = new ServiceItemAdapter(serviceItemList, this);
+        serviceItemAdapter = new ServiceItemAdapter(serviceItemList, currentWorkPlanId, this);
         serviceItemsRecyclerView.setAdapter(serviceItemAdapter);
     }
 
@@ -175,18 +176,17 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
     }
 
     private void deleteTimeEntry(TimeEntry timeEntry) {
-        if (timeEntry.id == null || timeEntry.id.isEmpty()) {
+        if (timeEntry.getTimeEntryId() == null || timeEntry.getTimeEntryId().isEmpty()) {
             Toast.makeText(this, "Cannot delete, time entry ID is missing.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        db.collection("time_entries").document(timeEntry.id)
+        db.collection("workplans").document(currentWorkPlanId).collection("time_entries").document(timeEntry.getTimeEntryId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
-                    // remove locally and update adapter immediately
                     int indexToRemove = -1;
                     for (int i = 0; i < timeEntryList.size(); i++) {
-                        if (timeEntry.id.equals(timeEntryList.get(i).id)) {
+                        if (timeEntry.getTimeEntryId().equals(timeEntryList.get(i).getTimeEntryId())) {
                             indexToRemove = i;
                             break;
                         }
@@ -195,7 +195,6 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
                         timeEntryList.remove(indexToRemove);
                         timeEntryAdapter.notifyItemRemoved(indexToRemove);
                     } else {
-                        // fallback to full refresh
                         timeEntryAdapter.notifyDataSetChanged();
                     }
                     Toast.makeText(WorkPlanDetailsActivity.this, "Time entry deleted successfully!", Toast.LENGTH_SHORT).show();
@@ -204,18 +203,17 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
     }
 
     private void deleteMaterial(Material material) {
-        if (material.id == null || material.id.isEmpty()) {
+        if (material.getMaterialId() == null || material.getMaterialId().isEmpty()) {
             Toast.makeText(this, "Cannot delete, material ID is missing.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        db.collection("materials").document(material.id)
+        db.collection("workplans").document(currentWorkPlanId).collection("materials").document(material.getMaterialId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
-                    // remove locally and update adapter immediately
                     int indexToRemove = -1;
                     for (int i = 0; i < materialList.size(); i++) {
-                        if (material.id.equals(materialList.get(i).id)) {
+                        if (material.getMaterialId().equals(materialList.get(i).getMaterialId())) {
                             indexToRemove = i;
                             break;
                         }
@@ -224,7 +222,6 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
                         materialList.remove(indexToRemove);
                         materialAdapter.notifyItemRemoved(indexToRemove);
                     } else {
-                        // fallback to full refresh
                         materialAdapter.notifyDataSetChanged();
                     }
                     Toast.makeText(WorkPlanDetailsActivity.this, "Material deleted successfully!", Toast.LENGTH_SHORT).show();
@@ -233,18 +230,17 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
     }
 
     private void deleteServiceItem(ServiceItem serviceItem) {
-        if (serviceItem.id == null || serviceItem.id.isEmpty()) {
+        if (serviceItem.getServiceItemId() == null || serviceItem.getServiceItemId().isEmpty()) {
             Toast.makeText(this, "Cannot delete, service item ID is missing.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        db.collection("service_items").document(serviceItem.id)
+        db.collection("workplans").document(currentWorkPlanId).collection("service_items").document(serviceItem.getServiceItemId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
-                    // remove locally and update adapter immediately
                     int indexToRemove = -1;
                     for (int i = 0; i < serviceItemList.size(); i++) {
-                        if (serviceItem.id.equals(serviceItemList.get(i).id)) {
+                        if (serviceItem.getServiceItemId().equals(serviceItemList.get(i).getServiceItemId())) {
                             indexToRemove = i;
                             break;
                         }
@@ -253,7 +249,6 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
                         serviceItemList.remove(indexToRemove);
                         serviceItemAdapter.notifyItemRemoved(indexToRemove);
                     } else {
-                        // fallback to full refresh
                         serviceItemAdapter.notifyDataSetChanged();
                     }
                     Toast.makeText(WorkPlanDetailsActivity.this, "Service item deleted successfully!", Toast.LENGTH_SHORT).show();
@@ -364,7 +359,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
         timeEntry.put("notes", timeEntryNotesEditText.getText().toString());
         timeEntry.put("createdAt", new Timestamp(new Date()));
 
-        db.collection("time_entries").add(timeEntry).addOnSuccessListener(documentReference -> {
+        db.collection("workplans").document(currentWorkPlanId).collection("time_entries").add(timeEntry).addOnSuccessListener(documentReference -> {
             Toast.makeText(this, "Time entry added", Toast.LENGTH_SHORT).show();
             timeEntryHoursEditText.setText("");
             timeEntryHourRateEditText.setText("");
@@ -397,7 +392,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
         material.put("notes", materialNotesEditText.getText().toString());
         material.put("createdAt", new Timestamp(new Date()));
 
-        db.collection("materials").add(material).addOnSuccessListener(documentReference -> {
+        db.collection("workplans").document(currentWorkPlanId).collection("materials").add(material).addOnSuccessListener(documentReference -> {
             Toast.makeText(this, "Material added", Toast.LENGTH_SHORT).show();
             materialNameEditText.setText("");
             materialQuantityEditText.setText("");
@@ -424,7 +419,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
         serviceItem.put("notes", serviceItemNotesEditText.getText().toString());
         serviceItem.put("createdAt", new Timestamp(new Date()));
 
-        db.collection("service_items").add(serviceItem).addOnSuccessListener(documentReference -> {
+        db.collection("workplans").document(currentWorkPlanId).collection("service_items").add(serviceItem).addOnSuccessListener(documentReference -> {
             Toast.makeText(this, "Service item added", Toast.LENGTH_SHORT).show();
             serviceItemDescriptionEditText.setText("");
             serviceItemFeeEditText.setText("");
@@ -442,8 +437,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
     private void fetchTimeEntries(String workPlanId) {
         if (timeEntriesListener != null) timeEntriesListener.remove();
 
-        timeEntriesListener = db.collection("time_entries")
-                .whereEqualTo("workPlanId", workPlanId)
+        timeEntriesListener = db.collection("workplans").document(workPlanId).collection("time_entries")
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .addSnapshotListener((snapshots, e) -> {
                     if (e != null) {
@@ -455,7 +449,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
                         for (DocumentSnapshot doc : snapshots) {
                             TimeEntry entry = doc.toObject(TimeEntry.class);
                             if (entry != null) {
-                                entry.id = doc.getId();
+                                entry.setTimeEntryId(doc.getId());
                                 timeEntryList.add(entry);
                             }
                         }
@@ -467,8 +461,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
     private void fetchMaterials(String workPlanId) {
         if (materialsListener != null) materialsListener.remove();
 
-        materialsListener = db.collection("materials")
-                .whereEqualTo("workPlanId", workPlanId)
+        materialsListener = db.collection("workplans").document(workPlanId).collection("materials")
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .addSnapshotListener((snapshots, e) -> {
             if (e != null) {
@@ -480,7 +473,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
                 for (DocumentSnapshot doc : snapshots) {
                     Material material = doc.toObject(Material.class);
                     if (material != null) {
-                        material.id = doc.getId();
+                        material.setMaterialId(doc.getId());
                         materialList.add(material);
                     }
                 }
@@ -492,8 +485,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
     private void fetchServiceItems(String workPlanId) {
         if (serviceItemsListener != null) serviceItemsListener.remove();
 
-        serviceItemsListener = db.collection("service_items")
-                .whereEqualTo("workPlanId", workPlanId)
+        serviceItemsListener = db.collection("workplans").document(workPlanId).collection("service_items")
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .addSnapshotListener((snapshots, e) -> {
             if (e != null) {
@@ -505,7 +497,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
                 for (DocumentSnapshot doc : snapshots) {
                     ServiceItem item = doc.toObject(ServiceItem.class);
                     if (item != null) {
-                        item.id = doc.getId();
+                        item.setServiceItemId(doc.getId());
                         serviceItemList.add(item);
                     }
                 }

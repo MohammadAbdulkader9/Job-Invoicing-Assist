@@ -1,26 +1,35 @@
 package com.mdu.jobinvoicing;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.mdu.jobinvoicing.data.local.entities.TimeEntry;
+
 import java.util.List;
 
 public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.TimeEntryViewHolder> {
 
     private List<TimeEntry> timeEntries;
     private OnDeleteClickListener onDeleteClickListener;
+    private final String workPlanId;
 
     public interface OnDeleteClickListener {
         void onDeleteClick(TimeEntry timeEntry);
     }
 
-    public TimeEntryAdapter(List<TimeEntry> timeEntries, OnDeleteClickListener onDeleteClickListener) {
+    public TimeEntryAdapter(List<TimeEntry> timeEntries, String workPlanId, OnDeleteClickListener onDeleteClickListener) {
         this.timeEntries = timeEntries;
+        this.workPlanId = workPlanId;
         this.onDeleteClickListener = onDeleteClickListener;
     }
 
@@ -34,15 +43,66 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
     @Override
     public void onBindViewHolder(@NonNull TimeEntryViewHolder holder, int position) {
         TimeEntry timeEntry = timeEntries.get(position);
-        holder.timeEntryHoursTextView.setText("Hours: " + timeEntry.hours);
-        holder.timeEntryRateTextView.setText("Rate: SEK " + timeEntry.hourRate + "/hr");
-        holder.timeEntryTotalTextView.setText("Total: SEK" + timeEntry.total);
-        holder.timeEntryNotesTextView.setText("Notes: " + timeEntry.notes);
+        holder.timeEntryHoursTextView.setText("Hours: " + timeEntry.getHours());
+        holder.timeEntryRateTextView.setText("Rate: SEK " + timeEntry.getHourRate() + "/hr");
+        holder.timeEntryTotalTextView.setText("Total: SEK" + timeEntry.getTotal());
+        holder.timeEntryNotesTextView.setText("Notes: " + timeEntry.getNotes());
         holder.deleteButton.setOnClickListener(v -> {
             if (onDeleteClickListener != null) {
                 onDeleteClickListener.onDeleteClick(timeEntry);
             }
         });
+
+        holder.editButton.setOnClickListener(v -> {
+            showEditTimeEntryDialog(timeEntry, holder.itemView.getContext());
+        });
+    }
+
+    private void showEditTimeEntryDialog(TimeEntry timeEntry, Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View dialogView = inflater.inflate(R.layout.dialog_edit_time_entry, null);
+        builder.setView(dialogView);
+
+        final TextInputEditText editTimeEntryHours = dialogView.findViewById(R.id.editTimeEntryHours);
+        final TextInputEditText editTimeEntryRate = dialogView.findViewById(R.id.editTimeEntryRate);
+        final TextInputEditText editTimeEntryNotes = dialogView.findViewById(R.id.editTimeEntryNotes);
+
+        editTimeEntryHours.setText(String.valueOf(timeEntry.getHours()));
+        editTimeEntryRate.setText(String.valueOf(timeEntry.getHourRate()));
+        editTimeEntryNotes.setText(timeEntry.getNotes());
+
+        builder.setPositiveButton("Save", (dialog, which) -> {
+            double hours = Double.parseDouble(editTimeEntryHours.getText().toString());
+            double rate = Double.parseDouble(editTimeEntryRate.getText().toString());
+            String notes = editTimeEntryNotes.getText().toString();
+
+            timeEntry.setHours(hours);
+            timeEntry.setHourRate(rate);
+            timeEntry.setNotes(notes);
+            timeEntry.setTotal(hours * rate);
+
+            updateTimeEntryInFirebase(timeEntry);
+
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void updateTimeEntryInFirebase(TimeEntry timeEntry) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("work_plans").document(workPlanId)
+                .collection("time_entries").document(timeEntry.getTimeEntryId())
+                .set(timeEntry)
+                .addOnSuccessListener(aVoid -> {
+                    int index = timeEntries.indexOf(timeEntry);
+                    if (index != -1) {
+                        timeEntries.set(index, timeEntry);
+                        notifyItemChanged(index);
+                    }
+                });
     }
 
     @Override
@@ -61,6 +121,7 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
         TextView timeEntryTotalTextView;
         TextView timeEntryNotesTextView;
         ImageButton deleteButton;
+        ImageButton editButton;
 
         public TimeEntryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -69,6 +130,7 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
             timeEntryTotalTextView = itemView.findViewById(R.id.timeEntryTotalTextView);
             timeEntryNotesTextView = itemView.findViewById(R.id.timeEntryNotesTextView);
             deleteButton = itemView.findViewById(R.id.delete_button);
+            editButton = itemView.findViewById(R.id.edit_button);
         }
     }
 }

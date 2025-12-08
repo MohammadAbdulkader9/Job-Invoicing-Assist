@@ -26,16 +26,17 @@ import androidx.room.PrimaryKey;
 public class TimeEntry {
     @PrimaryKey
     @NonNull
-    public String id;
+    private String id;
 
-    public String workPlanId; // FK -> WorkPlan.id
-    public String operatorId; // FK -> Operator.id (nullable if operator removed)
-    public long startTimeMillis;
-    public long endTimeMillis; // 0 if still running
-    public double hours; // computed value stored for convenience
-    public double hourRate;
-    public double total;
-    public String notes;
+    private String workPlanId; // FK -> WorkPlan.id
+    private String operatorId; // FK -> Operator.id (nullable if operator removed)
+    private long startTimeMillis;
+    private long endTimeMillis; // 0 if still running
+    private double hours; // computed value stored for convenience
+    private double hourRate;
+    private double total;
+    private String notes;
+    private String timeEntryId;
 
     public TimeEntry() {
         // No-argument constructor required for Firestore deserialization
@@ -52,5 +53,86 @@ public class TimeEntry {
         this.hourRate = hourRate;
         this.total = hours * hourRate;
         this.notes = notes;
+    }
+
+    @NonNull
+    public String getId() {
+        return id;
+    }
+
+    public void setId(@NonNull String id) {
+        this.id = id;
+    }
+
+    public String getWorkPlanId() {
+        return workPlanId;
+    }
+
+    public void setWorkPlanId(String workPlanId) {
+        this.workPlanId = workPlanId;
+    }
+
+    public String getOperatorId() {
+        return operatorId;
+    }
+
+    public void setOperatorId(String operatorId) {
+        this.operatorId = operatorId;
+    }
+
+    public long getStartTimeMillis() {
+        return startTimeMillis;
+    }
+
+    public void setStartTimeMillis(long startTimeMillis) {
+        this.startTimeMillis = startTimeMillis;
+    }
+
+    public long getEndTimeMillis() {
+        return endTimeMillis;
+    }
+
+    public void setEndTimeMillis(long endTimeMillis) {
+        this.endTimeMillis = endTimeMillis;
+    }
+
+    public double getHours() {
+        return hours;
+    }
+
+    public void setHours(double hours) {
+        this.hours = hours;
+    }
+
+    public double getHourRate() {
+        return hourRate;
+    }
+
+    public void setHourRate(double hourRate) {
+        this.hourRate = hourRate;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getTimeEntryId() {
+        return timeEntryId;
+    }
+
+    public void setTimeEntryId(String timeEntryId) {
+        this.timeEntryId = timeEntryId;
     }
 }
