@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.mdu.jobinvoicing.data.local.entities.WorkPlanStatus;
@@ -41,12 +43,12 @@ public class WorkPlanActivity extends AppCompatActivity {
         workLocationEt = findViewById(R.id.inputJobLocation);
         btnCreate = findViewById(R.id.btnCreate);
         btnCancel = findViewById(R.id.btnCancel);
-        backBtn = findViewById(R.id.back_button);
+        MaterialToolbar toolbar = findViewById(R.id.workplan_top_bar);
 
         // ===============================
         // Back & Cancel Button Listeners
         // ===============================
-        backBtn.setOnClickListener(v -> finish());
+        toolbar.setNavigationOnClickListener(v -> finish());
         btnCancel.setOnClickListener(v -> finish());
 
         //==============

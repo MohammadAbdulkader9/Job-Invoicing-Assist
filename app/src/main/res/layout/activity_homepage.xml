@@ -9,69 +9,56 @@
     android:background="#FFFFFF"
     tools:context=".HomePage">
 
-    <!-- Top bar: app title + business id -->
-    <LinearLayout
-        android:id="@+id/topBar"
-        android:layout_width="0dp"
+    <!-- Top bar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/materialToolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:background="#F5F5F5"
-        android:padding="16dp"
+        app:title="Job Invoicing Assist"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/titleText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Job Invoicing Assist"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <ImageView
-                android:id="@+id/statusDot"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="4dp"
-                android:src="@drawable/dot_circle"
-                app:layout_constraintEnd_toStartOf="@id/SyncText"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="#FF0000" />
-
-            <TextView
-                android:id="@+id/SyncText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Unsynced"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
 
+    <ImageView
+        android:id="@+id/statusDot"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/dot_circle"
+        app:layout_constraintEnd_toStartOf="@id/SyncText"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="#FF0000"
+        android:elevation="4dp"/>
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/SyncText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Unsynced"
+        android:textSize="14sp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="4dp"/>
+
 
     <!-- Middle section: three rounded cards -->
     <LinearLayout
         android:id="@+id/middleSection"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="20dp"
-        app:layout_constraintBottom_toTopOf="@id/bottomBar"
+        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topBar">
+        app:layout_constraintTop_toBottomOf="@+id/materialToolbar">
 
         <!-- Create Work plan card -->
         <com.google.android.material.card.MaterialCardView
@@ -106,9 +93,9 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- View Jobs card -->
+        <!-- View WorkPlans card -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardViewJobs"
+            android:id="@+id/cardViewWorkPlans"
             android:layout_width="220dp"
             android:layout_height="140dp"
             android:layout_marginBottom="20dp"
@@ -133,7 +120,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="View Jobs"
+                    android:text="View Work Plans"
                     android:textSize="18sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -173,7 +160,8 @@
 
     </LinearLayout>
 
-    <!-- Bottom navigation bar: industrial grey with icon + text -->
+
+    <!-- Bottom navigation bar -->
     <LinearLayout
         android:id="@+id/bottomBar"
         android:layout_width="0dp"

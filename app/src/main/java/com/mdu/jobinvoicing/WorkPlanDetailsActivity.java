@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -43,7 +44,6 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
 
     private EditText customerNameEditText, workTitleEditText, workDescriptionEditText, locationEditText, dateEditText;
     private Button saveButton, addTimeEntryButton, addMaterialButton, addServiceItemButton;
-    private ImageView backButton;
     private RadioGroup statusRadioGroup;
     private RadioButton statusOpen, statusInProgress, statusClosed;
 
@@ -80,7 +80,6 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
         locationEditText = findViewById(R.id.addressEditText);
         dateEditText = findViewById(R.id.dateEditText);
         saveButton = findViewById(R.id.saveButton);
-        backButton = findViewById(R.id.back_button);
         statusRadioGroup = findViewById(R.id.statusRadioGroup);
         statusOpen = findViewById(R.id.statusOpen);
         statusInProgress = findViewById(R.id.statusInProgress);
@@ -114,9 +113,12 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
         serviceItemFeeEditText = findViewById(R.id.serviceItemFeeEditText);
         serviceItemNotesEditText = findViewById(R.id.serviceItemNotesEditText);
 
+        MaterialToolbar toolbar = findViewById(R.id.WorkPlanDetails_top_bar);
+
+
         setupRecyclerViews();
 
-        backButton.setOnClickListener(v -> finish());
+        toolbar.setNavigationOnClickListener(v -> finish());
         dateEditText.setOnClickListener(v -> showDatePickerDialog());
         saveButton.setOnClickListener(v -> saveWorkPlanChanges());
 

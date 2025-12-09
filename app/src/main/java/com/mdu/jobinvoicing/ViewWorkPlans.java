@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -41,6 +42,10 @@ public class ViewWorkPlans extends AppCompatActivity {
         workPlansRecyclerView.setAdapter(workPlanAdapter);
 
         fetchWorkPlans();
+
+        //back button
+        MaterialToolbar toolbar = findViewById(R.id.viewWorkPlans_top_bar);
+        toolbar.setNavigationOnClickListener(v -> finish());
     }
 
     private void fetchWorkPlans() {

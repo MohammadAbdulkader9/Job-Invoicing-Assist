@@ -1,57 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:padding="24dp"
+    android:background="#FFFFFF"
     tools:context=".WorkPlanActivity">
-    <!-- Back Button -->
-    <ImageView
-        android:id="@+id/back_button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/ic_baseline_arrow_back_24"
-        android:background="@drawable/back_button_border"
-        android:padding="8dp"
-        android:contentDescription="@string/back"
+
+    <!-- Top bar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/workplan_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F5F5F5"
+        app:title="Create Work Plan"
+        app:navigationIcon="@drawable/back_arrow"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:fontFamily="sans-serif"
-        android:text="@string/create_work_plan"
-        android:textColor="#000"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@id/back_button"
-        app:layout_constraintTop_toTopOf="@id/back_button"
-        app:layout_constraintBottom_toBottomOf="@id/back_button"/>
-    <!-- Subtitle -->
-    <TextView
-        android:id="@+id/sub_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="@string/log_new_job"
-        android:textColor="#2E2C2C"
-        android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="@id/title"
-        app:layout_constraintTop_toBottomOf="@id/title" />
-    <!-- Bottom Divider -->
-    <View
-        android:id="@+id/bottom_divider"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="24dp"
-        android:background="#BDBDBD"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sub_title" />
+        />
+
     <!-- ============================= -->
     <!--        FORM SECTION           -->
     <!-- ============================= -->
@@ -59,12 +28,15 @@
         android:id="@+id/scrollArea"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:paddingTop="32dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@id/bottom_divider"
-        app:layout_constraintStart_toStartOf="parent"
+        android:paddingTop="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/workplan_top_bar"
+        app:layout_constraintVertical_bias="1.0">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -75,91 +47,95 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
                 android:text="@string/client"
                 android:textSize="22sp"
-                android:textStyle="bold"
-                android:paddingBottom="8dp" />
+                android:textStyle="bold" />
+
             <EditText
                 android:id="@+id/inputClientName"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="@drawable/edittext_border"
+                android:hint="@string/enter_client"
+                android:inputType="textPersonName"
                 android:padding="16dp"
                 android:textSize="20sp"
-                tools:ignore="Autofill"
-                android:inputType="textPersonName"
-                android:hint="@string/enter_client" />
+                tools:ignore="Autofill" />
             <!-- Workplan Title -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="28dp"
+                android:paddingBottom="8dp"
                 android:text="Work title"
                 android:textSize="22sp"
-                android:textStyle="bold"
-                android:paddingTop="28dp"
-                android:paddingBottom="8dp" />
+                android:textStyle="bold" />
+
             <EditText
                 android:id="@+id/inputWorkPlanTitle"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="@drawable/edittext_border"
+                android:hint="@string/enter_job_title"
+                android:inputType="textCapWords"
                 android:padding="16dp"
                 android:textSize="20sp"
-                tools:ignore="Autofill"
-                android:inputType="textCapWords"
-                android:hint="@string/enter_job_title" />
+                tools:ignore="Autofill" />
             <!-- Job Description -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="28dp"
+                android:paddingBottom="8dp"
                 android:text="Work plan description"
                 android:textSize="22sp"
-                android:textStyle="bold"
-                android:paddingTop="28dp"
-                android:paddingBottom="8dp" />
+                android:textStyle="bold" />
+
             <EditText
                 android:id="@+id/inputJobDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minLines="4"
-                android:maxLines="12"
                 android:background="@drawable/edittext_border"
                 android:gravity="top"
                 android:hint="@string/enter_job_des"
                 android:inputType="textMultiLine"
+                android:maxLines="12"
+                android:minLines="4"
                 android:padding="16dp"
-                android:textSize="20sp"
                 android:scrollHorizontally="false"
+                android:textSize="20sp"
                 tools:ignore="Autofill" />
             <!-- Job Location -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="28dp"
+                android:paddingBottom="8dp"
                 android:text="Work location"
                 android:textSize="22sp"
-                android:textStyle="bold"
-                android:paddingTop="28dp"
-                android:paddingBottom="8dp" />
+                android:textStyle="bold" />
+
             <EditText
                 android:id="@+id/inputJobLocation"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="@drawable/edittext_border"
-                android:padding="16dp"
-                android:gravity="center_vertical"
-                android:hint="@string/enter_location"
-                android:textSize="20sp"
-                android:inputType="textCapWords"
                 android:drawableStart="@drawable/ic_baseline_add_location_24"
                 android:drawablePadding="16dp"
+                android:gravity="center_vertical"
+                android:hint="@string/enter_location"
+                android:inputType="textCapWords"
+                android:padding="16dp"
+                android:textSize="20sp"
                 tools:ignore="Autofill" />
 
             <!-- Buttons -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center"
+                android:orientation="horizontal"
                 android:paddingTop="40dp"
                 android:paddingBottom="32dp"
                 android:weightSum="2">
@@ -172,13 +148,13 @@
                     android:layout_weight="1"
                     android:background="@drawable/rounded_white_border"
                     android:text="@string/cancel"
-                    app:backgroundTint="@null"
+                    android:textColor="#000"
                     android:textSize="20sp"
-                    android:textColor="#000" />
+                    app:backgroundTint="@null" />
 
                 <Space
                     android:layout_width="24dp"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent" />
 
                 <!-- Create Button -->
 
@@ -189,10 +165,9 @@
                     android:layout_weight="1"
                     android:background="@drawable/rounded_black_button"
                     android:text="@string/create"
+                    android:textColor="@android:color/white"
                     android:textSize="20sp"
-                    app:backgroundTint="@null"
-                    android:textColor="@android:color/white" />
-
+                    app:backgroundTint="@null" />
 
 
             </LinearLayout>

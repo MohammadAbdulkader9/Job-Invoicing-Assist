@@ -2,13 +2,11 @@ package com.mdu.jobinvoicing;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -56,7 +54,7 @@ public class HomePage extends AppCompatActivity {
 
         // ----- Find views -----
         cardCreateWorkPlan = findViewById(R.id.cardCreateWorkPlan);
-        cardViewJobs       = findViewById(R.id.cardViewJobs);
+        cardViewJobs       = findViewById(R.id.cardViewWorkPlans);
         //cardTimeTracking   = findViewById(R.id.cardTimeTracking);
 
         navNewJobs         = findViewById(R.id.navNewJobs);
@@ -89,7 +87,7 @@ public class HomePage extends AppCompatActivity {
             startActivity(intent);
         });
 
-        MaterialCardView cardViewJobs = findViewById(R.id.cardViewJobs);
+        MaterialCardView cardViewJobs = findViewById(R.id.cardViewWorkPlans);
         cardViewJobs.setOnClickListener(v -> {
             Intent intent = new Intent(HomePage.this, ViewWorkPlans.class);
             startActivity(intent);

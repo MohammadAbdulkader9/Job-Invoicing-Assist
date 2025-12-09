@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mdu.jobinvoicing.data.local.AppDatabase;
@@ -78,6 +79,10 @@ public class StopWatchTimer extends AppCompatActivity {
         entryName = findViewById(R.id.entry_name);
         startPauseButton = findViewById(R.id.stopwatch_start_pause);
         resetButton = findViewById(R.id.stopwatch_reset);
+
+        //back button
+        MaterialToolbar toolbar = findViewById(R.id.Timers_top_bar);
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         // Initialize bottom-half views
         timersRecyclerView = findViewById(R.id.timers_recycler_view);
