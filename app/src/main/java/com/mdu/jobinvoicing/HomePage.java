@@ -116,6 +116,10 @@ public class HomePage extends AppCompatActivity {
             startActivity(intent);
             //Toast.makeText(this, "Bottom: Create Invoices", Toast.LENGTH_SHORT).show();
         });
+        navProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(HomePage.this, OperatorProfile.class);
+            startActivity(intent);
+        });
         setupNetworkCallback();
     }
     private void setupNetworkCallback() {
@@ -140,10 +144,6 @@ public class HomePage extends AppCompatActivity {
         updateStatus(isOnline());
     }
 
-        navProfile.setOnClickListener(v -> {
-            Intent intent = new Intent(HomePage.this, OperatorProfile.class);
-            startActivity(intent);
-        });
     private boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm != null) {
