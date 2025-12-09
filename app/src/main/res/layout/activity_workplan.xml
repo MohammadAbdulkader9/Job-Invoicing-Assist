@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:padding="24dp"
-    tools:context=".Workplan">
+    tools:context=".WorkPlanActivity">
     <!-- Back Button -->
     <ImageView
         android:id="@+id/back_button"
@@ -90,17 +90,17 @@
                 tools:ignore="Autofill"
                 android:inputType="textPersonName"
                 android:hint="@string/enter_client" />
-            <!-- Job Title -->
+            <!-- Workplan Title -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/job_title"
+                android:text="Work title"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:paddingTop="28dp"
                 android:paddingBottom="8dp" />
             <EditText
-                android:id="@+id/inputJobTitle"
+                android:id="@+id/inputWorkPlanTitle"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="@drawable/edittext_border"
@@ -113,7 +113,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/job_des"
+                android:text="Work plan description"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:paddingTop="28dp"
@@ -136,7 +136,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/location"
+                android:text="Work location"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:paddingTop="28dp"
@@ -154,107 +154,6 @@
                 android:drawableStart="@drawable/ic_baseline_add_location_24"
                 android:drawablePadding="16dp"
                 tools:ignore="Autofill" />
-            <!-- Billing Model -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/Billing"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:paddingTop="28dp"
-                android:paddingBottom="8dp" />
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:endIconMode="dropdown_menu">
-
-                <AutoCompleteTextView
-                    android:id="@+id/mySpinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/select_billing_model"
-                    android:inputType="none"
-                    android:padding="16dp"
-                    android:importantForAccessibility="no"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Material Used -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/Materials"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:paddingTop="28dp"
-                android:paddingBottom="8dp" />
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:endIconMode="dropdown_menu">
-
-                <AutoCompleteTextView
-                    android:id="@+id/my_material"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/what_materials_are_you_used"
-                    android:inputType="none"
-                    android:padding="16dp"
-                    android:importantForAccessibility="no"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-            <!-- Start & End Time -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/start_time"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:paddingTop="28dp"
-                android:paddingBottom="8dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2"
-                android:gravity="center_vertical">
-
-                <!-- Start Time Field -->
-                <EditText
-                    android:id="@+id/inputStartTime"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:autofillHints="time"
-                    android:background="@drawable/edittext_border"
-                    android:hint="@string/start_time"
-                    android:inputType="none"
-                    android:padding="16dp"
-                    android:textSize="20sp"
-                    android:drawableEnd="@drawable/outline_alarm_on_24"
-                    android:drawablePadding="10dp" />
-
-                <Space
-                    android:layout_width="16dp"
-                    android:layout_height="match_parent"/>
-
-                <!-- End Time Field -->
-                <EditText
-                    android:id="@+id/inputEndTime"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/edittext_border"
-                    android:hint="@string/end_time"
-                    android:inputType="none"
-                    android:padding="16dp"
-                    android:autofillHints="time"
-                    android:textSize="20sp"
-                    android:drawableEnd="@drawable/outline_alarm_off_24"
-                    android:drawablePadding="10dp" />
-
-            </LinearLayout>
 
             <!-- Buttons -->
             <LinearLayout

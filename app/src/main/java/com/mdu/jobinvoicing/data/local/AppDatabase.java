@@ -6,6 +6,7 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
 import com.mdu.jobinvoicing.data.local.daos.*;
 import com.mdu.jobinvoicing.data.local.entities.*;
@@ -23,7 +24,8 @@ import com.mdu.jobinvoicing.data.local.entities.*;
         SyncQueue.class,
         Operator.class,
         TimerItem.class
-}, version = 2, exportSchema = false)
+}, version = 5, exportSchema = false)
+@TypeConverters({WorkPlanStatusConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase INSTANCE;
 

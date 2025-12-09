@@ -18,7 +18,7 @@ import java.util.List;
  */
 @Dao
 public interface WorkPlanDao {
-    @Query("SELECT * FROM work_plans ORDER BY startDateMillis DESC")
+    @Query("SELECT * FROM work_plans ORDER BY startDate DESC")
     LiveData<List<WorkPlan>> getAllWorkPlans();
 
     @Query("SELECT * FROM work_plans WHERE id = :id LIMIT 1")

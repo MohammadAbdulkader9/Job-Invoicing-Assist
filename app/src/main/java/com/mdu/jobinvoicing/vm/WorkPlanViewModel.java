@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import com.mdu.jobinvoicing.data.local.entities.WorkPlan;
+import com.mdu.jobinvoicing.data.local.entities.WorkPlanStatus;
 import com.mdu.jobinvoicing.data.repositories.WorkPlanRepository;
 
 import java.util.List;
@@ -69,6 +70,6 @@ public class WorkPlanViewModel extends AndroidViewModel {
         String id = UUID.randomUUID().toString();
         long now = System.currentTimeMillis();
         // Default values for a new plan
-        return new WorkPlan(id, "", "", "", now, now, "OPEN");
+        return new WorkPlan(id, "", "", "", now, now, WorkPlanStatus.OPEN);
     }
 }

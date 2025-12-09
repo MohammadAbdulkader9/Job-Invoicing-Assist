@@ -26,7 +26,12 @@ public class Material {
     public double quantity;
     public String unit; // e.g., "pcs", "m", "kg"
     public double unitPrice;
+    public double total;
     public String notes;
+
+    public Material() {
+        // No-argument constructor required for Firestore deserialization
+    }
 
     public Material(@NonNull String id, String workPlanId, String name,
                     double quantity, String unit, double unitPrice, String notes) {
@@ -36,6 +41,7 @@ public class Material {
         this.quantity = quantity;
         this.unit = unit;
         this.unitPrice = unitPrice;
+        this.total = quantity * unitPrice;
         this.notes = notes;
     }
 }
