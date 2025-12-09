@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.mdu.jobinvoicing.data.local.entities.WorkPlan;
+import com.mdu.jobinvoicing.data.local.entities.WorkPlanStatus;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,6 +24,7 @@ public class WorkPlanAdapter extends RecyclerView.Adapter<WorkPlanAdapter.WorkPl
 
     private List<WorkPlan> workPlans;
     private Context context;
+    private FirebaseFirestore db;
 
     public WorkPlanAdapter(Context context, List<WorkPlan> workPlans) {
         this.context = context;
@@ -36,10 +40,11 @@ public class WorkPlanAdapter extends RecyclerView.Adapter<WorkPlanAdapter.WorkPl
 
     @Override
     public void onBindViewHolder(@NonNull WorkPlanViewHolder holder, int position) {
+        ImageView delete = holder.itemView.findViewById(R.id.delete_icon);
+
         WorkPlan workPlan = workPlans.get(position);
         holder.clientNameTextView.setText(workPlan.clientName);
         holder.workTitleTextView.setText(workPlan.title);
-        holder.workDescriptionTextView.setText(workPlan.description);
         holder.workLocationTextView.setText(workPlan.location);
 
         if (workPlan.startDate > 0) {
@@ -48,8 +53,35 @@ public class WorkPlanAdapter extends RecyclerView.Adapter<WorkPlanAdapter.WorkPl
         }
 
         if (workPlan.status != null) {
-            holder.statusTextView.setText(workPlan.status.name());
+            //fix to get rid of _ in In_Progress
+            if (workPlan.status == WorkPlanStatus.IN_PROGRESS) {
+                holder.statusTextView.setText("IN PROGRESS");
+            }else {
+                holder.statusTextView.setText(workPlan.status.name());
+            }
         }
+
+        //work plan icon depending on status
+        if (workPlan.status == WorkPlanStatus.OPEN) {
+            holder.workStatusIcon.setImageResource(R.drawable.jobbs_list_status_open);
+        } else if (workPlan.status == WorkPlanStatus.IN_PROGRESS) {
+            holder.workStatusIcon.setImageResource(R.drawable.jobbs_list_status_in_progress);
+        } else if (workPlan.status == WorkPlanStatus.CLOSED) {
+            holder.workStatusIcon.setImageResource(R.drawable.jobbs_list_status_closed);
+        }
+
+        //delete icon press
+        delete.setOnClickListener(v -> {
+            //TODO: ask if you really want to remove it
+
+            //removes from the list
+            workPlans.remove(workPlan);
+            notifyItemRemoved(position);
+
+            db = FirebaseFirestore.getInstance();
+            db.collection("workplans").document(workPlan.id).delete();
+        });
+
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, WorkPlanDetailsActivity.class);
@@ -66,19 +98,19 @@ public class WorkPlanAdapter extends RecyclerView.Adapter<WorkPlanAdapter.WorkPl
     static class WorkPlanViewHolder extends RecyclerView.ViewHolder {
         TextView clientNameTextView;
         TextView workTitleTextView;
-        TextView workDescriptionTextView;
         TextView workLocationTextView;
         TextView startDateTextView;
         TextView statusTextView;
+        ImageView workStatusIcon;
 
         public WorkPlanViewHolder(@NonNull View itemView) {
             super(itemView);
             clientNameTextView = itemView.findViewById(R.id.clientNameTextView);
             workTitleTextView = itemView.findViewById(R.id.workTitleTextView);
-            workDescriptionTextView = itemView.findViewById(R.id.workDescriptionTextView);
             workLocationTextView = itemView.findViewById(R.id.workLocationTextView);
             startDateTextView = itemView.findViewById(R.id.startDateTextView);
             statusTextView = itemView.findViewById(R.id.statusTextView);
+            workStatusIcon = itemView.findViewById(R.id.work_status_icon);
         }
     }
 }
