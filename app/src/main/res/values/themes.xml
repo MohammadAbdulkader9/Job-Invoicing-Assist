@@ -6,4 +6,9 @@
     </style>
 
     <style name="Theme.JobInvoicingAssist" parent="Base.Theme.JobInvoicingAssist" />
+    <style name="HintStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColorHint">#999999</item>
+    </style>
+
 </resources>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/card_background"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvName"
+        android:text="Operator Name"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tvRole"
+        android:text="Operator"
+        android:textColor="#555"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tvEmail"
+        android:text="📧 Email Address"
+        android:textSize="15sp"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tvPhone"
+        android:text="📱 Phone Number"
+        android:textSize="15sp"
+        android:layout_marginTop="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <!-- Buttons Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp">
+
+        <Button
+            android:id="@+id/btnSetActive"
+            android:text="Set Active"
+            android:backgroundTint="#000"
+            android:textColor="#fff"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="45dp" />
+
+        <Button
+            android:id="@+id/btnEdit"
+            android:text="Edit"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#4CAF50"
+            android:textColor="#fff"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="45dp" />
+
+        <ImageButton
+            android:id="@+id/btnDelete"
+            android:src="@drawable/ic_delete_red"
+            app:tint="#F44336"
+            android:background="@android:color/transparent"
+            android:layout_marginStart="8dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp" />
+
+    </LinearLayout>
+</LinearLayout>
