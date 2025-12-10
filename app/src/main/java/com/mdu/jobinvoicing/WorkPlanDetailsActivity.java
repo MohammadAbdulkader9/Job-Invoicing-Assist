@@ -3,6 +3,10 @@ package com.mdu.jobinvoicing;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler; // auto-save feature
+import android.os.Looper; // auto-save feature
+import android.text.Editable; // auto-save feature
+import android.text.TextWatcher; // auto-save feature
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,8 +26,8 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query; // auto-save feature
 import com.mdu.jobinvoicing.data.local.entities.Material;
 import com.mdu.jobinvoicing.data.local.entities.ServiceItem;
 import com.mdu.jobinvoicing.data.local.entities.TimeEntry;
@@ -69,6 +73,11 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
     private ArrayList<TimeEntry> timeEntryList = new ArrayList<>();
     private ArrayList<Material> materialList = new ArrayList<>();
     private ArrayList<ServiceItem> serviceItemList = new ArrayList<>();
+
+    // auto-save feature
+    private Handler autoSaveHandler = new Handler(Looper.getMainLooper());
+    private Runnable autoSaveRunnable;
+    private boolean isProgrammaticChange = false;
 
 
     @Override
@@ -119,10 +128,10 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
         serviceItemNotesEditText = findViewById(R.id.serviceItemNotesEditText);
 
         setupRecyclerViews();
+        setupAutoSave(); // auto-save feature
 
         backButton.setOnClickListener(v -> finish());
         dateEditText.setOnClickListener(v -> showDatePickerDialog());
-        saveButton.setOnClickListener(v -> saveWorkPlanChanges());
 
         timeEntryHeader.setOnClickListener(v -> toggleSection(timeEntryContent, timeEntryToggle));
         materialHeader.setOnClickListener(v -> toggleSection(materialContent, materialToggle));
@@ -141,6 +150,38 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
                 fetchSubCollections(currentWorkPlanId);
             }
         }
+    }
+    // auto-save feature
+    private void setupAutoSave() {
+        saveButton.setVisibility(View.GONE);
+        autoSaveRunnable = this::saveWorkPlanChanges;
+
+        TextWatcher autoSaveTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { /* Unused */ }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!isProgrammaticChange) {
+                    autoSaveHandler.removeCallbacks(autoSaveRunnable);
+                    autoSaveHandler.postDelayed(autoSaveRunnable, 2000); // 2-second delay
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { /* Unused */ }
+        };
+
+        customerNameEditText.addTextChangedListener(autoSaveTextWatcher);
+        workTitleEditText.addTextChangedListener(autoSaveTextWatcher);
+        workDescriptionEditText.addTextChangedListener(autoSaveTextWatcher);
+        locationEditText.addTextChangedListener(autoSaveTextWatcher);
+
+        statusRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (!isProgrammaticChange) {
+                saveWorkPlanChanges();
+            }
+        });
     }
 
     private void setupRecyclerViews() {
@@ -262,6 +303,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document != null && document.exists()) {
+                    isProgrammaticChange = true;
                     customerNameEditText.setText(document.getString("clientName"));
                     workTitleEditText.setText(document.getString("workTitle"));
                     workDescriptionEditText.setText(document.getString("workDescription"));
@@ -284,6 +326,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
                             Log.e(TAG, "Invalid status value: " + statusStr, e);
                         }
                     }
+                    isProgrammaticChange = false;
                 } else {
                     Toast.makeText(this, "Work plan details not found.", Toast.LENGTH_SHORT).show();
                 }
@@ -295,8 +338,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
 
     private void saveWorkPlanChanges() {
         if (currentWorkPlanId == null || currentWorkPlanId.isEmpty()) {
-            Toast.makeText(this, "Cannot save changes, work plan ID is missing.", Toast.LENGTH_SHORT).show();
-            return;
+            return; // Don't save if there's no ID
         }
 
         String clientName = customerNameEditText.getText().toString().trim();
@@ -333,7 +375,6 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
                 .update(updatedWorkPlan)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(WorkPlanDetailsActivity.this, "Work plan updated successfully!", Toast.LENGTH_SHORT).show();
-                    finish();
                 })
                 .addOnFailureListener(e -> Toast.makeText(WorkPlanDetailsActivity.this, "Error updating work plan: " + e.getMessage(), Toast.LENGTH_LONG).show());
     }
@@ -464,22 +505,22 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
         materialsListener = db.collection("workplans").document(workPlanId).collection("materials")
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .addSnapshotListener((snapshots, e) -> {
-            if (e != null) {
-                Log.w(TAG, "Listen failed.", e);
-                return;
-            }
-            materialList.clear();
-            if (snapshots != null) {
-                for (DocumentSnapshot doc : snapshots) {
-                    Material material = doc.toObject(Material.class);
-                    if (material != null) {
-                        material.setId(doc.getId());
-                        materialList.add(material);
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
                     }
-                }
-            }
-            materialAdapter.notifyDataSetChanged();
-        });
+                    materialList.clear();
+                    if (snapshots != null) {
+                        for (DocumentSnapshot doc : snapshots) {
+                            Material material = doc.toObject(Material.class);
+                            if (material != null) {
+                                material.setId(doc.getId());
+                                materialList.add(material);
+                            }
+                        }
+                    }
+                    materialAdapter.notifyDataSetChanged();
+                });
     }
 
     private void fetchServiceItems(String workPlanId) {
@@ -488,22 +529,22 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
         serviceItemsListener = db.collection("workplans").document(workPlanId).collection("service_items")
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .addSnapshotListener((snapshots, e) -> {
-            if (e != null) {
-                Log.w(TAG, "Listen failed.", e);
-                return;
-            }
-            serviceItemList.clear();
-            if (snapshots != null) {
-                for (DocumentSnapshot doc : snapshots) {
-                    ServiceItem item = doc.toObject(ServiceItem.class);
-                    if (item != null) {
-                        item.setId(doc.getId());
-                        serviceItemList.add(item);
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
                     }
-                }
-            }
-            serviceItemAdapter.notifyDataSetChanged();
-        });
+                    serviceItemList.clear();
+                    if (snapshots != null) {
+                        for (DocumentSnapshot doc : snapshots) {
+                            ServiceItem item = doc.toObject(ServiceItem.class);
+                            if (item != null) {
+                                item.setId(doc.getId());
+                                serviceItemList.add(item);
+                            }
+                        }
+                    }
+                    serviceItemAdapter.notifyDataSetChanged();
+                });
     }
 
     private void showDatePickerDialog() {
@@ -514,7 +555,8 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 (view, year1, monthOfYear, dayOfMonth) -> {
-                    dateEditText.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year1);
+                    dateEditText.setText(String.format(Locale.getDefault(), "%d/%d/%d", dayOfMonth, monthOfYear + 1, year1));
+                    saveWorkPlanChanges();
                 }, year, month, day);
         datePickerDialog.show();
     }
@@ -531,6 +573,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
 
     @Override
     protected void onDestroy() {
+        autoSaveHandler.removeCallbacks(autoSaveRunnable);
         if (timeEntriesListener != null) timeEntriesListener.remove();
         if (materialsListener != null) materialsListener.remove();
         if (serviceItemsListener != null) serviceItemsListener.remove();
