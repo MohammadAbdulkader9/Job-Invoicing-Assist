@@ -12,11 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
-        <!-- ========================================== -->
-        <!-- TITLE + SUBTITLE -->
-        <!-- ========================================== -->
-
+        <!-- TITLE -->
         <TextView
             android:id="@+id/tvTitle"
             android:text="Operator Profile"
@@ -36,27 +32,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-
-        <!-- ========================================== -->
-        <!-- FORM CARD (TOP) -->
-        <!-- ========================================== -->
+        <!-- FORM CARD -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/formCard"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:padding="32dp"
-            android:background="@drawable/card_background"
-            android:layout_height="wrap_content">
+            android:background="@drawable/card_background">
 
             <!-- Full Name -->
             <TextView
                 android:id="@+id/lblFullName"
                 android:text="Full Name *"
                 android:textStyle="bold"
-                android:layout_marginTop="18dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent" />
 
             <EditText
                 android:id="@+id/etFullName"
@@ -75,11 +67,11 @@
                 android:id="@+id/lblRole"
                 android:text="Role *"
                 android:textStyle="bold"
-                android:layout_marginTop="18dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
                 app:layout_constraintTop_toBottomOf="@id/etFullName"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent" />
 
             <EditText
                 android:id="@+id/etRole"
@@ -92,14 +84,14 @@
                 android:background="@drawable/edittext_bg"
                 app:layout_constraintTop_toBottomOf="@id/lblRole"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <!-- Divider -->
             <View
                 android:id="@+id/divider"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_marginTop="26dp"
+                android:layout_marginTop="24dp"
                 android:background="#DDD"
                 app:layout_constraintTop_toBottomOf="@id/etRole"
                 app:layout_constraintStart_toStartOf="parent"
@@ -114,7 +106,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/divider"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent" />
 
             <EditText
                 android:id="@+id/etEmail"
@@ -126,7 +118,7 @@
                 android:layout_marginTop="6dp"
                 app:layout_constraintTop_toBottomOf="@id/lblEmail"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <!-- Phone -->
             <TextView
@@ -137,7 +129,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/etEmail"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent" />
 
             <EditText
                 android:id="@+id/etPhone"
@@ -149,27 +141,44 @@
                 android:layout_marginTop="6dp"
                 app:layout_constraintTop_toBottomOf="@id/lblPhone"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- SAVE BUTTON -->
-            <Button
-                android:id="@+id/btnSave"
-                android:text="Save Profile"
-                android:backgroundTint="#000"
-                android:textColor="@android:color/white"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
+            <!-- BUTTON ROW -->
+            <LinearLayout
+                android:id="@+id/layoutButtons"
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
                 app:layout_constraintTop_toBottomOf="@id/etPhone"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <!-- CANCEL -->
+                <Button
+                    android:id="@+id/btnCancel"
+                    android:text="Cancel"
+                    android:backgroundTint="#888888"
+                    android:textColor="@android:color/white"
+
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1" />
+
+                <!-- SAVE -->
+                <Button
+                    android:id="@+id/btnSave"
+                    android:text="Create Profile"
+                    android:backgroundTint="#000000"
+                    android:textColor="@android:color/white"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-        <!-- ========================================== -->
-        <!-- MULTIPLE OPERATOR CARDS (LIST) -->
-        <!-- ========================================== -->
+        <!-- OPERATORS LIST -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvOperators"
             android:layout_width="match_parent"
