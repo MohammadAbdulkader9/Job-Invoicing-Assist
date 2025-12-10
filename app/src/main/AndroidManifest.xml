@@ -30,6 +30,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+        <activity android:name=".OperatorProfile"/>
         <activity android:name=".StopWatchTimer" />
         <activity android:name=".WorkPlanActivity"/>
         <activity android:name=".Invoices"/>
@@ -39,6 +40,8 @@
 
 
 
+
+        </activity>
 
 
     </application>

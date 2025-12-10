@@ -37,7 +37,7 @@ public class HomePage extends AppCompatActivity {
     private MaterialCardView cardCreateWorkPlan, cardViewJobs, cardTimeTracking;
 
     // Bottom navigation items
-    private LinearLayout navNewJobs, navCreateInvoices, navSyncNow;
+    private LinearLayout navNewJobs, navCreateInvoices, navProfile;
 
     private ConnectivityManager.NetworkCallback networkCallback;
     private MockLoadAssistService service;
@@ -84,6 +84,7 @@ public class HomePage extends AppCompatActivity {
 
         navNewJobs         = findViewById(R.id.navNewJobs);
         navCreateInvoices  = findViewById(R.id.navCreateInvoices);
+        navProfile        = findViewById(R.id.navOperatorProfile);
         //navSyncNow         = findViewById(R.id.navSyncNow);Commenting it out as no longer needed
          //offline-online functionality
         statusText = findViewById(R.id.SyncText);
@@ -144,6 +145,10 @@ public class HomePage extends AppCompatActivity {
             Intent intent = new Intent(HomePage.this, Invoices.class);
             startActivity(intent);
             //Toast.makeText(this, "Bottom: Create Invoices", Toast.LENGTH_SHORT).show();
+        });
+        navProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(HomePage.this, OperatorProfile.class);
+            startActivity(intent);
         });
         setupNetworkCallback();
     }
