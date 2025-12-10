@@ -23,8 +23,8 @@ import com.mdu.jobinvoicing.data.local.entities.*;
         InvoiceLineItem.class,
         SyncQueue.class,
         Operator.class,
-        TimerItem.class
-}, version = 7, exportSchema = false)
+        StopWatchTimerItem.class
+}, version = 9, exportSchema = false)
 @TypeConverters({WorkPlanStatusConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase INSTANCE;
@@ -37,7 +37,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract InvoiceLineItemDao invoiceLineItemDao();
     public abstract SyncQueueDao syncQueueDao();
     public abstract OperatorDao operatorDao();
-    public abstract TimerItemDao timerItemDao();
+    public abstract StopWatchTimerItemDao timerItemDao();
 
     public static AppDatabase getInstance(final Context context) {
         if (INSTANCE == null) {

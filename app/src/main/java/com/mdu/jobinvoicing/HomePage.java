@@ -4,13 +4,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
-import android.os.Bundle;
-import android.view.View;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.ImageView;
@@ -109,7 +106,7 @@ public class HomePage extends AppCompatActivity {
 
         MaterialCardView cardTimeTracking = findViewById(R.id.cardTimeTracking);
         cardTimeTracking.setOnClickListener(v -> {
-            Intent intent = new Intent(HomePage.this, StopWatchTimer.class);
+            Intent intent = new Intent(HomePage.this, StopWatchTimerActivity.class);
             startActivity(intent);
         });
 
