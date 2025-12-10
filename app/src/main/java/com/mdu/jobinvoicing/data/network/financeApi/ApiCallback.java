@@ -1,5 +1,9 @@
 package com.mdu.jobinvoicing.data.network.financeApi;
 
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -8,7 +12,7 @@ public abstract class ApiCallback<T> implements Callback<T> {
 
     public abstract void onSuccess(T response);
 
-    public void onError(String errorMessage) {
+    public void onError(String errorMessage, ErrorResponse err) {
         System.err.println("[API Error]: " + errorMessage);
     }
 
@@ -17,12 +21,14 @@ public abstract class ApiCallback<T> implements Callback<T> {
         if (response.isSuccessful() && response.body() != null) {
             onSuccess(response.body());
         } else {
-            onError("Server Error: " + response.code());
+
+            ErrorResponse err = ApiServiceManager.parseErrorResponse(response);
+            onError("Server Error: " + response.code(), err);
         }
     }
 
     @Override
     public void onFailure(Call<T> call, Throwable t) {
-        onError("Network Failed: " + t.getMessage());
+        onError("Network Failed: " + t.getMessage(), null);
     }
 }
