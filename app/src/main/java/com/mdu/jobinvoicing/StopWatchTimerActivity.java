@@ -99,7 +99,7 @@ public class StopWatchTimerActivity extends AppCompatActivity {
             timerAdapter.notifyDataSetChanged();
 
             if (newId != -1) {
-                // select the newly created item
+                // select newly created item
                 for (int i = 0; i < this.timers.size(); i++) {
                     if (this.timers.get(i).getId() == newId) {
                         selectTimer(i);
@@ -117,7 +117,19 @@ public class StopWatchTimerActivity extends AppCompatActivity {
                 }
                 updateUI();
             } else {
-                updateUI();
+                // NO new item & NO previous selection -> try to auto-select a running timer
+                boolean selected = false;
+                for (int i = 0; i < this.timers.size(); i++) {
+                    if (this.timers.get(i).isRunning()) {
+                        selectTimer(i);
+                        selected = true;
+                        break;
+                    }
+                }
+                if (!selected) {
+                    // nothing running — just update UI (no selection)
+                    updateUI();
+                }
             }
         });
 
