@@ -16,6 +16,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -83,6 +86,13 @@ public class StopWatchTimer extends AppCompatActivity {
         //back button
         MaterialToolbar toolbar = findViewById(R.id.Timers_top_bar);
         toolbar.setNavigationOnClickListener(v -> finish());
+
+        // Apply padding for system bars (status bar / navigation bar)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.stopwatch), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         // Initialize bottom-half views
         timersRecyclerView = findViewById(R.id.timers_recycler_view);

@@ -10,6 +10,9 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -44,7 +47,6 @@ public class WorkPlanActivity extends AppCompatActivity {
         btnCreate = findViewById(R.id.btnCreate);
         btnCancel = findViewById(R.id.btnCancel);
         MaterialToolbar toolbar = findViewById(R.id.workplan_top_bar);
-        backBtn = findViewById(R.id.back_button);
         if (getIntent() != null) {
             String clientName = getIntent().getStringExtra("clientName");
             String workTitle = getIntent().getStringExtra("workTitle");
@@ -56,6 +58,13 @@ public class WorkPlanActivity extends AppCompatActivity {
             if (workDescription != null) workDescriptionEt.setText(workDescription);
             if (workLocation != null) workLocationEt.setText(workLocation);
         }
+
+        // Apply padding for system bars (status bar / navigation bar)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.workplan), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
 
         // ===============================
