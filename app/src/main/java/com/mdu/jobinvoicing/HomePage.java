@@ -94,13 +94,6 @@ public class HomePage extends AppCompatActivity {
 
         // ----- Middle cards: main actions -----
 
-        cardCreateWorkPlan.setOnClickListener(v -> {
-            // TODO: Navigate to "Create Work Plan" screen.
-            // Example when you create the activity:
-            // Intent intent = new Intent(HomePage.this, CreateWorkPlanActivity.class);
-            // startActivity(intent);
-            Toast.makeText(this, "Create Work plan clicked", Toast.LENGTH_SHORT).show();
-        });
         MaterialCardView  cardCreateWorkPlan = findViewById(R.id.cardCreateWorkPlan);
         cardCreateWorkPlan.setOnClickListener(v -> {
             Intent intent = new Intent(HomePage.this, WorkPlanActivity.class);
