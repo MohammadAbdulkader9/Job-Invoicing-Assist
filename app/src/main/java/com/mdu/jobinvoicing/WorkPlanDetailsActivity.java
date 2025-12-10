@@ -1,6 +1,8 @@
 package com.mdu.jobinvoicing;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler; // auto-save feature
@@ -8,7 +10,10 @@ import android.os.Looper; // auto-save feature
 import android.text.Editable; // auto-save feature
 import android.text.TextWatcher; // auto-save feature
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,8 +21,11 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,8 +36,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query; // auto-save feature
+import com.mdu.jobinvoicing.data.local.AppDatabase;
+import com.mdu.jobinvoicing.data.local.daos.StopWatchTimerItemDao;
 import com.mdu.jobinvoicing.data.local.entities.Material;
 import com.mdu.jobinvoicing.data.local.entities.ServiceItem;
+import com.mdu.jobinvoicing.data.local.entities.StopWatchTimerItem;
 import com.mdu.jobinvoicing.data.local.entities.TimeEntry;
 import com.mdu.jobinvoicing.data.local.entities.WorkPlanStatus;
 
@@ -39,15 +50,17 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEntryAdapter.OnDeleteClickListener, MaterialAdapter.OnDeleteClickListener, ServiceItemAdapter.OnDeleteClickListener {
 
     private static final String TAG = "WorkPlanDetailsActivity";
 
     private EditText customerNameEditText, workTitleEditText, workDescriptionEditText, locationEditText, dateEditText;
-    private Button saveButton, addTimeEntryButton, addMaterialButton, addServiceItemButton;
+    private Button saveButton, saveTimeEntryButton, addMaterialButton, addServiceItemButton, importFromTimerButton;
     private ImageView backButton;
     private RadioGroup statusRadioGroup;
     private RadioButton statusOpen, statusInProgress, statusClosed;
@@ -109,9 +122,10 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
         serviceItemContent = findViewById(R.id.serviceItemContent);
         serviceItemToggle = findViewById(R.id.serviceItemToggle);
 
-        addTimeEntryButton = findViewById(R.id.addTimeEntryButton);
+        saveTimeEntryButton = findViewById(R.id.addTimeEntryButton);
         addMaterialButton = findViewById(R.id.addMaterialButton);
         addServiceItemButton = findViewById(R.id.addServiceItemButton);
+        importFromTimerButton = findViewById(R.id.importFromTimerButton);
 
         timeEntryHoursEditText = findViewById(R.id.timeEntryHoursEditText);
         timeEntryHourRateEditText = findViewById(R.id.timeEntryHourRateEditText);
@@ -137,9 +151,11 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
         materialHeader.setOnClickListener(v -> toggleSection(materialContent, materialToggle));
         serviceItemHeader.setOnClickListener(v -> toggleSection(serviceItemContent, serviceItemToggle));
 
-        addTimeEntryButton.setOnClickListener(v -> addTimeEntry());
+        saveTimeEntryButton.setOnClickListener(v -> addTimeEntry());
         addMaterialButton.setOnClickListener(v -> addMaterial());
         addServiceItemButton.setOnClickListener(v -> addServiceItem());
+        importFromTimerButton.setOnClickListener(v -> importFromTimer());
+
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("WORK_PLAN_ID")) {
@@ -570,6 +586,68 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
             toggle.animate().rotation(180).setDuration(200).start();
         }
     }
+
+    private void importFromTimer() {
+        AppDatabase localDb = AppDatabase.getInstance(this);
+        StopWatchTimerItemDao timerDao = localDb.timerItemDao();
+        timerDao.getAllTimerItems().observe(this, timerItems -> {
+            if (timerItems != null && !timerItems.isEmpty()) {
+                showTimerSelectionDialog(timerItems);
+            } else {
+                Toast.makeText(this, "No timers available.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showTimerSelectionDialog(List<StopWatchTimerItem> timerItems) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select a Timer");
+
+        TimerAdapter adapter = new TimerAdapter(this, timerItems);
+
+        builder.setAdapter(adapter, (dialog, which) -> {
+            StopWatchTimerItem selectedTimer = timerItems.get(which);
+            long elapsedMillis = selectedTimer.getElapsedMillis();
+            double hours = (double) elapsedMillis / TimeUnit.HOURS.toMillis(1);
+
+            timeEntryHoursEditText.setText(String.format(Locale.getDefault(), "%.2f", hours));
+            timeEntryNotesEditText.setText(selectedTimer.getName());
+        });
+
+        builder.show();
+    }
+
+    private class TimerAdapter extends ArrayAdapter<StopWatchTimerItem> {
+
+        public TimerAdapter(Context context, List<StopWatchTimerItem> timers) {
+            super(context, 0, timers);
+        }
+
+        @NonNull
+        @Override
+        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_stopwatch_timer, parent, false);
+            }
+
+            StopWatchTimerItem timer = getItem(position);
+
+            TextView timerName = convertView.findViewById(R.id.timer_name);
+            TextView timerValue = convertView.findViewById(R.id.timer_value);
+
+            if (timer != null) {
+                timerName.setText(timer.getName());
+                long millis = timer.getElapsedMillis();
+                long hours = TimeUnit.MILLISECONDS.toHours(millis);
+                long minutes = TimeUnit.MILLISECONDS.toMinutes(millis) % 60;
+                long seconds = TimeUnit.MILLISECONDS.toSeconds(millis) % 60;
+                timerValue.setText(String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds));
+            }
+
+            return convertView;
+        }
+    }
+
 
     @Override
     protected void onDestroy() {

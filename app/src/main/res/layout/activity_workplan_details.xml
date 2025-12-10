@@ -291,12 +291,26 @@
                     android:minLines="2"
                     android:gravity="top"/>
 
-                <Button
-                    android:id="@+id/addTimeEntryButton"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Add Time Entry"
-                    android:layout_gravity="end"/>
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/importFromTimerButton"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:text="Import from Timer"/>
+
+                    <Button
+                        android:id="@+id/addTimeEntryButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add Time Entry"/>
+                </LinearLayout>
 
             </LinearLayout>
 
