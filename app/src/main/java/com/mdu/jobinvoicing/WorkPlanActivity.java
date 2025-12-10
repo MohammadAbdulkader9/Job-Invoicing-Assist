@@ -44,6 +44,19 @@ public class WorkPlanActivity extends AppCompatActivity {
         btnCreate = findViewById(R.id.btnCreate);
         btnCancel = findViewById(R.id.btnCancel);
         MaterialToolbar toolbar = findViewById(R.id.workplan_top_bar);
+        backBtn = findViewById(R.id.back_button);
+        if (getIntent() != null) {
+            String clientName = getIntent().getStringExtra("clientName");
+            String workTitle = getIntent().getStringExtra("workTitle");
+            String workDescription = getIntent().getStringExtra("workDescription");
+            String workLocation = getIntent().getStringExtra("workLocation");
+
+            if (clientName != null) clientNameEt.setText(clientName);
+            if (workTitle != null) workTitleEt.setText(workTitle);
+            if (workDescription != null) workDescriptionEt.setText(workDescription);
+            if (workLocation != null) workLocationEt.setText(workLocation);
+        }
+
 
         // ===============================
         // Back & Cancel Button Listeners
