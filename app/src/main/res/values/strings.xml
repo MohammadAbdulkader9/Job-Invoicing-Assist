@@ -34,5 +34,11 @@
         <item>option 2</item>
         <item>option 3</item>
     </string-array>
+    <string-array name="work_plan_filter_options"> //filtrera datum/status
+        <item>Date (Newest)</item>
+        <item>Date (Oldest)</item>
+        <item>Status: In Progress</item>
+        <item>Status: Closed</item>
+    </string-array>
 
 </resources>
