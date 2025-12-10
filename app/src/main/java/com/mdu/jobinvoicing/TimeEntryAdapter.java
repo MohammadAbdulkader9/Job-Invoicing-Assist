@@ -15,7 +15,10 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mdu.jobinvoicing.data.local.entities.TimeEntry;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
+import java.util.Locale;
 
 public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.TimeEntryViewHolder> {
 
@@ -45,7 +48,7 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
         TimeEntry timeEntry = timeEntries.get(position);
         holder.timeEntryHoursTextView.setText("Hours: " + timeEntry.getHours());
         holder.timeEntryRateTextView.setText("Rate: SEK " + timeEntry.getHourRate() + "/hr");
-        holder.timeEntryTotalTextView.setText("Total: SEK" + timeEntry.getTotal());
+        holder.timeEntryTotalTextView.setText("Total: SEK" + String.format(Locale.getDefault(), "%.2f", timeEntry.getTotal()));
         holder.timeEntryNotesTextView.setText("Notes: " + timeEntry.getNotes());
         holder.deleteButton.setOnClickListener(v -> {
             if (onDeleteClickListener != null) {
@@ -73,14 +76,14 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
         editTimeEntryNotes.setText(timeEntry.getNotes());
 
         builder.setPositiveButton("Save", (dialog, which) -> {
-            double hours = Double.parseDouble(editTimeEntryHours.getText().toString());
-            double rate = Double.parseDouble(editTimeEntryRate.getText().toString());
+            BigDecimal hours = new BigDecimal(editTimeEntryHours.getText().toString());
+            BigDecimal rate = new BigDecimal(editTimeEntryRate.getText().toString());
             String notes = editTimeEntryNotes.getText().toString();
 
-            timeEntry.setHours(hours);
-            timeEntry.setHourRate(rate);
+            timeEntry.setHours(hours.doubleValue());
+            timeEntry.setHourRate(rate.doubleValue());
             timeEntry.setNotes(notes);
-            timeEntry.setTotal(hours * rate);
+            timeEntry.setTotal(hours.multiply(rate).setScale(2, RoundingMode.HALF_UP).doubleValue());
 
             updateTimeEntryInFirebase(timeEntry);
 

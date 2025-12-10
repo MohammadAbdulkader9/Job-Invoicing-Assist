@@ -5,10 +5,10 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler; // auto-save feature
-import android.os.Looper; // auto-save feature
-import android.text.Editable; // auto-save feature
-import android.text.TextWatcher; // auto-save feature
+import android.os.Handler;
+import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +35,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.Query; // auto-save feature
+import com.google.firebase.firestore.Query;
 import com.mdu.jobinvoicing.data.local.AppDatabase;
 import com.mdu.jobinvoicing.data.local.daos.StopWatchTimerItemDao;
 import com.mdu.jobinvoicing.data.local.entities.Material;
@@ -44,6 +44,8 @@ import com.mdu.jobinvoicing.data.local.entities.StopWatchTimerItem;
 import com.mdu.jobinvoicing.data.local.entities.TimeEntry;
 import com.mdu.jobinvoicing.data.local.entities.WorkPlanStatus;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -404,15 +406,15 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
             return;
         }
 
-        double hours = Double.parseDouble(hoursStr);
-        double hourRate = Double.parseDouble(hourRateStr);
-        double total = hours * hourRate;
+        BigDecimal hours = new BigDecimal(hoursStr);
+        BigDecimal hourRate = new BigDecimal(hourRateStr);
+        BigDecimal total = hours.multiply(hourRate);
 
         Map<String, Object> timeEntry = new HashMap<>();
         timeEntry.put("workPlanId", currentWorkPlanId);
-        timeEntry.put("hours", hours);
-        timeEntry.put("hourRate", hourRate);
-        timeEntry.put("total", total);
+        timeEntry.put("hours", hours.doubleValue());
+        timeEntry.put("hourRate", hourRate.doubleValue());
+        timeEntry.put("total", total.setScale(2, RoundingMode.HALF_UP).doubleValue());
         timeEntry.put("notes", timeEntryNotesEditText.getText().toString());
         timeEntry.put("createdAt", new Timestamp(new Date()));
 
@@ -435,17 +437,17 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
             return;
         }
 
-        double quantity = Double.parseDouble(quantityStr);
-        double unitPrice = Double.parseDouble(unitPriceStr);
-        double total = quantity * unitPrice;
+        BigDecimal quantity = new BigDecimal(quantityStr);
+        BigDecimal unitPrice = new BigDecimal(unitPriceStr);
+        BigDecimal total = quantity.multiply(unitPrice);
 
         Map<String, Object> material = new HashMap<>();
         material.put("workPlanId", currentWorkPlanId);
         material.put("name", name);
-        material.put("quantity", quantity);
+        material.put("quantity", quantity.doubleValue());
         material.put("unit", materialUnitEditText.getText().toString());
-        material.put("unitPrice", unitPrice);
-        material.put("total", total);
+        material.put("unitPrice", unitPrice.doubleValue());
+        material.put("total", total.setScale(2, RoundingMode.HALF_UP).doubleValue());
         material.put("notes", materialNotesEditText.getText().toString());
         material.put("createdAt", new Timestamp(new Date()));
 
