@@ -1,16 +1,8 @@
 package com.mdu.jobinvoicing;
 
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkCapabilities;
-import android.os.Bundle;
-import android.view.View;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.ImageView;
@@ -24,6 +16,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.card.MaterialCardView;
 import com.mdu.jobinvoicing.data.network.financeApi.ApiServiceManager;
 
@@ -32,6 +25,7 @@ public class HomePage extends AppCompatActivity {
 
     private TextView statusText;
     private ImageView statusDot;
+    private NetworkHelper networkHelper;
 
     // Middle cards
     private MaterialCardView cardCreateWorkPlan, cardViewJobs, cardTimeTracking;
@@ -39,7 +33,6 @@ public class HomePage extends AppCompatActivity {
     // Bottom navigation items
     private LinearLayout navNewJobs, navCreateInvoices, navProfile;
 
-    private ConnectivityManager.NetworkCallback networkCallback;
     private MockLoadAssistService service;
     private boolean bound = false;
     private final ServiceConnection conn = new ServiceConnection(){
@@ -71,11 +64,18 @@ public class HomePage extends AppCompatActivity {
         ApiServiceManager.createInstance(ApiServiceManager.ApiProvider.FORTNOX);
 
         // Apply padding for system bars (status bar / navigation bar)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.workplan_details), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Set Top Bar Title
+        MaterialToolbar toolbar = findViewById(R.id.top_bar);
+        if (toolbar != null) {
+            toolbar.setTitle("Home");
+            toolbar.setNavigationIcon(null);
+        }
 
         // ----- Find views -----
         cardCreateWorkPlan = findViewById(R.id.cardCreateWorkPlan);
@@ -86,10 +86,14 @@ public class HomePage extends AppCompatActivity {
         navCreateInvoices  = findViewById(R.id.navCreateInvoices);
         navProfile        = findViewById(R.id.navOperatorProfile);
         //navSyncNow         = findViewById(R.id.navSyncNow);Commenting it out as no longer needed
-         //offline-online functionality
+
+
+        //offline-online functionality
         statusText = findViewById(R.id.SyncText);
         statusDot = findViewById(R.id.statusDot);
 
+        networkHelper = new NetworkHelper(this, statusDot, statusText);
+        networkHelper.startMonitoring();
 
 
         // ----- Middle cards: main actions -----
@@ -143,7 +147,6 @@ public class HomePage extends AppCompatActivity {
             Intent intent = new Intent(HomePage.this, OperatorProfile.class);
             startActivity(intent);
         });
-        setupNetworkCallback();
     }
     @Override
     protected void onStart() {
@@ -159,58 +162,12 @@ public class HomePage extends AppCompatActivity {
         if (bound) unbindService(conn);
         bound = false;
     }
-    private void setupNetworkCallback() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm == null) return;
-
-        networkCallback = new ConnectivityManager.NetworkCallback() {
-            @Override
-            public void onAvailable(Network network) {
-                runOnUiThread(() -> updateStatus(true));
-            }
-
-            @Override
-            public void onLost(Network network) {
-                runOnUiThread(() -> updateStatus(false));
-            }
-        };
-
-        cm.registerDefaultNetworkCallback(networkCallback);
-
-        // Set initial status
-        updateStatus(isOnline());
-    }
-
-    private boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm != null) {
-            Network network = cm.getActiveNetwork();
-            if (network != null) {
-                NetworkCapabilities capabilities = cm.getNetworkCapabilities(network);
-                return capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
-            }
-        }
-        return false;
-    }
-
-    private void updateStatus(boolean online) {
-        if (statusDot != null && statusText != null) {
-            if (online) {
-                statusDot.setColorFilter(Color.parseColor("#4CAF50")); // green
-                statusText.setText("Online");
-            } else {
-                statusDot.setColorFilter(Color.parseColor("#9E9E9E")); // grey
-                statusText.setText("Offline");
-            }
-        }
-    }
-
+    
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm != null && networkCallback != null) {
-            cm.unregisterNetworkCallback(networkCallback);
+        if (networkHelper != null) {
+            networkHelper.stopMonitoring();
         }
     }
 }

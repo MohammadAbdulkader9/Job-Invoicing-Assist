@@ -24,7 +24,7 @@
             android:layout_marginTop="8dp"
             android:text="Client Name"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            android:textColor="#295FC3"
+            android:textColor="@color/blue"
             android:textColorLink="#2549A6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

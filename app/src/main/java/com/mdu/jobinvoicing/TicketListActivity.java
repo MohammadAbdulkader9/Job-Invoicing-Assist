@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -29,21 +30,37 @@ public class TicketListActivity extends AppCompatActivity {
     private Handler handler = new Handler();
     private Runnable runnable;
 
+    private NetworkHelper networkHelper;
+    private TextView statusText;
+    private ImageView statusDot;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_list);
 
-        // Back button
-        MaterialToolbar toolbar = findViewById(R.id.loadTickets_top_bar);
-        toolbar.setNavigationOnClickListener(v -> finish());
+
 
         // Apply padding for system bars (status bar / navigation bar)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.workplan_details), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Set Top Bar Title
+        MaterialToolbar toolbar = findViewById(R.id.top_bar);
+        if (toolbar != null) {
+            toolbar.setTitle("Load Tickets");
+            toolbar.setNavigationOnClickListener(v -> finish());
+        }
+
+        // offline-online functionality
+        statusText = findViewById(R.id.SyncText);
+        statusDot = findViewById(R.id.statusDot);
+
+        networkHelper = new NetworkHelper(this, statusDot, statusText);
+        networkHelper.startMonitoring();
 
 
         // RecyclerView setup
@@ -123,6 +140,9 @@ public class TicketListActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (networkHelper != null) {
+            networkHelper.stopMonitoring();
+        }
         handler.removeCallbacks(runnable);
     }
 }

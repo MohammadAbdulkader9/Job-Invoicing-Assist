@@ -6,6 +6,7 @@ import static com.google.firebase.firestore.FirebaseFirestore.*;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -31,6 +32,9 @@ public class WorkPlanActivity extends AppCompatActivity {
     private EditText clientNameEt, workTitleEt, workDescriptionEt, workLocationEt;
     private MaterialButton btnCreate, btnCancel;
     private ImageView backBtn;
+    private NetworkHelper networkHelper;
+    private TextView statusText;
+    private ImageView statusDot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +50,6 @@ public class WorkPlanActivity extends AppCompatActivity {
         workLocationEt = findViewById(R.id.inputJobLocation);
         btnCreate = findViewById(R.id.btnCreate);
         btnCancel = findViewById(R.id.btnCancel);
-        MaterialToolbar toolbar = findViewById(R.id.workplan_top_bar);
         if (getIntent() != null) {
             String clientName = getIntent().getStringExtra("clientName");
             String workTitle = getIntent().getStringExtra("workTitle");
@@ -70,13 +73,26 @@ public class WorkPlanActivity extends AppCompatActivity {
         // ===============================
         // Back & Cancel Button Listeners
         // ===============================
-        toolbar.setNavigationOnClickListener(v -> finish());
+        // Set Top Bar Title
+        MaterialToolbar toolbar = findViewById(R.id.top_bar);
+        if (toolbar != null) {
+            toolbar.setTitle("Create Work Plan");
+            toolbar.setNavigationOnClickListener(v -> finish());
+        }
         btnCancel.setOnClickListener(v -> finish());
 
         //==============
         // Create Button Listener
         // ===============================
         btnCreate.setOnClickListener(v -> saveWorkplan());
+
+
+        // offline-online functionality
+        statusText = findViewById(R.id.SyncText);
+        statusDot = findViewById(R.id.statusDot);
+
+        networkHelper = new NetworkHelper(this, statusDot, statusText);
+        networkHelper.startMonitoring();
     }
 
     // ===============================
@@ -131,6 +147,14 @@ public class WorkPlanActivity extends AppCompatActivity {
         workTitleEt.setText("");
         workDescriptionEt.setText("");
         workLocationEt.setText("");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (networkHelper != null) {
+            networkHelper.stopMonitoring();
+        }
     }
 
 }

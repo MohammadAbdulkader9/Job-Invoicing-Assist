@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +54,10 @@ public class StopWatchTimer extends AppCompatActivity {
     private TimerItemDao timerItemDao;
     private final AtomicLong newTimerId = new AtomicLong(-1);
 
+    private NetworkHelper networkHelper;
+    private TextView statusText;
+    private ImageView statusDot;
+
     private final Runnable runnable = new Runnable() {
         @Override
         public void run() {
@@ -83,9 +88,12 @@ public class StopWatchTimer extends AppCompatActivity {
         startPauseButton = findViewById(R.id.stopwatch_start_pause);
         resetButton = findViewById(R.id.stopwatch_reset);
 
-        //back button
-        MaterialToolbar toolbar = findViewById(R.id.Timers_top_bar);
-        toolbar.setNavigationOnClickListener(v -> finish());
+        // Set Top Bar Title
+        MaterialToolbar toolbar = findViewById(R.id.top_bar);
+        if (toolbar != null) {
+            toolbar.setTitle("Timers");
+            toolbar.setNavigationOnClickListener(v -> finish());
+        }
 
         // Apply padding for system bars (status bar / navigation bar)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.stopwatch), (v, insets) -> {
@@ -97,6 +105,14 @@ public class StopWatchTimer extends AppCompatActivity {
         // Initialize bottom-half views
         timersRecyclerView = findViewById(R.id.timers_recycler_view);
         addEntryFab = findViewById(R.id.add_entry_fab);
+
+        // offline-online functionality
+        statusText = findViewById(R.id.SyncText);
+        statusDot = findViewById(R.id.statusDot);
+
+        networkHelper = new NetworkHelper(this, statusDot, statusText);
+        networkHelper.startMonitoring();
+
 
         // Set up RecyclerView
         timersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -264,6 +280,9 @@ public class StopWatchTimer extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (networkHelper != null) {
+            networkHelper.stopMonitoring();
+        }
         handler.removeCallbacks(runnable);
         executor.shutdown();
     }

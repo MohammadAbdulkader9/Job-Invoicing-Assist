@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navNewJobs"
+        android:title="New Jobs"
+        android:icon="@drawable/new_jobb_icon" />
+    <item
+        android:id="@+id/navCreateInvoices"
+        android:title="Create Invoices"
+        android:icon="@drawable/create_invoice_icon" />
+    <item
+        android:id="@+id/navOperatorProfile"
+        android:title="Profile"
+        android:icon="@drawable/outline_person_book_24" />
+</menu>

@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main"
+    android:id="@+id/workplan_details"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
     <!-- Top bar -->
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/loadTickets_top_bar"
+    <include
+        android:id="@+id/topBar"
+        layout="@layout/view_top_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F5F5F5"
-        app:title="Work Plans"
-        app:navigationIcon="@drawable/back_arrow"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         />
 
     <!-- RecyclerView to display tickets -->

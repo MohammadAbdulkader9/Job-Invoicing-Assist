@@ -2,6 +2,8 @@ package com.mdu.jobinvoicing;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -29,6 +31,9 @@ public class ViewWorkPlans extends AppCompatActivity {
     private WorkPlanAdapter workPlanAdapter;
     private List<WorkPlan> workPlanList;
     private FirebaseFirestore db;
+    private NetworkHelper networkHelper;
+    private TextView statusText;
+    private ImageView statusDot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +58,20 @@ public class ViewWorkPlans extends AppCompatActivity {
 
         fetchWorkPlans();
 
-        //back button
-        MaterialToolbar toolbar = findViewById(R.id.viewWorkPlans_top_bar);
-        toolbar.setNavigationOnClickListener(v -> finish());
+        // Set Top Bar Title
+        MaterialToolbar toolbar = findViewById(R.id.top_bar);
+        if (toolbar != null) {
+            toolbar.setTitle("Work Plans");
+            toolbar.setNavigationOnClickListener(v -> finish());
+        }
+
+
+        // offline-online functionality
+        statusText = findViewById(R.id.SyncText);
+        statusDot = findViewById(R.id.statusDot);
+
+        networkHelper = new NetworkHelper(this, statusDot, statusText);
+        networkHelper.startMonitoring();
     }
 
     private void fetchWorkPlans() {
@@ -96,5 +112,12 @@ public class ViewWorkPlans extends AppCompatActivity {
                     }
                     workPlanAdapter.notifyDataSetChanged();
                 });
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (networkHelper != null) {
+            networkHelper.stopMonitoring();
+        }
     }
 }

@@ -3,72 +3,52 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/workplan_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     tools:context=".HomePage">
 
-    <!-- Top bar -->
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/materialToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#F5F5F5"
-        app:title="Job Invoicing Assist"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
-
-
-    <ImageView
-        android:id="@+id/statusDot"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="4dp"
-        android:src="@drawable/dot_circle"
-        app:layout_constraintEnd_toStartOf="@id/SyncText"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="#FF0000"
-        android:elevation="4dp"/>
-
-    <TextView
-        android:id="@+id/SyncText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Unsynced"
-        android:textSize="14sp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:elevation="4dp"/>
-
-
-    <!-- Middle section: three rounded cards -->
-    <LinearLayout
-        android:id="@+id/middleSection"
+    <!-- Top bar using the _view_top_bar.xml  DO LIKE THIS ON ALL PAGES-->
+    <include
+        android:id="@+id/topBar"
+        layout="@layout/view_top_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialToolbar">
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <!-- Middle Left section: two rounded cards -->
+
+
+    <LinearLayout
+        android:id="@+id/middleLeftSection"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
+        app:layout_constraintEnd_toStartOf="@+id/middleRightSection"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topBar">
+
 
         <!-- Create Work plan card -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardCreateWorkPlan"
-            android:layout_width="220dp"
-            android:layout_height="140dp"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
             android:layout_marginBottom="20dp"
             android:clickable="true"
             android:foreground="?attr/selectableItemBackground"
-            app:cardBackgroundColor="#E0E0E0"
+            app:cardBackgroundColor="@color/card_color"
             app:cardCornerRadius="24dp"
             app:cardElevation="4dp">
 
@@ -79,10 +59,11 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/tint"
                     android:layout_width="66dp"
                     android:layout_height="35dp"
                     android:src="@drawable/create_work_plan_icon"
-                    app:tint="#FF000000" />
+                    app:tint="@color/blue" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -93,47 +74,15 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- View WorkPlans card -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardViewWorkPlans"
-            android:layout_width="220dp"
-            android:layout_height="140dp"
-            android:layout_marginBottom="20dp"
-            android:clickable="true"
-            android:foreground="?attr/selectableItemBackground"
-            app:cardBackgroundColor="#E0E0E0"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="4dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="55dp"
-                    android:layout_height="37dp"
-                    android:src="@drawable/assignment_icon"
-                    app:tint="#FF000000" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="View Work Plans"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
         <!-- Time Tracking card -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardTimeTracking"
-            android:layout_width="220dp"
-            android:layout_height="140dp"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="50dp"
             android:clickable="true"
             android:foreground="?attr/selectableItemBackground"
-            app:cardBackgroundColor="#E0E0E0"
+            app:cardBackgroundColor="@color/card_color"
             app:cardCornerRadius="24dp"
             app:cardElevation="4dp">
 
@@ -147,7 +96,7 @@
                     android:layout_width="59dp"
                     android:layout_height="34dp"
                     android:src="@drawable/timer_icon"
-                    app:tint="#FF000000" />
+                    app:tint="@color/blue" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -156,16 +105,39 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
             </LinearLayout>
+
+
         </com.google.android.material.card.MaterialCardView>
-        <!-- Load Ticket card -->
+
+    </LinearLayout>
+
+    <!-- Middle Right section: two rounded cards -->
+    <LinearLayout
+        android:id="@+id/middleRightSection"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/middleLeftSection"
+        app:layout_constraintTop_toBottomOf="@+id/topBar">
+
+
+        <!-- View WorkPlans card -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardLoadTicket"
-            android:layout_width="220dp"
-            android:layout_height="140dp"
-            android:layout_marginTop="20dp"
+            android:id="@+id/cardViewWorkPlans"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginBottom="20dp"
             android:clickable="true"
             android:foreground="?attr/selectableItemBackground"
-            app:cardBackgroundColor="#E0E0E0"
+            app:cardBackgroundColor="@color/card_color"
             app:cardCornerRadius="24dp"
             app:cardElevation="4dp">
 
@@ -179,7 +151,40 @@
                     android:layout_width="55dp"
                     android:layout_height="37dp"
                     android:src="@drawable/assignment_icon"
-                    app:tint="#FF000000" />
+                    app:tint="@color/blue" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="View Work Plans"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Load Ticket card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardLoadTicket"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="50dp"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
+            app:cardBackgroundColor="@color/card_color"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="55dp"
+                    android:layout_height="37dp"
+                    android:src="@drawable/assignment_icon"
+                    app:tint="@color/blue" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -191,11 +196,11 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-
     </LinearLayout>
 
 
-    <!-- Bottom navigation bar -->
+    <!-- Bottom bar -->
+
     <LinearLayout
         android:id="@+id/bottomBar"
         android:layout_width="0dp"
@@ -222,7 +227,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/new_jobb_icon"
-                app:tint="#FFFFFF" />
+                app:tint="#295FC3" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -247,7 +252,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/create_invoice_icon"
-                app:tint="#FFFFFF" />
+                app:tint="#295FC3" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -272,7 +277,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/outline_person_book_24"
-                app:tint="#FFFFFF" />
+                app:tint="#295FC3" />
 
             <TextView
                 android:layout_width="wrap_content"

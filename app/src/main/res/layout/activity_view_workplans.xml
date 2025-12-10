@@ -10,28 +10,23 @@
     tools:context=".ViewWorkPlans">
 
     <!-- Top bar -->
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/viewWorkPlans_top_bar"
+    <include
+        android:id="@+id/topBar"
+        layout="@layout/view_top_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F5F5F5"
-        app:title="Work Plans"
-        app:navigationIcon="@drawable/back_arrow"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         />
 
     <!-- Middle section: -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/middleSection"
+        android:id="@+id/middleLeftSection"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:padding="20dp"
         app:layout_constraintBottom_toTopOf="@id/bottomBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewWorkPlans_top_bar">
+        app:layout_constraintTop_toBottomOf="@id/topBar">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/searchBarLayout"
