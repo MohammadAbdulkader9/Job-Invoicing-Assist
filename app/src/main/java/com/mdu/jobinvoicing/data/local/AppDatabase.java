@@ -11,6 +11,9 @@ import androidx.room.TypeConverters;
 import com.mdu.jobinvoicing.data.local.daos.*;
 import com.mdu.jobinvoicing.data.local.entities.*;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * AppDatabase defines the Room database and provides DAOs.
  */
@@ -23,11 +26,14 @@ import com.mdu.jobinvoicing.data.local.entities.*;
         InvoiceLineItem.class,
         SyncQueue.class,
         Operator.class,
-        StopWatchTimerItem.class
-}, version = 9, exportSchema = false)
+        StopWatchTimerItem.class,
+        Distance.class,
+        Weight.class
+}, version = 10, exportSchema = false)
 @TypeConverters({WorkPlanStatusConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase INSTANCE;
+    static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(4);
 
     public abstract WorkPlanDao workPlanDao();
     public abstract TimeEntryDao timeEntryDao();
@@ -38,6 +44,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract SyncQueueDao syncQueueDao();
     public abstract OperatorDao operatorDao();
     public abstract StopWatchTimerItemDao timerItemDao();
+    public abstract DistanceDao distanceDao();
+    public abstract WeightDao weightDao();
 
     public static AppDatabase getInstance(final Context context) {
         if (INSTANCE == null) {
