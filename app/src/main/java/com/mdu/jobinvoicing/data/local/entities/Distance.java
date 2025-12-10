@@ -20,8 +20,9 @@ public class Distance {
     private String id;
 
     private String workPlanId; // FK -> WorkPlan.id
-    private double distance; // in kilometers
-    private double ratePerKm;
+    private double distance;
+    private double rate;
+    private String unit; // e.g., "m", "km", "mile"
     private double total;
     private String notes;
 
@@ -29,12 +30,13 @@ public class Distance {
         // No-argument constructor required for Firestore deserialization
     }
 
-    public Distance(@NonNull String id, String workPlanId, double distance, double ratePerKm, String notes) {
+    public Distance(@NonNull String id, String workPlanId, double distance, double rate, String unit, String notes) {
         this.id = id;
         this.workPlanId = workPlanId;
         this.distance = distance;
-        this.ratePerKm = ratePerKm;
-        this.total = distance * ratePerKm;
+        this.rate = rate;
+        this.unit = unit;
+        this.total = distance * rate;
         this.notes = notes;
     }
 
@@ -63,12 +65,18 @@ public class Distance {
         this.distance = distance;
     }
 
-    public double getRatePerKm() {
-        return ratePerKm;
+    public double getRate() {
+        return rate;
     }
 
-    public void setRatePerKm(double ratePerKm) {
-        this.ratePerKm = ratePerKm;
+    public void setRate(double rate) {
+        this.rate = rate;
+    }
+
+    public String getUnit() { return unit;}
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     public double getTotal() {

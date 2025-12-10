@@ -21,7 +21,10 @@ public class Weight {
 
     private String workPlanId; // FK -> WorkPlan.id
     private double weight; // in kilograms
-    private double ratePerKg;
+    private double rate;
+
+    private String unit; // e.g., "kg", "lbs", "ton"
+
     private double total;
     private String notes;
 
@@ -29,12 +32,13 @@ public class Weight {
         // No-argument constructor required for Firestore deserialization
     }
 
-    public Weight(@NonNull String id, String workPlanId, double weight, double ratePerKg, String notes) {
+    public Weight(@NonNull String id, String workPlanId, double weight, double rate, String unit, String notes) {
         this.id = id;
         this.workPlanId = workPlanId;
         this.weight = weight;
-        this.ratePerKg = ratePerKg;
-        this.total = weight * ratePerKg;
+        this.rate = rate;
+        this.unit = unit;
+        this.total = weight * rate;
         this.notes = notes;
     }
 
@@ -63,12 +67,18 @@ public class Weight {
         this.weight = weight;
     }
 
-    public double getRatePerKg() {
-        return ratePerKg;
+    public double getRate() {
+        return rate;
     }
 
-    public void setRatePerKg(double ratePerKg) {
-        this.ratePerKg = ratePerKg;
+    public void setRate(double rate) {
+        this.rate = rate;
+    }
+
+    public String getUnit() { return unit;}
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     public double getTotal() {

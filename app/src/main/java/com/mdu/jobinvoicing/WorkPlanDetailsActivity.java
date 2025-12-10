@@ -38,10 +38,12 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.mdu.jobinvoicing.data.local.AppDatabase;
 import com.mdu.jobinvoicing.data.local.daos.StopWatchTimerItemDao;
+import com.mdu.jobinvoicing.data.local.entities.Distance;
 import com.mdu.jobinvoicing.data.local.entities.Material;
 import com.mdu.jobinvoicing.data.local.entities.ServiceItem;
 import com.mdu.jobinvoicing.data.local.entities.StopWatchTimerItem;
 import com.mdu.jobinvoicing.data.local.entities.TimeEntry;
+import com.mdu.jobinvoicing.data.local.entities.Weight;
 import com.mdu.jobinvoicing.data.local.entities.WorkPlanStatus;
 
 import java.math.BigDecimal;
@@ -57,12 +59,17 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEntryAdapter.OnDeleteClickListener, MaterialAdapter.OnDeleteClickListener, ServiceItemAdapter.OnDeleteClickListener {
+public class WorkPlanDetailsActivity extends AppCompatActivity implements
+        TimeEntryAdapter.OnDeleteClickListener,
+        MaterialAdapter.OnDeleteClickListener,
+        ServiceItemAdapter.OnDeleteClickListener,
+        DistanceAdapter.OnDeleteClickListener,
+        WeightAdapter.OnDeleteClickListener {
 
     private static final String TAG = "WorkPlanDetailsActivity";
 
     private EditText customerNameEditText, workTitleEditText, workDescriptionEditText, locationEditText, dateEditText;
-    private Button saveButton, saveTimeEntryButton, addMaterialButton, addServiceItemButton, importFromTimerButton;
+    private Button saveButton, saveTimeEntryButton, addMaterialButton, addServiceItemButton, importFromTimerButton, addDistanceButton, addWeightButton;
     private ImageView backButton;
     private RadioGroup statusRadioGroup;
     private RadioButton statusOpen, statusInProgress, statusClosed;
@@ -71,23 +78,31 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
     private ListenerRegistration timeEntriesListener;
     private ListenerRegistration materialsListener;
     private ListenerRegistration serviceItemsListener;
+    private ListenerRegistration distancesListener;
+    private ListenerRegistration weightsListener;
     private String currentWorkPlanId;
 
-    private RelativeLayout timeEntryHeader, materialHeader, serviceItemHeader;
-    private LinearLayout timeEntryContent, materialContent, serviceItemContent;
-    private ImageView timeEntryToggle, materialToggle, serviceItemToggle;
+    private RelativeLayout timeEntryHeader, materialHeader, serviceItemHeader, distanceHeader, weightHeader;
+    private LinearLayout timeEntryContent, materialContent, serviceItemContent, distanceContent, weightContent;
+    private ImageView timeEntryToggle, materialToggle, serviceItemToggle, distanceToggle, weightToggle;
 
-    private RecyclerView timeEntriesRecyclerView, materialsRecyclerView, serviceItemsRecyclerView;
+    private RecyclerView timeEntriesRecyclerView, materialsRecyclerView, serviceItemsRecyclerView, distancesRecyclerView, weightsRecyclerView;
     private TimeEntryAdapter timeEntryAdapter;
     private MaterialAdapter materialAdapter;
     private ServiceItemAdapter serviceItemAdapter;
+    private DistanceAdapter distanceAdapter;
+    private WeightAdapter weightAdapter;
     private EditText timeEntryHoursEditText, timeEntryHourRateEditText, timeEntryNotesEditText;
     private EditText materialNameEditText, materialQuantityEditText, materialUnitEditText, materialUnitPriceEditText, materialNotesEditText;
     private EditText serviceItemDescriptionEditText, serviceItemFeeEditText, serviceItemNotesEditText;
+    private EditText distanceEditText, distanceRateEditText, distanceUnitEditText, distanceNotesEditText;
+    private EditText weightEditText, weightRateEditText, weightUnitEditText, weightNotesEditText;
 
     private ArrayList<TimeEntry> timeEntryList = new ArrayList<>();
     private ArrayList<Material> materialList = new ArrayList<>();
     private ArrayList<ServiceItem> serviceItemList = new ArrayList<>();
+    private ArrayList<Distance> distanceList = new ArrayList<>();
+    private ArrayList<Weight> weightList = new ArrayList<>();
 
     // auto-save feature
     private Handler autoSaveHandler = new Handler(Looper.getMainLooper());
@@ -123,11 +138,19 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
         serviceItemHeader = findViewById(R.id.serviceItemHeader);
         serviceItemContent = findViewById(R.id.serviceItemContent);
         serviceItemToggle = findViewById(R.id.serviceItemToggle);
+        distanceHeader = findViewById(R.id.distanceHeader);
+        distanceContent = findViewById(R.id.distanceContent);
+        distanceToggle = findViewById(R.id.distanceToggle);
+        weightHeader = findViewById(R.id.weightHeader);
+        weightContent = findViewById(R.id.weightContent);
+        weightToggle = findViewById(R.id.weightToggle);
 
         saveTimeEntryButton = findViewById(R.id.addTimeEntryButton);
         addMaterialButton = findViewById(R.id.addMaterialButton);
         addServiceItemButton = findViewById(R.id.addServiceItemButton);
         importFromTimerButton = findViewById(R.id.importFromTimerButton);
+        addDistanceButton = findViewById(R.id.addDistanceButton);
+        addWeightButton = findViewById(R.id.addWeightButton);
 
         timeEntryHoursEditText = findViewById(R.id.timeEntryHoursEditText);
         timeEntryHourRateEditText = findViewById(R.id.timeEntryHourRateEditText);
@@ -143,6 +166,16 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
         serviceItemFeeEditText = findViewById(R.id.serviceItemFeeEditText);
         serviceItemNotesEditText = findViewById(R.id.serviceItemNotesEditText);
 
+        distanceEditText = findViewById(R.id.distanceEditText);
+        distanceRateEditText = findViewById(R.id.distanceRateEditText);
+        distanceUnitEditText = findViewById(R.id.distanceUnitEditText);
+        distanceNotesEditText = findViewById(R.id.distanceNotesEditText);
+
+        weightEditText = findViewById(R.id.weightEditText);
+        weightRateEditText = findViewById(R.id.weightRateEditText);
+        weightUnitEditText = findViewById(R.id.weightUnitEditText);
+        weightNotesEditText = findViewById(R.id.weightNotesEditText);
+
         setupRecyclerViews();
         setupAutoSave(); // auto-save feature
 
@@ -152,10 +185,14 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
         timeEntryHeader.setOnClickListener(v -> toggleSection(timeEntryContent, timeEntryToggle));
         materialHeader.setOnClickListener(v -> toggleSection(materialContent, materialToggle));
         serviceItemHeader.setOnClickListener(v -> toggleSection(serviceItemContent, serviceItemToggle));
+        distanceHeader.setOnClickListener(v -> toggleSection(distanceContent, distanceToggle));
+        weightHeader.setOnClickListener(v -> toggleSection(weightContent, weightToggle));
 
         saveTimeEntryButton.setOnClickListener(v -> addTimeEntry());
         addMaterialButton.setOnClickListener(v -> addMaterial());
         addServiceItemButton.setOnClickListener(v -> addServiceItem());
+        addDistanceButton.setOnClickListener(v -> addDistance());
+        addWeightButton.setOnClickListener(v -> addWeight());
         importFromTimerButton.setOnClickListener(v -> importFromTimer());
 
 
@@ -217,6 +254,16 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
         serviceItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         serviceItemAdapter = new ServiceItemAdapter(serviceItemList, currentWorkPlanId, this);
         serviceItemsRecyclerView.setAdapter(serviceItemAdapter);
+
+        distancesRecyclerView = findViewById(R.id.distancesRecyclerView);
+        distancesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        distanceAdapter = new DistanceAdapter(distanceList, currentWorkPlanId, this);
+        distancesRecyclerView.setAdapter(distanceAdapter);
+
+        weightsRecyclerView = findViewById(R.id.weightsRecyclerView);
+        weightsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        weightAdapter = new WeightAdapter(weightList,currentWorkPlanId, this);
+        weightsRecyclerView.setAdapter(weightAdapter);
     }
 
     @Override
@@ -232,6 +279,16 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
     @Override
     public void onDeleteClick(ServiceItem serviceItem) {
         deleteServiceItem(serviceItem);
+    }
+
+    @Override
+    public void onDeleteClick(Distance distance) {
+        deleteDistance(distance);
+    }
+
+    @Override
+    public void onDeleteClick(Weight weight) {
+        deleteWeight(weight);
     }
 
     private void deleteTimeEntry(TimeEntry timeEntry) {
@@ -313,6 +370,60 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
                     Toast.makeText(WorkPlanDetailsActivity.this, "Service item deleted successfully!", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> Toast.makeText(WorkPlanDetailsActivity.this, "Error deleting service item: " + e.getMessage(), Toast.LENGTH_LONG).show());
+    }
+
+    private void deleteDistance(Distance distance) {
+        if (distance.getId() == null || distance.getId().isEmpty()) {
+            Toast.makeText(this, "Cannot delete, distance ID is missing.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        db.collection("workplans").document(currentWorkPlanId).collection("distances").document(distance.getId())
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    int indexToRemove = -1;
+                    for (int i = 0; i < distanceList.size(); i++) {
+                        if (distance.getId().equals(distanceList.get(i).getId())) {
+                            indexToRemove = i;
+                            break;
+                        }
+                    }
+                    if (indexToRemove != -1) {
+                        distanceList.remove(indexToRemove);
+                        distanceAdapter.notifyItemRemoved(indexToRemove);
+                    } else {
+                        distanceAdapter.notifyDataSetChanged();
+                    }
+                    Toast.makeText(WorkPlanDetailsActivity.this, "Distance deleted successfully!", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> Toast.makeText(WorkPlanDetailsActivity.this, "Error deleting distance: " + e.getMessage(), Toast.LENGTH_LONG).show());
+    }
+
+    private void deleteWeight(Weight weight) {
+        if (weight.getId() == null || weight.getId().isEmpty()) {
+            Toast.makeText(this, "Cannot delete, weight ID is missing.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        db.collection("workplans").document(currentWorkPlanId).collection("weights").document(weight.getId())
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    int indexToRemove = -1;
+                    for (int i = 0; i < weightList.size(); i++) {
+                        if (weight.getId().equals(weightList.get(i).getId())) {
+                            indexToRemove = i;
+                            break;
+                        }
+                    }
+                    if (indexToRemove != -1) {
+                        weightList.remove(indexToRemove);
+                        weightAdapter.notifyItemRemoved(indexToRemove);
+                    } else {
+                        weightAdapter.notifyDataSetChanged();
+                    }
+                    Toast.makeText(WorkPlanDetailsActivity.this, "Weight deleted successfully!", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> Toast.makeText(WorkPlanDetailsActivity.this, "Error deleting weight: " + e.getMessage(), Toast.LENGTH_LONG).show());
     }
 
     private void loadWorkPlanData(String workPlanId) {
@@ -487,10 +598,76 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
         fetchSubCollections(currentWorkPlanId);
     }
 
+    private void addDistance() {
+        String distanceStr = distanceEditText.getText().toString();
+        String rateStr = distanceRateEditText.getText().toString();
+
+        if (distanceStr.isEmpty() || rateStr.isEmpty()) {
+            Toast.makeText(this, "Distance and rate are required.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        BigDecimal distance = new BigDecimal(distanceStr);
+        BigDecimal rate = new BigDecimal(rateStr);
+        BigDecimal total = distance.multiply(rate);
+
+        Map<String, Object> distanceData = new HashMap<>();
+        distanceData.put("workPlanId", currentWorkPlanId);
+        distanceData.put("distance", distance.doubleValue());
+        distanceData.put("unit", distanceUnitEditText.getText().toString());
+        distanceData.put("rate", rate.doubleValue());
+        distanceData.put("total", total.setScale(2, RoundingMode.HALF_UP).doubleValue());
+        distanceData.put("notes", distanceNotesEditText.getText().toString());
+        distanceData.put("createdAt", new Timestamp(new Date()));
+
+        db.collection("workplans").document(currentWorkPlanId).collection("distances").add(distanceData).addOnSuccessListener(documentReference -> {
+            Toast.makeText(this, "Distance added", Toast.LENGTH_SHORT).show();
+            distanceEditText.setText("");
+            distanceUnitEditText.setText("");
+            distanceRateEditText.setText("");
+            distanceNotesEditText.setText("");
+        }).addOnFailureListener(e -> Toast.makeText(this, "Error adding distance", Toast.LENGTH_SHORT).show());
+        fetchSubCollections(currentWorkPlanId);
+    }
+
+    private void addWeight() {
+        String weightStr = weightEditText.getText().toString();
+        String rateStr = weightRateEditText.getText().toString();
+
+        if (weightStr.isEmpty() || rateStr.isEmpty()) {
+            Toast.makeText(this, "Weight and rate are required.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        BigDecimal weight = new BigDecimal(weightStr);
+        BigDecimal rate = new BigDecimal(rateStr);
+        BigDecimal total = weight.multiply(rate);
+
+        Map<String, Object> weightData = new HashMap<>();
+        weightData.put("workPlanId", currentWorkPlanId);
+        weightData.put("weight", weight.doubleValue());
+        weightData.put("rate", rate.doubleValue());
+        weightData.put("unit", weightUnitEditText.getText().toString());
+        weightData.put("total", total.setScale(2, RoundingMode.HALF_UP).doubleValue());
+        weightData.put("notes", weightNotesEditText.getText().toString());
+        weightData.put("createdAt", new Timestamp(new Date()));
+
+        db.collection("workplans").document(currentWorkPlanId).collection("weights").add(weightData).addOnSuccessListener(documentReference -> {
+            Toast.makeText(this, "Weight added", Toast.LENGTH_SHORT).show();
+            weightEditText.setText("");
+            weightUnitEditText.setText("");
+            weightRateEditText.setText("");
+            weightNotesEditText.setText("");
+        }).addOnFailureListener(e -> Toast.makeText(this, "Error adding weight", Toast.LENGTH_SHORT).show());
+        fetchSubCollections(currentWorkPlanId);
+    }
+
     private void fetchSubCollections(String workPlanId) {
         fetchTimeEntries(workPlanId);
         fetchMaterials(workPlanId);
         fetchServiceItems(workPlanId);
+        fetchDistances(workPlanId);
+        fetchWeights(workPlanId);
     }
 
     private void fetchTimeEntries(String workPlanId) {
@@ -562,6 +739,54 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
                         }
                     }
                     serviceItemAdapter.notifyDataSetChanged();
+                });
+    }
+
+    private void fetchDistances(String workPlanId) {
+        if (distancesListener != null) distancesListener.remove();
+
+        distancesListener = db.collection("workplans").document(workPlanId).collection("distances")
+                .orderBy("createdAt", Query.Direction.DESCENDING)
+                .addSnapshotListener((snapshots, e) -> {
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
+                    distanceList.clear();
+                    if (snapshots != null) {
+                        for (DocumentSnapshot doc : snapshots) {
+                            Distance distance = doc.toObject(Distance.class);
+                            if (distance != null) {
+                                distance.setId(doc.getId());
+                                distanceList.add(distance);
+                            }
+                        }
+                    }
+                    distanceAdapter.notifyDataSetChanged();
+                });
+    }
+
+    private void fetchWeights(String workPlanId) {
+        if (weightsListener != null) weightsListener.remove();
+
+        weightsListener = db.collection("workplans").document(workPlanId).collection("weights")
+                .orderBy("createdAt", Query.Direction.DESCENDING)
+                .addSnapshotListener((snapshots, e) -> {
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
+                    weightList.clear();
+                    if (snapshots != null) {
+                        for (DocumentSnapshot doc : snapshots) {
+                            Weight weight = doc.toObject(Weight.class);
+                            if (weight != null) {
+                                weight.setId(doc.getId());
+                                weightList.add(weight);
+                            }
+                        }
+                    }
+                    weightAdapter.notifyDataSetChanged();
                 });
     }
 
@@ -657,6 +882,8 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
         if (timeEntriesListener != null) timeEntriesListener.remove();
         if (materialsListener != null) materialsListener.remove();
         if (serviceItemsListener != null) serviceItemsListener.remove();
+        if (distancesListener != null) distancesListener.remove();
+        if (weightsListener != null) weightsListener.remove();
         super.onDestroy();
     }
 }

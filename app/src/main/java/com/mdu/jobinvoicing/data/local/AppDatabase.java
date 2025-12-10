@@ -29,7 +29,7 @@ import java.util.concurrent.Executors;
         StopWatchTimerItem.class,
         Distance.class,
         Weight.class
-}, version = 10, exportSchema = false)
+}, version = 11, exportSchema = false)
 @TypeConverters({WorkPlanStatusConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase INSTANCE;
