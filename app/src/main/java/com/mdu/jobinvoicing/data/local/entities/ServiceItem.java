@@ -27,7 +27,6 @@ public class ServiceItem {
     private double serviceFee;
 
     private String notes;
-    private String serviceItemId;
 
     public ServiceItem() {
         // No-argument constructor required for Firestore deserialization
@@ -81,13 +80,5 @@ public class ServiceItem {
 
     public void setNotes(String notes) {
         this.notes = notes;
-    }
-
-    public String getServiceItemId() {
-        return serviceItemId;
-    }
-
-    public void setServiceItemId(String serviceItemId) {
-        this.serviceItemId = serviceItemId;
     }
 }

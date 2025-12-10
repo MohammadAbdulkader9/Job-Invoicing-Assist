@@ -28,7 +28,6 @@ public class Material {
     private double unitPrice;
     private double total;
     private String notes;
-    private String materialId;
 
 
     public Material() {
@@ -110,13 +109,5 @@ public class Material {
 
     public void setNotes(String notes) {
         this.notes = notes;
-    }
-
-    public String getMaterialId() {
-        return materialId;
-    }
-
-    public void setMaterialId(String materialId) {
-        this.materialId = materialId;
     }
 }

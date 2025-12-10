@@ -449,7 +449,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
                         for (DocumentSnapshot doc : snapshots) {
                             TimeEntry entry = doc.toObject(TimeEntry.class);
                             if (entry != null) {
-                                entry.setTimeEntryId(doc.getId());
+                                entry.setId(doc.getId());
                                 timeEntryList.add(entry);
                             }
                         }
@@ -473,7 +473,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
                 for (DocumentSnapshot doc : snapshots) {
                     Material material = doc.toObject(Material.class);
                     if (material != null) {
-                        material.setMaterialId(doc.getId());
+                        material.setId(doc.getId());
                         materialList.add(material);
                     }
                 }
@@ -497,7 +497,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements TimeEn
                 for (DocumentSnapshot doc : snapshots) {
                     ServiceItem item = doc.toObject(ServiceItem.class);
                     if (item != null) {
-                        item.setServiceItemId(doc.getId());
+                        item.setId(doc.getId());
                         serviceItemList.add(item);
                     }
                 }

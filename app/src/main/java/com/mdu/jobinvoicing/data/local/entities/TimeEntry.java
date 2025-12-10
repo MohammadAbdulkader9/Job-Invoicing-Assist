@@ -30,7 +30,6 @@ public class TimeEntry {
     private double hourRate;
     private double total;
     private String notes;
-    private String timeEntryId;
 
     public TimeEntry() {
         // No-argument constructor required for Firestore deserialization
@@ -92,13 +91,5 @@ public class TimeEntry {
 
     public void setNotes(String notes) {
         this.notes = notes;
-    }
-
-    public String getTimeEntryId() {
-        return timeEntryId;
-    }
-
-    public void setTimeEntryId(String timeEntryId) {
-        this.timeEntryId = timeEntryId;
     }
 }
