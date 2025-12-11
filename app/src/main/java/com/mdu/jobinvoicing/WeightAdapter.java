@@ -16,6 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.mdu.jobinvoicing.data.local.entities.Weight;
 
 import java.util.List;
+import java.util.Locale;
 
 public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightViewHolder> {
 
@@ -27,7 +28,7 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
         void onDeleteClick(Weight weight);
     }
 
-    public WeightAdapter(List<Weight> weights,String workPlanId, OnDeleteClickListener onDeleteClickListener) {
+    public WeightAdapter(List<Weight> weights, String workPlanId, OnDeleteClickListener onDeleteClickListener) {
         this.weights = weights;
         this.workPlanId = workPlanId;
         this.onDeleteClickListener = onDeleteClickListener;
@@ -44,11 +45,11 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
     public void onBindViewHolder(@NonNull WeightViewHolder holder, int position) {
         Weight weight = weights.get(position);
 
-        holder.weightTextView.setText("Weight: " + weight.getWeight());
-        holder.weightUnitTextView.setText("Unit: " +weight.getUnit());
-        holder.weightRateTextView.setText("Rate: Sek " + weight.getRate() + " " + weight.getUnit());
-        holder.weightTotalTextView.setText("Total: Sek " + weight.getTotal() + " " + weight.getUnit());
-        holder.weightNotesTextView.setText(weight.getNotes());
+        holder.weightTextView.setText("Weight: " + weight.getWeight() + " " + weight.getUnit());
+        holder.weightUnitTextView.setText("Unit: " + weight.getUnit());
+        holder.weightRateTextView.setText("Rate: " + weight.getRate());
+        holder.weightTotalTextView.setText("Total: " + weight.getWeight() * weight.getRate() + " SEK/ " + weight.getUnit());
+        holder.weightNotesTextView.setText("Notes: " + weight.getNotes());
 
         holder.deleteButton.setOnClickListener(v -> {
             if (onDeleteClickListener != null) {
@@ -67,27 +68,29 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
         View dialogView = inflater.inflate(R.layout.dialog_edit_weight, null);
         builder.setView(dialogView);
 
-        final TextInputEditText editWeightEditText = dialogView.findViewById(R.id.weightEditText);
-        final TextInputEditText editRatePerUnitEditText = dialogView.findViewById(R.id.weightRateEditText);
-        final TextInputEditText editNotesEditText = dialogView.findViewById(R.id.weightNotesEditText);
+        final TextInputEditText editWeightEditText = dialogView.findViewById(R.id.editWeight);
+        final TextInputEditText editUnitEditText = dialogView.findViewById(R.id.editWeightUnit);
+        final TextInputEditText editRateEditText = dialogView.findViewById(R.id.editWeightRatePrice);
+        final TextInputEditText editNotesEditText = dialogView.findViewById(R.id.editWeightNotes);
 
         editWeightEditText.setText(String.valueOf(weight.getWeight()));
-        editRatePerUnitEditText.setText(String.valueOf(weight.getRate()));
+        editUnitEditText.setText(weight.getUnit());
+        editRateEditText.setText(String.valueOf(weight.getRate()));
         editNotesEditText.setText(weight.getNotes());
-
 
         builder.setPositiveButton("Save", (dialog, which) -> {
             String weightText = editWeightEditText.getText().toString();
-            String ratePerUnitText = editRatePerUnitEditText.getText().toString();
+            String unit = editUnitEditText.getText().toString();
+            String rate = editRateEditText.getText().toString();
             String notesText = editNotesEditText.getText().toString();
 
-
             weight.setWeight(Double.parseDouble(weightText));
-            weight.setRate(Double.parseDouble(ratePerUnitText));
+            weight.setUnit(unit);
+            weight.setRate(Double.parseDouble(rate));
             weight.setNotes(notesText);
 
             updateWeightInFirebase(weight);
-    });
+        });
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
         AlertDialog dialog = builder.create();
@@ -96,12 +99,12 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
 
     private void updateWeightInFirebase(Weight weight) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("workPlans").document(workPlanId)
+        db.collection("workplans").document(workPlanId)
                 .collection("weights").document(weight.getId())
                 .update(
                         "weight", weight.getWeight(),
-                        "rate", weight.getRate(),
                         "unit", weight.getUnit(),
+                        "rate", weight.getRate(),
                         "total", weight.getWeight() * weight.getRate(),
                         "notes", weight.getNotes()
                 )
@@ -113,8 +116,6 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
                     }
                 });
     }
-
-
 
     @Override
     public int getItemCount() {
@@ -128,19 +129,18 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
 
     static class WeightViewHolder extends RecyclerView.ViewHolder {
         TextView weightTextView;
-        TextView weightRateTextView;
-        TextView weightNotesTextView;
-        TextView weightTotalTextView;
         TextView weightUnitTextView;
-
+        TextView weightRateTextView;
+        TextView weightTotalTextView;
+        TextView weightNotesTextView;
         ImageButton deleteButton;
         ImageButton editButton;
 
         public WeightViewHolder(@NonNull View itemView) {
             super(itemView);
             weightTextView = itemView.findViewById(R.id.weightTextView);
+            weightUnitTextView = itemView.findViewById(R.id.weightUnitTextView);
             weightRateTextView = itemView.findViewById(R.id.weightRateTextView);
-            weightUnitTextView = itemView.findViewById(R.id.weightUnitPriceTextView);
             weightTotalTextView = itemView.findViewById(R.id.weightTotalTextView);
             weightNotesTextView = itemView.findViewById(R.id.weightNotesTextView);
             deleteButton = itemView.findViewById(R.id.delete_button);

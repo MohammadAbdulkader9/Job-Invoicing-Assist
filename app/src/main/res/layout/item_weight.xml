@@ -29,7 +29,15 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                tools:text="Weight: 5" />
+                tools:text="Weight: 1000" />
+
+            <TextView
+                android:id="@+id/weightUnitTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="16sp"
+                tools:text="Unit: kg" />
 
             <TextView
                 android:id="@+id/weightRateTextView"
@@ -37,15 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:textSize="16sp"
-                tools:text="Rate: SEK 50/kg" />
-
-            <TextView
-                android:id="@+id/weightUnitPriceTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:textSize="16sp"
-                tools:text="Unit Price: $5.00" />
+                tools:text="Rate: SEK 2/kg" />
 
             <TextView
                 android:id="@+id/weightTotalTextView"
@@ -53,8 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:textSize="16sp"
-                tools:text="Total: $50.00" />
-
+                tools:text="Total: SEK 2000" />
 
             <TextView
                 android:id="@+id/weightNotesTextView"
@@ -62,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:textSize="14sp"
-                tools:text="Notes: Did some work." />
+                tools:text="Notes: Material delivery." />
         </LinearLayout>
 
         <ImageButton
