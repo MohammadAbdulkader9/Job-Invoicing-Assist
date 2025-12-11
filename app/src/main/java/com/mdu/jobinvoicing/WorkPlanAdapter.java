@@ -1,5 +1,6 @@
 package com.mdu.jobinvoicing;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -73,13 +74,23 @@ public class WorkPlanAdapter extends RecyclerView.Adapter<WorkPlanAdapter.WorkPl
         //delete icon press
         delete.setOnClickListener(v -> {
             //TODO: ask if you really want to remove it
-
-            //removes from the list
-            workPlans.remove(workPlan);
-            notifyItemRemoved(position);
-
-            db = FirebaseFirestore.getInstance();
-            db.collection("workplans").document(workPlan.id).delete();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
+            AlertDialog dialog = builder.setTitle("Delete Work Plan")
+                    .setMessage("Are you sure you want to delete this work plan?")
+                    .setPositiveButton("Yes", (d, which) -> {
+                        int actualPosition = holder.getAdapterPosition();
+                        if (actualPosition != RecyclerView.NO_POSITION) {
+                            workPlans.remove(actualPosition);
+                            notifyItemRemoved(actualPosition);
+                            db = FirebaseFirestore.getInstance();
+                            db.collection("workplans").document(workPlan.id).delete();
+                        }
+                    })
+                    .setNegativeButton("No", (d, which) -> d.dismiss())
+                    .show();
+            
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(android.graphics.Color.GREEN);
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(android.graphics.Color.RED);
         });
 
 
