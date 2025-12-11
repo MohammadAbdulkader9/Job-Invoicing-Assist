@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">#295FC3</item>
+    </style>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#295FC3</color>
     <color name="card_color">#F7F7FF</color>
+    <color name="nav_bar_color">#39393E</color>
 </resources>

@@ -17,6 +17,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.mdu.jobinvoicing.data.network.financeApi.ApiServiceManager;
 
@@ -31,7 +32,7 @@ public class HomePage extends AppCompatActivity {
     private MaterialCardView cardCreateWorkPlan, cardViewJobs, cardTimeTracking;
 
     // Bottom navigation items
-    private LinearLayout navNewJobs, navCreateInvoices, navProfile;
+    private BottomNavigationView bottomNavigationView;
 
     private MockLoadAssistService service;
     private boolean bound = false;
@@ -82,12 +83,8 @@ public class HomePage extends AppCompatActivity {
         cardViewJobs       = findViewById(R.id.cardViewWorkPlans);
         //cardTimeTracking   = findViewById(R.id.cardTimeTracking);
 
-        navNewJobs         = findViewById(R.id.navNewJobs);
-        navCreateInvoices  = findViewById(R.id.navCreateInvoices);
-        navProfile        = findViewById(R.id.navOperatorProfile);
-        //navSyncNow         = findViewById(R.id.navSyncNow);Commenting it out as no longer needed
-
-
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        
         //offline-online functionality
         statusText = findViewById(R.id.SyncText);
         statusDot = findViewById(R.id.statusDot);
@@ -126,26 +123,21 @@ public class HomePage extends AppCompatActivity {
 
         // ----- Bottom navigation bar -----
 
-        navNewJobs.setOnClickListener(v -> {
-            // TODO: Bottom navigation destination: NewJobsActivity.
-            // Steps:
-            // 1) Create NewJobsActivity in package com.mdu.jobinvoicing
-            // 2) Make sure it is added to AndroidManifest.xml
-            // 3) Then use:
-            //    Intent intent = new Intent(HomePage.this, NewJobsActivity.class);
-            //    startActivity(intent);
-            Toast.makeText(this, "Bottom: New Jobs", Toast.LENGTH_SHORT).show();
-        });
-
-        navCreateInvoices.setOnClickListener(v -> {
-            // TODO: Bottom navigation destination: CreateInvoicesActivity.
-            Intent intent = new Intent(HomePage.this, Invoices.class);
-            startActivity(intent);
-            //Toast.makeText(this, "Bottom: Create Invoices", Toast.LENGTH_SHORT).show();
-        });
-        navProfile.setOnClickListener(v -> {
-            Intent intent = new Intent(HomePage.this, OperatorProfile.class);
-            startActivity(intent);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_home) {
+                // Already on Home, do nothing
+                return true;
+            } else if (itemId == R.id.nav_create_invoice) {
+                Intent intent = new Intent(HomePage.this, Invoices.class);
+                startActivity(intent);
+                return true;
+            } else if (itemId == R.id.nav_profile) {
+                Intent intent = new Intent(HomePage.this, OperatorProfile.class);
+                startActivity(intent);
+                return true;
+            }
+            return false;
         });
     }
     @Override
