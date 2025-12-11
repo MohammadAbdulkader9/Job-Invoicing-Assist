@@ -31,7 +31,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:hint="Rate Price">
+        android:hint="Unit">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editDistanceUnit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Unit Price">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editDistanceRatePrice"
@@ -47,7 +60,7 @@
         android:hint="Notes">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editMaterialNotes"
+            android:id="@+id/editDistanceNotes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minLines="2"

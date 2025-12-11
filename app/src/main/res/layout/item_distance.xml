@@ -30,6 +30,13 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 tools:text="Distance: 5" />
+            <TextView
+                android:id="@+id/distanceUnitTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="16sp"
+                tools:text="Unit: km" />
 
             <TextView
                 android:id="@+id/distanceRateTextView"

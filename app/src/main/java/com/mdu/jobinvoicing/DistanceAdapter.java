@@ -45,10 +45,11 @@ public class DistanceAdapter extends RecyclerView.Adapter<DistanceAdapter.Distan
     public void onBindViewHolder(@NonNull DistanceViewHolder holder, int position) {
         Distance distance = distances.get(position);
 
-        holder.distanceTextView.setText(String.format(Locale.getDefault(), "Distance: %.2f", distance.getDistance()));
-        holder.distanceRateTextView.setText(String.format(Locale.getDefault(), "Rate: %.2f/km", distance.getRate()));
-        holder.distanceTotalTextView.setText(String.format(Locale.getDefault(), "Total: %.2f", distance.getDistance() * distance.getRate()));
-        holder.distanceNotesTextView.setText(distance.getNotes());
+        holder.distanceTextView.setText("Distance: " + distance.getDistance() + " " + distance.getUnit());
+        holder.distanceUnitTextView.setText("Unit: " + distance.getUnit());
+        holder.distanceRateTextView.setText("Rate: " + distance.getRate());
+        holder.distanceTotalTextView.setText("Total: " + distance.getDistance() * distance.getRate() + " SEK/ " + distance.getUnit());
+        holder.distanceNotesTextView.setText("Notes: " + distance.getNotes());
 
         holder.deleteButton.setOnClickListener(v -> {
             if (onDeleteClickListener != null) {
@@ -67,21 +68,25 @@ public class DistanceAdapter extends RecyclerView.Adapter<DistanceAdapter.Distan
         View dialogView = inflater.inflate(R.layout.dialog_edit_distance, null);
         builder.setView(dialogView);
 
-        final TextInputEditText editDistanceEditText = dialogView.findViewById(R.id.distanceEditText);
-        final TextInputEditText editRatePerKmEditText = dialogView.findViewById(R.id.distanceRateTextView);
-        final TextInputEditText editNotesEditText = dialogView.findViewById(R.id.distanceNotesTextView);
+        final TextInputEditText editDistanceEditText = dialogView.findViewById(R.id.editDistance);
+        final TextInputEditText editUnitEditText = dialogView.findViewById(R.id.editDistanceUnit);
+        final TextInputEditText editRateEditText = dialogView.findViewById(R.id.editDistanceRatePrice);
+        final TextInputEditText editNotesEditText = dialogView.findViewById(R.id.editDistanceNotes);
 
-        editDistanceEditText.setText(String.format(Locale.getDefault(), "%.2f", distance.getDistance()));
-        editRatePerKmEditText.setText(String.format(Locale.getDefault(), "%.2f", distance.getRate()));
+        editDistanceEditText.setText(String.valueOf(distance.getDistance()));
+        editUnitEditText.setText(distance.getUnit());
+        editRateEditText.setText(String.valueOf(distance.getRate()));
         editNotesEditText.setText(distance.getNotes());
 
         builder.setPositiveButton("Save", (dialog, which) -> {
             String distanceText = editDistanceEditText.getText().toString();
-            String ratePerKmText = editRatePerKmEditText.getText().toString();
+            String unit = editUnitEditText.getText().toString();
+            String rate = editRateEditText.getText().toString();
             String notesText = editNotesEditText.getText().toString();
 
             distance.setDistance(Double.parseDouble(distanceText));
-            distance.setRate(Double.parseDouble(ratePerKmText));
+            distance.setUnit(unit);
+            distance.setRate(Double.parseDouble(rate));
             distance.setNotes(notesText);
 
             updateDistanceInFirebase(distance);
@@ -94,11 +99,12 @@ public class DistanceAdapter extends RecyclerView.Adapter<DistanceAdapter.Distan
 
 private void updateDistanceInFirebase(Distance distance) {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    db.collection("workPlans").document(workPlanId)
+    db.collection("workplans").document(workPlanId)
             .collection("distances").document(distance.getId())
             .update(
                     "distance", distance.getDistance(),
-                    "ratePerKm", distance.getRate(),
+                    "unit", distance.getUnit(),
+                    "rate", distance.getRate(),
                     "total", distance.getDistance() * distance.getRate(),
                     "notes", distance.getNotes()
             )
@@ -124,6 +130,7 @@ private void updateDistanceInFirebase(Distance distance) {
 
     static class DistanceViewHolder extends RecyclerView.ViewHolder {
         TextView distanceTextView;
+        TextView distanceUnitTextView;
         TextView distanceRateTextView;
         TextView distanceTotalTextView;
         TextView distanceNotesTextView;
@@ -134,6 +141,7 @@ private void updateDistanceInFirebase(Distance distance) {
         public DistanceViewHolder(@NonNull View itemView) {
             super(itemView);
             distanceTextView = itemView.findViewById(R.id.distanceTextView);
+            distanceUnitTextView = itemView.findViewById(R.id.distanceUnitTextView);
             distanceRateTextView = itemView.findViewById(R.id.distanceRateTextView);
             distanceTotalTextView = itemView.findViewById(R.id.distanceTotalTextView);
             distanceNotesTextView = itemView.findViewById(R.id.distanceNotesTextView);
