@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardContainer"
     android:orientation="vertical"
     android:padding="24dp"
     android:layout_marginBottom="16dp"
@@ -40,6 +41,21 @@
         android:layout_marginTop="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <!-- Active Badge -->
+    <TextView
+        android:id="@+id/tvActiveTag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="✔ ACTIVE"
+        android:textColor="@android:color/holo_red_dark"
+        android:textStyle="bold"
+        android:padding="4dp"
+        android:background="@drawable/active_badge_bg"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="8dp"/>
+
 
     <!-- Buttons Row -->
     <LinearLayout
@@ -71,7 +87,7 @@
             android:id="@+id/btnDelete"
             android:src="@drawable/ic_delete_red"
             app:tint="#F44336"
-            android:background="@android:color/transparent"
+            android:background="@drawable/button_outline"
             android:layout_marginStart="8dp"
             android:layout_width="45dp"
             android:layout_height="45dp" />
