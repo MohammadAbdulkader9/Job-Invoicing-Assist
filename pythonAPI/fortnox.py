@@ -19,6 +19,8 @@ errorResponse = {
 invoices = di.invoices
 customers = dc.customers
 
+## INVOICE API ##
+
 
 @app.route("/3/invoices", methods=["POST", "GET"])
 def postInvoice():
@@ -74,3 +76,56 @@ def getInvoicePreview(invoice_id):
             return send_file("./assets/sample.pdf")
 
     return jsonify(errorResponse), 400
+
+
+## CUSTOMER API ##
+
+
+@app.route("/3/customers", methods=["POST", "GET"])
+def postCustomer():
+    if request.method == "POST":
+        last_id = customers["Customers"][-1]["CustomerNumber"]
+        new_customer = json.loads(json.dumps(request.json))
+        new_customer["CustomerNumber"] = last_id + 1
+        if new_customer["CustomerNumber"] == "":
+            return jsonify(errorResponse), 400
+        customers["Customers"].append(new_customer)
+        return jsonify(new_customer), 201
+
+    return jsonify(customers["Customers"])
+
+
+@app.route("/3/customers/<string:customer_id>", methods=["GET", "PUT", "DELETE"])
+def getCustomer(customer_id):
+    request.headers.get("Content-Type")
+    if request.method == "DELETE":
+        original_length = len(customers["Customers"])
+        customers["Customers"] = [
+            cust
+            for cust in customers["Customers"]
+            if cust["CustomerNumber"] != customer_id
+        ]
+        if len(customers["Customers"]) < original_length:
+            return "", 204
+
+        return "", 404
+
+    print(customer_id)
+    for customer in customers["Customers"]:
+        if customer["CustomerNumber"] == customer_id:
+            if request.method == "PUT":
+                customer.update(request.json)
+                customers[customer_id] = json.loads(json.dumps(request.json))
+                return jsonify(request.json)
+
+            return customer, 200
+
+    return jsonify(
+        {
+            "ErrorInformation": {
+                "Code": "123",
+                "Error": "321",
+                "Message": f"Customer with ID {customer_id} not found",
+            }
+        }
+    ), 404
