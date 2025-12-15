@@ -22,7 +22,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="@id/bottomBar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topBar">
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:text="Client Name"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <EditText
                 android:id="@+id/customerNameEditText"
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:text="Work Title"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <EditText
                 android:id="@+id/workTitleEditText"
@@ -69,7 +69,7 @@
                 android:layout_marginTop="16dp"
                 android:text="Work Description"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <EditText
                 android:id="@+id/workDescriptionEditText"
@@ -87,7 +87,7 @@
                 android:layout_marginTop="16dp"
                 android:text="Work Location"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <EditText
                 android:id="@+id/addressEditText"
@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:inputType="textPostalAddress"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -103,8 +103,7 @@
                 android:layout_marginTop="16dp"
                 android:text="Date"
                 android:textSize="18sp"
-                android:textStyle="bold" />
-
+                android:textStyle="bold"/>
             <EditText
                 android:id="@+id/dateEditText"
                 android:layout_width="match_parent"
@@ -120,7 +119,7 @@
                 android:layout_marginTop="16dp"
                 android:text="Status"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <RadioGroup
                 android:id="@+id/statusRadioGroup"
@@ -200,6 +199,22 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_service_item" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/distancesRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_distance" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/weightsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_weight" />
+
 
             <!-- Time Entry Section -->
             <RelativeLayout
@@ -259,12 +274,28 @@
                     android:inputType="textMultiLine"
                     android:minLines="2" />
 
-                <Button
-                    android:id="@+id/addTimeEntryButton"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:text="Add Time Entry" />
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/importFromTimerButton"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:text="Import from Timer"/>
+
+                    <Button
+                        android:id="@+id/addTimeEntryButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="Add Time Entry" />
+                </LinearLayout>
+
 
             </LinearLayout>
 
@@ -284,7 +315,7 @@
                     android:layout_centerVertical="true"
                     android:text="Material"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <ImageView
                     android:id="@+id/materialToggle"
@@ -365,7 +396,7 @@
                     android:layout_centerVertical="true"
                     android:text="Service"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <ImageView
                     android:id="@+id/serviceItemToggle"
@@ -416,98 +447,158 @@
 
             </LinearLayout>
 
+            <!-- Distance Section -->
+            <RelativeLayout
+                android:id="@+id/distanceHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Distance"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <ImageView
+                    android:id="@+id/distanceToggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+                    />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/distanceContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <EditText
+                    android:id="@+id/distanceEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Distance"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/distanceUnitEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Distance unit (m, km, mile)"
+                    android:inputType="text" />
+
+                <EditText
+                    android:id="@+id/distanceRateEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Rate per unit"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/distanceNotesEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Notes"
+                    android:inputType="textMultiLine"
+                    android:minLines="2"
+                    android:gravity="top"/>
+
+                <Button
+                    android:id="@+id/addDistanceButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Distance"
+                    android:layout_gravity="end"/>
+
+            </LinearLayout>
+
+            <!-- Weight Section -->
+            <RelativeLayout
+                android:id="@+id/weightHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Weight"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <ImageView
+                    android:id="@+id/weightToggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+                    />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/weightContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <EditText
+                    android:id="@+id/weightEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Weight"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/weightUnitEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Weight unit (kg, lbs, ton)"
+                    android:inputType="text" />
+
+                <EditText
+                    android:id="@+id/weightRateEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Rate per unit"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/weightNotesEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Notes"
+                    android:inputType="textMultiLine"
+                    android:minLines="2"
+                    android:gravity="top"/>
+
+                <Button
+                    android:id="@+id/addWeightButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Weight"
+                    android:layout_gravity="end"/>
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </ScrollView>
-
-    <!-- Bottom navigation bar: industrial grey with icon + text -->
-    <LinearLayout
-
-        android:id="@+id/bottomBar"
-        android:layout_width="0dp"
-        android:layout_height="90dp"
-        android:background="#424242"
-        android:orientation="horizontal"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <!-- New Jobs -->
-        <LinearLayout
-            android:id="@+id/navNewJobs"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:clickable="true"
-            android:foreground="?attr/selectableItemBackground">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/new_jobb_icon"
-                app:tint="#FFFFFF" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New Jobs"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-        <!-- Create Invoices -->
-        <LinearLayout
-            android:id="@+id/navCreateInvoices"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:clickable="true"
-            android:foreground="?attr/selectableItemBackground">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/create_invoice_icon"
-                app:tint="#FFFFFF" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Create Invoices"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-        <!-- Sync Now -->
-        <LinearLayout
-            android:id="@+id/navSyncNow"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:clickable="true"
-            android:foreground="?attr/selectableItemBackground">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@android:drawable/ic_popup_sync"
-                app:tint="#FFFFFF" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sync Now"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

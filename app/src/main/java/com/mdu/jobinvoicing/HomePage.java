@@ -4,6 +4,10 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.os.IBinder;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -84,7 +88,7 @@ public class HomePage extends AppCompatActivity {
         //cardTimeTracking   = findViewById(R.id.cardTimeTracking);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        
+
         //offline-online functionality
         statusText = findViewById(R.id.SyncText);
         statusDot = findViewById(R.id.statusDot);
@@ -103,7 +107,7 @@ public class HomePage extends AppCompatActivity {
 
         MaterialCardView cardTimeTracking = findViewById(R.id.cardTimeTracking);
         cardTimeTracking.setOnClickListener(v -> {
-            Intent intent = new Intent(HomePage.this, StopWatchTimer.class);
+            Intent intent = new Intent(HomePage.this, StopWatchTimerActivity.class);
             startActivity(intent);
         });
 
@@ -154,7 +158,7 @@ public class HomePage extends AppCompatActivity {
         if (bound) unbindService(conn);
         bound = false;
     }
-    
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

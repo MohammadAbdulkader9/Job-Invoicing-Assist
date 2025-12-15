@@ -3,6 +3,7 @@ package com.mdu.jobinvoicing;
 import static com.google.firebase.firestore.FieldValue.*;
 import static com.google.firebase.firestore.FirebaseFirestore.*;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -134,7 +135,10 @@ public class WorkPlanActivity extends AppCompatActivity {
                 .add(workplan)
                 .addOnSuccessListener(doc -> {
                     Toast.makeText(this, "Work Plan Created Successfully!", Toast.LENGTH_SHORT).show();
-                    resetForm(); // <-- reset all fields after save
+                    Intent intent = new Intent(WorkPlanActivity.this, WorkPlanDetailsActivity.class);
+                    intent.putExtra("WORK_PLAN_ID", doc.getId());
+                    startActivity(intent);
+                    finish();
                 })
                 .addOnFailureListener(e -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show());
     }

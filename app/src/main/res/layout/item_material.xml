@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/delete_button">
+            android:layout_toStartOf="@+id/edit_button">
 
             <TextView
                 android:id="@+id/materialNameTextView"
@@ -64,6 +64,16 @@
                 tools:text="Notes: Oak wood." />
 
         </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/edit_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_baseline_edit_24"
+            android:contentDescription="Edit Material Entry"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_toStartOf="@id/delete_button"
+            android:layout_centerVertical="true" />
 
         <ImageButton
             android:id="@+id/delete_button"

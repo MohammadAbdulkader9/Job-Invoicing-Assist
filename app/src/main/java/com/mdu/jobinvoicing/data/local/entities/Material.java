@@ -19,15 +19,16 @@ import androidx.room.PrimaryKey;
 public class Material {
     @PrimaryKey
     @NonNull
-    public String id;
+    private String id;
 
-    public String workPlanId;
-    public String name;
-    public double quantity;
-    public String unit; // e.g., "pcs", "m", "kg"
-    public double unitPrice;
-    public double total;
-    public String notes;
+    private String workPlanId;
+    private String name;
+    private double quantity;
+    private String unit; // e.g., "pcs", "m", "kg"
+    private double unitPrice;
+    private double total;
+    private String notes;
+
 
     public Material() {
         // No-argument constructor required for Firestore deserialization
@@ -42,6 +43,71 @@ public class Material {
         this.unit = unit;
         this.unitPrice = unitPrice;
         this.total = quantity * unitPrice;
+        this.notes = notes;
+    }
+
+    @NonNull
+    public String getId() {
+        return id;
+    }
+
+    public void setId(@NonNull String id) {
+        this.id = id;
+    }
+
+    public String getWorkPlanId() {
+        return workPlanId;
+    }
+
+    public void setWorkPlanId(String workPlanId) {
+        this.workPlanId = workPlanId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public double getUnitPrice() {
+        return unitPrice;
+    }
+
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
         this.notes = notes;
     }
 }

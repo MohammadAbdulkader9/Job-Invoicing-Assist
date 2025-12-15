@@ -17,40 +17,79 @@ import androidx.room.PrimaryKey;
                         parentColumns = "id",
                         childColumns = "workPlanId",
                         onDelete = ForeignKey.CASCADE),
-                @ForeignKey(entity = Operator.class,
-                        parentColumns = "id",
-                        childColumns = "operatorId",
-                        onDelete = ForeignKey.SET_NULL)
+
         },
-        indices = {@Index("workPlanId"), @Index("operatorId")})
+        indices = {@Index("workPlanId")})
 public class TimeEntry {
     @PrimaryKey
     @NonNull
-    public String id;
+    private String id;
 
-    public String workPlanId; // FK -> WorkPlan.id
-    public String operatorId; // FK -> Operator.id (nullable if operator removed)
-    public long startTimeMillis;
-    public long endTimeMillis; // 0 if still running
-    public double hours; // computed value stored for convenience
-    public double hourRate;
-    public double total;
-    public String notes;
+    private String workPlanId; // FK -> WorkPlan.id
+    private double hours; // computed value stored for convenience
+    private double hourRate;
+    private double total;
+    private String notes;
 
     public TimeEntry() {
         // No-argument constructor required for Firestore deserialization
     }
 
-    public TimeEntry(@NonNull String id, String workPlanId, String operatorId,
-                     long startTimeMillis, long endTimeMillis, double hours, double hourRate, String notes) {
+    public TimeEntry(@NonNull String id, String workPlanId, double hours, double hourRate, String notes) {
         this.id = id;
         this.workPlanId = workPlanId;
-        this.operatorId = operatorId;
-        this.startTimeMillis = startTimeMillis;
-        this.endTimeMillis = endTimeMillis;
         this.hours = hours;
         this.hourRate = hourRate;
         this.total = hours * hourRate;
+        this.notes = notes;
+    }
+
+    @NonNull
+    public String getId() {
+        return id;
+    }
+
+    public void setId(@NonNull String id) {
+        this.id = id;
+    }
+
+    public String getWorkPlanId() {
+        return workPlanId;
+    }
+
+    public void setWorkPlanId(String workPlanId) {
+        this.workPlanId = workPlanId;
+    }
+
+    public double getHours() {
+        return hours;
+    }
+
+    public void setHours(double hours) {
+        this.hours = hours;
+    }
+
+    public double getHourRate() {
+        return hourRate;
+    }
+
+    public void setHourRate(double hourRate) {
+        this.hourRate = hourRate;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
         this.notes = notes;
     }
 }

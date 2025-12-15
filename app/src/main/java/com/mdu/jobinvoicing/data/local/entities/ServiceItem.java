@@ -19,14 +19,14 @@ import androidx.room.PrimaryKey;
 public class ServiceItem {
     @PrimaryKey
     @NonNull
-    public String id;
+    private String id;
 
-    public String workPlanId;
-    public String description;
+    private String workPlanId;
+    private String description;
 
-    public double serviceFee;
+    private double serviceFee;
 
-    public String notes;
+    private String notes;
 
     public ServiceItem() {
         // No-argument constructor required for Firestore deserialization
@@ -38,6 +38,47 @@ public class ServiceItem {
         this.workPlanId = workPlanId;
         this.description = description;
         this.serviceFee = serviceFee;
+        this.notes = notes;
+    }
+
+    @NonNull
+    public String getId() {
+        return id;
+    }
+
+    public void setId(@NonNull String id) {
+        this.id = id;
+    }
+
+    public String getWorkPlanId() {
+        return workPlanId;
+    }
+
+    public void setWorkPlanId(String workPlanId) {
+        this.workPlanId = workPlanId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public double getServiceFee() {
+        return serviceFee;
+    }
+
+    public void setServiceFee(double serviceFee) {
+        this.serviceFee = serviceFee;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
         this.notes = notes;
     }
 }

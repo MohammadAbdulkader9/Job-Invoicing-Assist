@@ -32,4 +32,24 @@ public class WorkPlan {
         this.endDate = endDate;
         this.status = status;
     }
+
+    public WorkPlanStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(WorkPlanStatus status) {
+        this.status = status;
+        }
+
+    public String getWorkTitle() {
+        return title;
+
+    }
+    public String getClientName() {
+        return clientName;
+    }
+
+    public long getStartDate() {
+        return startDate;
+    }
 }

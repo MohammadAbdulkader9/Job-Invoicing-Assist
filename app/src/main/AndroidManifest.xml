@@ -31,7 +31,7 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity android:name=".OperatorProfile"/>
-        <activity android:name=".StopWatchTimer" />
+        <activity android:name=".StopWatchTimerActivity" />
         <activity android:name=".WorkPlanActivity"/>
         <activity android:name=".Invoices"/>
         <activity android:name=".ViewWorkPlans"/>

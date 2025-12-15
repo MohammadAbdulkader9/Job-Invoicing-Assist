@@ -41,7 +41,7 @@ public class ServiceItemRepository {
         executor.execute(() -> {
             dao.insert(item);
             if (enqueueSync) {
-                enqueueSync(item.id, gson.toJson(item), "CREATE");
+                enqueueSync(item.getId(), gson.toJson(item), "CREATE");
             }
         });
     }
@@ -54,7 +54,7 @@ public class ServiceItemRepository {
         executor.execute(() -> {
             dao.update(item);
             if (enqueueSync) {
-                enqueueSync(item.id, gson.toJson(item), "UPDATE");
+                enqueueSync(item.getId(), gson.toJson(item), "UPDATE");
             }
         });
     }
@@ -67,7 +67,7 @@ public class ServiceItemRepository {
         executor.execute(() -> {
             dao.delete(item);
             if (enqueueSync) {
-                enqueueSync(item.id, gson.toJson(item), "DELETE");
+                enqueueSync(item.getId(), gson.toJson(item), "DELETE");
             }
         });
     }

@@ -1,8 +1,13 @@
 package com.mdu.jobinvoicing;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +26,10 @@ import com.mdu.jobinvoicing.data.local.entities.WorkPlan;
 import com.mdu.jobinvoicing.data.local.entities.WorkPlanStatus;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ViewWorkPlans extends AppCompatActivity {
 
@@ -30,10 +38,17 @@ public class ViewWorkPlans extends AppCompatActivity {
     private RecyclerView workPlansRecyclerView;
     private WorkPlanAdapter workPlanAdapter;
     private List<WorkPlan> workPlanList;
+    private List<WorkPlan> originalWorkPlanList;
     private FirebaseFirestore db;
     private NetworkHelper networkHelper;
     private TextView statusText;
     private ImageView statusDot;
+    private EditText searchEditText;
+    private ImageView filterButton;
+
+    private String currentSort = "DateDesc"; // Default sort
+    private WorkPlanStatus currentStatusFilter = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +68,30 @@ public class ViewWorkPlans extends AppCompatActivity {
         workPlansRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         workPlanList = new ArrayList<>();
+        originalWorkPlanList = new ArrayList<>();
         workPlanAdapter = new WorkPlanAdapter(this, workPlanList);
         workPlansRecyclerView.setAdapter(workPlanAdapter);
+
+        searchEditText = findViewById(R.id.searchEditText);
+        filterButton = findViewById(R.id.filterButton);
+
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterWorkPlans(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        filterButton.setOnClickListener(this::showFilterMenu);
+
 
         fetchWorkPlans();
 
@@ -83,7 +120,7 @@ public class ViewWorkPlans extends AppCompatActivity {
                         return;
                     }
 
-                    workPlanList.clear();
+                    originalWorkPlanList.clear();
                     if (value != null) {
                         for (QueryDocumentSnapshot doc : value) {
                             String id = doc.getId();
@@ -107,12 +144,76 @@ public class ViewWorkPlans extends AppCompatActivity {
 
                             WorkPlan workPlan = new WorkPlan(id, title, clientName, location, startDate, 0, status);
                             workPlan.description = description;
-                            workPlanList.add(workPlan);
+                            originalWorkPlanList.add(workPlan);
                         }
                     }
-                    workPlanAdapter.notifyDataSetChanged();
+                    filterWorkPlans(searchEditText.getText().toString());
                 });
     }
+
+    private void filterWorkPlans(String text) {
+        List<WorkPlan> filteredList = new ArrayList<>(originalWorkPlanList);
+
+        // Filter by status
+        if (currentStatusFilter != null) {
+            filteredList = filteredList.stream()
+                    .filter(wp -> wp.getStatus() == currentStatusFilter)
+                    .collect(Collectors.toList());
+        }
+
+
+        // Filter by search text
+        if (text != null && !text.isEmpty()) {
+            String lowerCaseQuery = text.toLowerCase();
+            filteredList = filteredList.stream()
+                    .filter(wp -> (wp.getWorkTitle() != null && wp.getWorkTitle().toLowerCase().contains(lowerCaseQuery)) ||
+                            (wp.getClientName() != null && wp.getClientName().toLowerCase().contains(lowerCaseQuery)))
+                    .collect(Collectors.toList());
+        }
+
+        // Sort
+        switch (currentSort) {
+            case "DateAsc":
+                Collections.sort(filteredList, Comparator.comparingLong(WorkPlan::getStartDate));
+                break;
+            case "DateDesc":
+                Collections.sort(filteredList, Comparator.comparingLong(WorkPlan::getStartDate).reversed());
+                break;
+        }
+
+        workPlanList.clear();
+        workPlanList.addAll(filteredList);
+        workPlanAdapter.notifyDataSetChanged();
+    }
+
+    private void showFilterMenu(View v) {
+        PopupMenu popup = new PopupMenu(this, v);
+        popup.getMenuInflater().inflate(R.menu.filter_menu, popup.getMenu());
+
+        popup.setOnMenuItemClickListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.sort_date_asc) {
+                currentSort = "DateAsc";
+            } else if (itemId == R.id.sort_date_desc) {
+                currentSort = "DateDesc";
+            } else if (itemId == R.id.status_open) {
+                currentStatusFilter = WorkPlanStatus.OPEN;
+            } else if (itemId == R.id.status_in_progress) {
+                currentStatusFilter = WorkPlanStatus.IN_PROGRESS;
+            } else if (itemId == R.id.status_closed) {
+                currentStatusFilter = WorkPlanStatus.CLOSED;
+            } else if (itemId == R.id.clear_filter) {
+                currentStatusFilter = null;
+            }
+
+            filterWorkPlans(searchEditText.getText().toString());
+            return true;
+        });
+
+        popup.show();
+    }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
