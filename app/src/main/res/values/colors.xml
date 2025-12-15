@@ -8,6 +8,10 @@
     </style>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#F44336</color>
+    <color name="button_pressed_color">#222222</color> <!-- slightly darker -->
+
+
     <color name="blue">#295FC3</color>
     <color name="card_color">#F7F7FF</color>
     <color name="nav_bar_color">#39393E</color>

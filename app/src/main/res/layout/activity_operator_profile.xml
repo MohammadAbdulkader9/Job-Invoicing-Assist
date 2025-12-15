@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/profile"
     android:layout_width="match_parent"
@@ -21,173 +21,182 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+        <!-- TITLE -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:text="Operator Profile"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-            <!-- ========================================== -->
-            <!-- TITLE + SUBTITLE -->
-            <!-- ========================================== -->
+        <TextView
+            android:id="@+id/tvSubtitle"
+            android:text="Manage your personal information"
+            android:textSize="14sp"
+            android:textColor="#777"
+            android:paddingBottom="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
+        <!-- FORM CARD -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/formCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="32dp"
+            android:background="@drawable/card_background">
+
+            <!-- Full Name -->
             <TextView
-                android:id="@+id/tvTitle"
+                android:id="@+id/lblFullName"
+                android:text="Full Name *"
+                android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:text="Operator Profile"
-                android:textSize="22sp"
-                android:textStyle="bold" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
+            <EditText
+                android:id="@+id/etFullName"
+                android:hint="Enter your full name"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="6dp"
+                android:paddingLeft="12dp"
+                android:background="@drawable/edittext_bg"
+                app:layout_constraintTop_toBottomOf="@id/lblFullName"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Role -->
             <TextView
-                android:id="@+id/tvSubtitle"
+                android:id="@+id/lblRole"
+                android:text="Role *"
+                android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingBottom="20dp"
-                android:text="Manage your personal information"
-                android:textColor="#777"
-                android:textSize="14sp" />
+                android:layout_marginTop="18dp"
+                app:layout_constraintTop_toBottomOf="@id/etFullName"
+                app:layout_constraintStart_toStartOf="parent" />
 
+            <EditText
+                android:id="@+id/etRole"
+                android:hint="Operator"
+                android:enabled="false"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="6dp"
+                android:paddingLeft="12dp"
+                android:background="@drawable/edittext_bg"
+                app:layout_constraintTop_toBottomOf="@id/lblRole"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- ========================================== -->
-            <!-- FORM CARD (TOP) -->
-            <!-- ========================================== -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/formCard"
-                android:layout_width="match_parent"
+            <!-- Divider -->
+            <View
+                android:id="@+id/divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="24dp"
+                android:background="#DDD"
+                app:layout_constraintTop_toBottomOf="@id/etRole"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Email -->
+            <TextView
+                android:id="@+id/lblEmail"
+                android:text="Email Address *"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/card_background"
-                android:padding="32dp">
+                app:layout_constraintTop_toBottomOf="@id/divider"
+                app:layout_constraintStart_toStartOf="parent" />
 
-                <!-- Full Name -->
-                <TextView
-                    android:id="@+id/lblFullName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:text="Full Name *"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <EditText
+                android:id="@+id/etEmail"
+                android:hint="Enter your email address"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:paddingLeft="12dp"
+                android:background="@drawable/edittext_bg"
+                android:layout_marginTop="6dp"
+                app:layout_constraintTop_toBottomOf="@id/lblEmail"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-                <EditText
-                    android:id="@+id/etFullName"
+            <!-- Phone -->
+            <TextView
+                android:id="@+id/lblPhone"
+                android:text="Phone Number *"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/etEmail"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/etPhone"
+                android:hint="Enter your mobile number"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:paddingLeft="12dp"
+                android:background="@drawable/edittext_bg"
+                android:layout_marginTop="6dp"
+                app:layout_constraintTop_toBottomOf="@id/lblPhone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- BUTTON ROW -->
+            <LinearLayout
+                android:id="@+id/layoutButtons"
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                app:layout_constraintTop_toBottomOf="@id/etPhone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <!-- CANCEL -->
+                <Button
+                    android:id="@+id/btnCancel"
+                    android:text="Cancel"
+                    android:backgroundTint="#888888"
+                    android:textColor="@android:color/white"
+
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="6dp"
-                    android:background="@drawable/edittext_bg"
-                    android:hint="Enter your full name"
-                    android:paddingLeft="12dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/lblFullName" />
+                    android:layout_height="50dp"
+                    android:layout_weight="1" />
 
-                <!-- Role -->
-                <TextView
-                    android:id="@+id/lblRole"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:text="Role *"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/etFullName" />
-
-                <EditText
-                    android:id="@+id/etRole"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="6dp"
-                    android:background="@drawable/edittext_bg"
-                    android:enabled="false"
-                    android:hint="Operator"
-                    android:paddingLeft="12dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/lblRole" />
-
-                <!-- Divider -->
-                <View
-                    android:id="@+id/divider"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="26dp"
-                    android:background="#DDD"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/etRole" />
-
-                <!-- Email -->
-                <TextView
-                    android:id="@+id/lblEmail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Email Address *"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/divider" />
-
-                <EditText
-                    android:id="@+id/etEmail"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="6dp"
-                    android:background="@drawable/edittext_bg"
-                    android:hint="Enter your email address"
-                    android:paddingLeft="12dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/lblEmail" />
-
-                <!-- Phone -->
-                <TextView
-                    android:id="@+id/lblPhone"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Phone Number *"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/etEmail" />
-
-                <EditText
-                    android:id="@+id/etPhone"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="6dp"
-                    android:background="@drawable/edittext_bg"
-                    android:hint="Enter your mobile number"
-                    android:paddingLeft="12dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/lblPhone" />
-
-                <!-- SAVE BUTTON -->
+                <!-- SAVE -->
                 <Button
                     android:id="@+id/btnSave"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="26dp"
-                    android:backgroundTint="#000"
-                    android:text="Save Profile"
+                    android:text="Create Profile"
+                    android:backgroundTint="#000000"
                     android:textColor="@android:color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/etPhone" />
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!-- OPERATORS LIST -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvOperators"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp" />
 
-            <!-- ========================================== -->
-            <!-- MULTIPLE OPERATOR CARDS (LIST) -->
-            <!-- ========================================== -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvOperators"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp" />
+    </LinearLayout>
 
-        </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>
 
     <include
         android:id="@+id/bottomNavigationView"
@@ -198,4 +207,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
