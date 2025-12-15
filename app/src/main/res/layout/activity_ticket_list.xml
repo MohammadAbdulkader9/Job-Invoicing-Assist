@@ -1,46 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/workplan_details"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
     <!-- Top bar -->
-    <LinearLayout
+    <include
         android:id="@+id/topBar"
+        layout="@layout/view_top_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="#F5F5F5"
-        android:padding="16dp"
-        android:gravity="center_vertical">
-
-        <!-- Back button -->
-        <ImageView
-            android:id="@+id/back_button"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/back_button_border"
-            android:contentDescription="@string/back"
-            android:padding="8dp"
-            android:src="@drawable/ic_baseline_arrow_back_24" />
-
-        <!-- Title -->
-        <TextView
-            android:id="@+id/titleText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="LoadTicket Details"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-
-    </LinearLayout>
+        />
 
     <!-- RecyclerView to display tickets -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTickets"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 </LinearLayout>

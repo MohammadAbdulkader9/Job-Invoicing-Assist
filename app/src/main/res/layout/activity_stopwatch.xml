@@ -12,6 +12,14 @@
         android:orientation="vertical"
         android:baselineAligned="false">
 
+        <!-- Top bar -->
+        <include
+            android:id="@+id/topBar"
+            layout="@layout/view_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+             />
+
         <!-- Top Half: Timer and Controls -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
