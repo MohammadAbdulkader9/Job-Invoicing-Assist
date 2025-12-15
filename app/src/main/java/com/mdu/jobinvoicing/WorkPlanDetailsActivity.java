@@ -73,7 +73,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
     private static final String TAG = "WorkPlanDetailsActivity";
 
     private EditText customerNameEditText, workTitleEditText, workDescriptionEditText, locationEditText, dateEditText;
-    private Button saveButton,saveTimeEntryButton, addTimeEntryButton, addMaterialButton, addServiceItemButton, importFromTimerButton, addDistanceButton, addWeightButton;
+    private Button saveButton, addTimeEntryButton, addMaterialButton, addServiceItemButton, importFromTimerButton, addDistanceButton, addWeightButton;
     private ImageView backButton;
     private RadioGroup statusRadioGroup;
     private RadioButton statusOpen, statusInProgress, statusClosed;
@@ -152,7 +152,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         weightContent = findViewById(R.id.weightContent);
         weightToggle = findViewById(R.id.weightToggle);
 
-        saveTimeEntryButton = findViewById(R.id.addTimeEntryButton);
+        addTimeEntryButton = findViewById(R.id.addTimeEntryButton);
         addMaterialButton = findViewById(R.id.addMaterialButton);
         addServiceItemButton = findViewById(R.id.addServiceItemButton);
         importFromTimerButton = findViewById(R.id.importFromTimerButton);
@@ -194,7 +194,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         distanceHeader.setOnClickListener(v -> toggleSection(distanceContent, distanceToggle));
         weightHeader.setOnClickListener(v -> toggleSection(weightContent, weightToggle));
 
-        saveTimeEntryButton.setOnClickListener(v -> addTimeEntry());
+        addTimeEntryButton.setOnClickListener(v -> addTimeEntry());
         addMaterialButton.setOnClickListener(v -> addMaterial());
         addServiceItemButton.setOnClickListener(v -> addServiceItem());
         addDistanceButton.setOnClickListener(v -> addDistance());
