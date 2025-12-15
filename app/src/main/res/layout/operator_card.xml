@@ -9,14 +9,37 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tvName"
-        android:text="Operator Name"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <!-- Name Row with Active Badge -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
+        <TextView
+            android:id="@+id/tvName"
+            android:text="Operator Name"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+        <!-- Active Badge -->
+        <TextView
+            android:id="@+id/tvActiveTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="✔ ACTIVE"
+            android:textColor="#4CAF50"
+            android:textStyle="bold"
+            android:padding="4dp"
+            android:background="@drawable/active_badge_bg"
+            android:visibility="gone"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
+    <!-- Role -->
     <TextView
         android:id="@+id/tvRole"
         android:text="Operator"
@@ -26,6 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <!-- Email -->
     <TextView
         android:id="@+id/tvEmail"
         android:text="📧 Email Address"
@@ -34,6 +58,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <!-- Phone -->
     <TextView
         android:id="@+id/tvPhone"
         android:text="📱 Phone Number"
@@ -41,21 +66,6 @@
         android:layout_marginTop="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <!-- Active Badge -->
-    <TextView
-        android:id="@+id/tvActiveTag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="✔ ACTIVE"
-        android:textColor="#4CAF50"
-        android:textStyle="bold"
-        android:padding="4dp"
-        android:background="@drawable/active_badge_bg"
-        android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="8dp"/>
-
 
     <!-- Buttons Row -->
     <LinearLayout
@@ -89,11 +99,9 @@
             android:id="@+id/btnDelete"
             android:src="@drawable/ic_delete_red"
             app:tint="#F44336"
-            android:textStyle="bold"
             android:background="@drawable/button_outline"
             android:layout_marginStart="8dp"
             android:layout_width="45dp"
             android:layout_height="45dp" />
-
     </LinearLayout>
 </LinearLayout>
