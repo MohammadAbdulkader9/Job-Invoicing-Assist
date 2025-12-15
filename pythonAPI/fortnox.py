@@ -1,6 +1,5 @@
 import json
 
-# import dummydata
 import dummydata.customers as dc
 import dummydata.invoices as di
 from flask import Flask, jsonify, request
@@ -30,6 +29,7 @@ def postInvoice():
         new_invoice["id"] = last_id + 1
         if new_invoice["CustomerNumber"] == "":
             return jsonify(errorResponse), 400
+        new_invoice["@url"] = f"https://api.example.com/3/invoices/{new_invoice['id']}"
         invoices["Invoices"].append(new_invoice)
         return jsonify(new_invoice), 201
 

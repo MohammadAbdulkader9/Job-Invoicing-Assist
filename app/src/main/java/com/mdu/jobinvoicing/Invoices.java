@@ -11,7 +11,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.mdu.jobinvoicing.data.network.financeApi.ApiCallback;
 import com.mdu.jobinvoicing.data.network.financeApi.ApiServiceManager;
 import com.mdu.jobinvoicing.data.network.financeApi.CustomerResponse;
-import com.mdu.jobinvoicing.data.network.financeApi.ErrorResponse;
 import com.mdu.jobinvoicing.data.network.financeApi.InvoiceResponse;
 import java.util.List;
 
@@ -113,6 +112,7 @@ public class Invoices extends AppCompatActivity {
                                         position
                                     );
                                 fillForm(activeInvoice);
+                                saveButton.setText("Update");
                                 sendButton.setEnabled(true);
                             }
                         }
@@ -125,6 +125,9 @@ public class Invoices extends AppCompatActivity {
             new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (activeCustomer == null){
+                        return;
+                    }
                     if (activeInvoice == null) {
                         createInvoice();
                         return;

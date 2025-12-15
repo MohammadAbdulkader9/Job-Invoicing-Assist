@@ -28,9 +28,22 @@ public class InvoiceResponse {
     @SerializedName("TotalToPay")
     private float TotalToPay;
 
+    @SerializedName("YourOrderNumber")
+    private String yourOrderNumber;
+    @SerializedName("YourReference")
+    private String yourReference;
+
     @Override
     public String toString() {
-        return this.CustomerName; // Or whatever field name holds your Invoice ID
+        String display = this.getId() + " - " + this.CustomerName;
+        if (this.yourOrderNumber != null && !this.yourOrderNumber.isEmpty()) {
+            display = yourOrderNumber;
+            if (!this.yourReference.isEmpty()){
+                display += " - ";
+                display += yourReference;
+            }
+        }
+        return display;
     }
     public InvoiceResponse(String Address1, String City, String Country, String Comments,
                            String Currency, String CustomerName, String CustomerId, float Total, float TotalToPay) {
