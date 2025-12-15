@@ -74,7 +74,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
 
     private EditText customerNameEditText, workTitleEditText, workDescriptionEditText, locationEditText, dateEditText;
     private Button saveButton, addTimeEntryButton, addMaterialButton, addServiceItemButton;
-    private Button saveButton, saveTimeEntryButton, addMaterialButton, addServiceItemButton, importFromTimerButton, addDistanceButton, addWeightButton;
+    private Button  saveTimeEntryButton, importFromTimerButton, addDistanceButton, addWeightButton;
     private ImageView backButton;
     private RadioGroup statusRadioGroup;
     private RadioButton statusOpen, statusInProgress, statusClosed;
