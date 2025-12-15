@@ -248,4 +248,10 @@
             style="@style/Widget.Material3.Button"/>
         </GridLayout>
     </LinearLayout>
+    <include
+        android:id="@+id/bottomNavigationView"
+        layout="@layout/view_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
 </ScrollView>
