@@ -8,12 +8,18 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -33,6 +39,9 @@ public class ViewWorkPlans extends AppCompatActivity {
     private List<WorkPlan> allWorkPlans; // all workplans from Firestore
     private List<WorkPlan> filteredWorkPlanList; // only the worklplans after search/filter
     private FirebaseFirestore db;
+    private NetworkHelper networkHelper;
+    private TextView statusText;
+    private ImageView statusDot;
 
     private TextInputEditText searchEditText;
     private Spinner filterSpinner;
@@ -41,6 +50,13 @@ public class ViewWorkPlans extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_workplans);
+
+        // Apply padding for system bars (status bar / navigation bar)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.viewWorkPlans), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         db = FirebaseFirestore.getInstance();
 
@@ -68,6 +84,23 @@ public class ViewWorkPlans extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 fetchWorkPlans();
             }
+        fetchWorkPlans();
+
+        // Set Top Bar Title
+        MaterialToolbar toolbar = findViewById(R.id.top_bar);
+        if (toolbar != null) {
+            toolbar.setTitle("Work Plans");
+            toolbar.setNavigationOnClickListener(v -> finish());
+        }
+
+
+        // offline-online functionality
+        statusText = findViewById(R.id.SyncText);
+        statusDot = findViewById(R.id.statusDot);
+
+        networkHelper = new NetworkHelper(this, statusDot, statusText);
+        networkHelper.startMonitoring();
+    }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
@@ -163,5 +196,12 @@ public class ViewWorkPlans extends AppCompatActivity {
             }
         }
         workPlanAdapter.notifyDataSetChanged();
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (networkHelper != null) {
+            networkHelper.stopMonitoring();
+        }
     }
 }
