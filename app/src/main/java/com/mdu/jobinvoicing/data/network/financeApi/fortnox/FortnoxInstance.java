@@ -61,6 +61,10 @@ public class FortnoxInstance implements ApiInterface {
         service.deleteInvoiceById(headers, id).enqueue(callback);
     }
 
+    public void sendInvoiceById(String id, ApiCallback<InvoiceResponse> callback){
+        service.sendInvoiceById(headers, id).enqueue(callback);
+    }
+
     public void getCustomerById(
         String id,
         ApiCallback<CustomerResponse> callback

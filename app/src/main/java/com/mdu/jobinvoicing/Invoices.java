@@ -24,6 +24,7 @@ public class Invoices extends AppCompatActivity {
     TextInputEditText cityEText;
     TextInputEditText countryEText;
     TextInputEditText commentsEText;
+    TextInputEditText emailEText;
     TextInputEditText currencyEText;
     TextInputEditText totalEText;
     TextInputEditText totaltpEText;
@@ -44,9 +45,13 @@ public class Invoices extends AppCompatActivity {
         cityEText = findViewById(R.id.etCity);
         countryEText = findViewById(R.id.etCountry);
         commentsEText = findViewById(R.id.etComments);
+        emailEText = findViewById(R.id.etEmail);
         currencyEText = findViewById(R.id.etCurrency);
         totalEText = findViewById(R.id.etTotal);
         totaltpEText = findViewById(R.id.etTotalToPay);
+
+
+
         asm = ApiServiceManager.getInstance();
         asm.getAllCustomers(
             new ApiCallback<List<CustomerResponse>>() {
@@ -73,6 +78,7 @@ public class Invoices extends AppCompatActivity {
                                     (CustomerResponse) parent.getItemAtPosition(
                                         position
                                     );
+                                emailEText.setText(activeCustomer.getEmail());
                             }
                         }
                     );
@@ -107,6 +113,7 @@ public class Invoices extends AppCompatActivity {
                                         position
                                     );
                                 fillForm(activeInvoice);
+                                sendButton.setEnabled(true);
                             }
                         }
                     );
@@ -135,9 +142,16 @@ public class Invoices extends AppCompatActivity {
                             return;
                         }
                         // asm.sendInvoiceById();
+                        asm.sendInvoiceById(activeInvoice.getId(), new ApiCallback<InvoiceResponse>() {
+                            @Override
+                            public void onSuccess(InvoiceResponse response) {
+                                System.out.println("Email sent");
+                            }
+                        });
                     }
                 }
         );
+        sendButton.setEnabled(false);
     }
 
     private void createInvoice() {
@@ -201,6 +215,7 @@ public class Invoices extends AppCompatActivity {
                 item.getCustomerNumber().equals(targetCustomerId)
             ) {
                 customer_dropdown.setText(item.toString(), false);
+                activeCustomer = item;
                 break;
             }
         }
@@ -209,6 +224,7 @@ public class Invoices extends AppCompatActivity {
         cityEText.setText(invoice.getCity());
         countryEText.setText(invoice.getCountry());
         commentsEText.setText(invoice.getComments());
+        emailEText.setText(activeCustomer.getEmail());
         currencyEText.setText(invoice.getCurrency());
         totalEText.setText(String.valueOf(invoice.getTotal()));
         totaltpEText.setText(String.valueOf(invoice.getTotalToPay()));

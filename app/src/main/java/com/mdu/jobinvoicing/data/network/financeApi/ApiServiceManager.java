@@ -103,6 +103,9 @@ public class ApiServiceManager {
                                ApiCallback<InvoiceResponse> callback){
         api.putInvoiceById(id,body,callback);
     }
+    public void sendInvoiceById(String id, ApiCallback<InvoiceResponse> callback){
+        api.sendInvoiceById(id, callback);
+    }
     public void getCustomerById(String id, ApiCallback<CustomerResponse> callback){
         api.getCustomerById(id, callback);
     }

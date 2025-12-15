@@ -78,6 +78,15 @@ def getInvoicePreview(invoice_id):
     return jsonify(errorResponse), 400
 
 
+@app.route("/3/invoices/<int:invoice_id>/email", methods=["GET"])
+def sendInvoiceByEmail(invoice_id):
+    for invoice in invoices["Invoices"]:
+        if invoice["id"] == invoice_id:
+            return invoice
+
+    return jsonify(errorResponse), 400
+
+
 ## CUSTOMER API ##
 
 
