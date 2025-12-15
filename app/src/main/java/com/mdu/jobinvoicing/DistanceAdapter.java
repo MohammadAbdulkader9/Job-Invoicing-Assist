@@ -52,9 +52,16 @@ public class DistanceAdapter extends RecyclerView.Adapter<DistanceAdapter.Distan
         holder.distanceNotesTextView.setText("Notes: " + distance.getNotes());
 
         holder.deleteButton.setOnClickListener(v -> {
-            if (onDeleteClickListener != null) {
-                onDeleteClickListener.onDeleteClick(distance);
-            }
+            new AlertDialog.Builder(holder.itemView.getContext())
+                    .setTitle("Delete Distance")
+                    .setMessage("Are you sure you want to delete this distance?")
+                    .setPositiveButton("Delete", (dialog, which) ->{
+                         if (onDeleteClickListener != null) {
+                            onDeleteClickListener.onDeleteClick(distance);
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
         });
 
         holder.editButton.setOnClickListener(v -> {

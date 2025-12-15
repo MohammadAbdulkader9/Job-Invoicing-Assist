@@ -48,14 +48,21 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.Materi
         Material material = materials.get(position);
         holder.materialNameTextView.setText("Material: " + material.getName());
         holder.materialQuantityTextView.setText("Quantity: " + material.getQuantity() + " " + material.getUnit());
-        holder.materialUnitPriceTextView.setText("Unit Price: SEK " + material.getUnitPrice() + "/ " + material.getUnit());
+        holder.materialUnitPriceTextView.setText("Unit Price: SEK " + material.getUnitPrice() + "/" + material.getUnit());
         holder.materialTotalTextView.setText("Total: SEK " + String.format(Locale.getDefault(), "%.2f", material.getTotal()));
         holder.materialNotesTextView.setText("Notes: " + material.getNotes());
 
         holder.deleteButton.setOnClickListener(v -> {
-            if (onDeleteClickListener != null) {
-                onDeleteClickListener.onDeleteClick(material);
-            }
+            new AlertDialog.Builder(holder.itemView.getContext())
+                    .setTitle("Delete Material")
+                    .setMessage("Are you sure you want to delete this material?")
+                    .setPositiveButton("Delete", (dialog, which) -> {
+                        if (onDeleteClickListener != null) {
+                            onDeleteClickListener.onDeleteClick(material);
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
         });
 
         holder.editButton.setOnClickListener(v -> {

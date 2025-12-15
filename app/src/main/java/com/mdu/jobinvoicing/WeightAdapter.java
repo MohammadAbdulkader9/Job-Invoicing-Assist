@@ -52,9 +52,16 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
         holder.weightNotesTextView.setText("Notes: " + weight.getNotes());
 
         holder.deleteButton.setOnClickListener(v -> {
-            if (onDeleteClickListener != null) {
-                onDeleteClickListener.onDeleteClick(weight);
-            }
+            new AlertDialog.Builder(holder.itemView.getContext())
+                    .setTitle("Delete Weight")
+                    .setMessage("Are you sure you want to delete this weight?")
+                    .setPositiveButton("Delete", (dialog, which) -> {
+                        if (onDeleteClickListener != null) {
+                            onDeleteClickListener.onDeleteClick(weight);
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
         });
 
         holder.editButton.setOnClickListener(v -> {

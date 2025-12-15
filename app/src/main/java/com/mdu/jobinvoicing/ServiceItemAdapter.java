@@ -48,9 +48,16 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
         holder.serviceItemCostTextView.setText("Fee: SEK " + String.format(Locale.getDefault(), "%.2f", serviceItem.getServiceFee()));
         holder.serviceItemNotesTextView.setText("Notes: " + serviceItem.getNotes());
         holder.deleteButton.setOnClickListener(v -> {
-            if (onDeleteClickListener != null) {
-                onDeleteClickListener.onDeleteClick(serviceItem);
-            }
+            new AlertDialog.Builder(holder.itemView.getContext())
+                    .setTitle("Delete Service Item")
+                    .setMessage("Are you sure you want to delete this service item?")
+                    .setPositiveButton("Delete", (dialog, which) -> {
+                        if (onDeleteClickListener != null) {
+                            onDeleteClickListener.onDeleteClick(serviceItem);
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
         });
 
         holder.editButton.setOnClickListener(v -> {

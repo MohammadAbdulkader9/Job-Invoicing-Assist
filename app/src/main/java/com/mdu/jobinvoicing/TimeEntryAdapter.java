@@ -51,9 +51,16 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
         holder.timeEntryTotalTextView.setText("Total: SEK " + String.format(Locale.getDefault(), "%.2f", timeEntry.getTotal()));
         holder.timeEntryNotesTextView.setText("Notes: " + timeEntry.getNotes());
         holder.deleteButton.setOnClickListener(v -> {
-            if (onDeleteClickListener != null) {
-                onDeleteClickListener.onDeleteClick(timeEntry);
-            }
+            new AlertDialog.Builder(holder.itemView.getContext())
+                    .setTitle("Delete Time Entry")
+                    .setMessage("Are you sure you want to delete this time entry?")
+                    .setPositiveButton("Delete", (dialog, which) -> {
+                        if (onDeleteClickListener != null) {
+                            onDeleteClickListener.onDeleteClick(timeEntry);
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
         });
 
         holder.editButton.setOnClickListener(v -> {
