@@ -24,6 +24,10 @@ public class InvoiceResponse {
     @SerializedName("TotalToPay")
     private float TotalToPay;
 
+    @Override
+    public String toString() {
+        return this.CustomerName; // Or whatever field name holds your Invoice ID
+    }
     public InvoiceResponse(String Address1, String City, String Country, String Comments,
                            String Currency, String CustomerName, String CustomerId, float Total, float TotalToPay) {
         this.Address1 = Address1;
@@ -108,4 +112,6 @@ public class InvoiceResponse {
     public void setTotalToPay(float TotalToPay) {
         this.TotalToPay = TotalToPay;
     }
+
+
 }
