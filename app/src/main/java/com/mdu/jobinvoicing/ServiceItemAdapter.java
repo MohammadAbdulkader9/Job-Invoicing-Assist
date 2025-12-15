@@ -16,6 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.mdu.jobinvoicing.data.local.entities.ServiceItem;
 
 import java.util.List;
+import java.util.Locale;
 
 public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.ServiceItemViewHolder> {
 
@@ -44,7 +45,7 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
     public void onBindViewHolder(@NonNull ServiceItemViewHolder holder, int position) {
         ServiceItem serviceItem = serviceItems.get(position);
         holder.serviceItemDescriptionTextView.setText("Service: " + serviceItem.getDescription());
-        holder.serviceItemCostTextView.setText("Fee: SEK " + serviceItem.getServiceFee());
+        holder.serviceItemCostTextView.setText("Fee: SEK " + String.format(Locale.getDefault(), "%.2f", serviceItem.getServiceFee()));
         holder.serviceItemNotesTextView.setText("Notes: " + serviceItem.getNotes());
         holder.deleteButton.setOnClickListener(v -> {
             if (onDeleteClickListener != null) {

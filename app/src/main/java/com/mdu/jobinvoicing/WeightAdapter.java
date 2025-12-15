@@ -47,8 +47,8 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
 
         holder.weightTextView.setText("Weight: " + weight.getWeight() + " " + weight.getUnit());
         holder.weightUnitTextView.setText("Unit: " + weight.getUnit());
-        holder.weightRateTextView.setText("Rate: " + weight.getRate());
-        holder.weightTotalTextView.setText("Total: " + weight.getWeight() * weight.getRate() + " SEK/ " + weight.getUnit());
+        holder.weightRateTextView.setText("Rate: " + weight.getRate() + " SEK/" + weight.getUnit());
+        holder.weightTotalTextView.setText("Total: " + String.format(Locale.getDefault(), "%.2f", weight.getWeight() * weight.getRate()));
         holder.weightNotesTextView.setText("Notes: " + weight.getNotes());
 
         holder.deleteButton.setOnClickListener(v -> {

@@ -47,8 +47,8 @@ public class DistanceAdapter extends RecyclerView.Adapter<DistanceAdapter.Distan
 
         holder.distanceTextView.setText("Distance: " + distance.getDistance() + " " + distance.getUnit());
         holder.distanceUnitTextView.setText("Unit: " + distance.getUnit());
-        holder.distanceRateTextView.setText("Rate: " + distance.getRate());
-        holder.distanceTotalTextView.setText("Total: " + distance.getDistance() * distance.getRate() + " SEK/ " + distance.getUnit());
+        holder.distanceRateTextView.setText("Rate: SEK " + distance.getRate() + "/" + distance.getUnit());
+        holder.distanceTotalTextView.setText("Total: SEK " + String.format(Locale.getDefault(), "%.2f", distance.getDistance() * distance.getRate()));
         holder.distanceNotesTextView.setText("Notes: " + distance.getNotes());
 
         holder.deleteButton.setOnClickListener(v -> {

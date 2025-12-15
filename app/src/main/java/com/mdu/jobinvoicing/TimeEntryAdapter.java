@@ -48,7 +48,7 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
         TimeEntry timeEntry = timeEntries.get(position);
         holder.timeEntryHoursTextView.setText("Hours: " + timeEntry.getHours());
         holder.timeEntryRateTextView.setText("Rate: SEK " + timeEntry.getHourRate() + "/hr");
-        holder.timeEntryTotalTextView.setText("Total: SEK" + String.format(Locale.getDefault(), "%.2f", timeEntry.getTotal()));
+        holder.timeEntryTotalTextView.setText("Total: SEK " + String.format(Locale.getDefault(), "%.2f", timeEntry.getTotal()));
         holder.timeEntryNotesTextView.setText("Notes: " + timeEntry.getNotes());
         holder.deleteButton.setOnClickListener(v -> {
             if (onDeleteClickListener != null) {

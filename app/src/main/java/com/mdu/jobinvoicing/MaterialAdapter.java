@@ -18,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.mdu.jobinvoicing.data.local.entities.Material;
 
 import java.util.List;
+import java.util.Locale;
 
 public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.MaterialViewHolder> {
 
@@ -47,8 +48,8 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.Materi
         Material material = materials.get(position);
         holder.materialNameTextView.setText("Material: " + material.getName());
         holder.materialQuantityTextView.setText("Quantity: " + material.getQuantity() + " " + material.getUnit());
-        holder.materialUnitPriceTextView.setText("Unit Price: SEK " + material.getUnitPrice());
-        holder.materialTotalTextView.setText("Total: SEK " + material.getTotal());
+        holder.materialUnitPriceTextView.setText("Unit Price: SEK " + material.getUnitPrice() + "/ " + material.getUnit());
+        holder.materialTotalTextView.setText("Total: SEK " + String.format(Locale.getDefault(), "%.2f", material.getTotal()));
         holder.materialNotesTextView.setText("Notes: " + material.getNotes());
 
         holder.deleteButton.setOnClickListener(v -> {
@@ -70,22 +71,26 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.Materi
 
         final TextInputEditText editMaterialName = dialogView.findViewById(R.id.editMaterialName);
         final TextInputEditText editMaterialQuantity = dialogView.findViewById(R.id.editMaterialQuantity);
+        final TextInputEditText editMaterialUnit = dialogView.findViewById(R.id.editMaterialUnit);
         final TextInputEditText editMaterialUnitPrice = dialogView.findViewById(R.id.editMaterialUnitPrice);
         final TextInputEditText editMaterialNotes = dialogView.findViewById(R.id.editMaterialNotes);
 
         editMaterialName.setText(material.getName());
         editMaterialQuantity.setText(String.valueOf(material.getQuantity()));
+        editMaterialUnit.setText(material.getUnit());
         editMaterialUnitPrice.setText(String.valueOf(material.getUnitPrice()));
         editMaterialNotes.setText(material.getNotes());
 
         builder.setPositiveButton("Save", (dialog, which) -> {
             String name = editMaterialName.getText().toString();
             double quantity = Double.parseDouble(editMaterialQuantity.getText().toString());
+            String unit = editMaterialUnit.getText().toString();
             double unitPrice = Double.parseDouble(editMaterialUnitPrice.getText().toString());
             String notes = editMaterialNotes.getText().toString();
 
             material.setName(name);
             material.setQuantity(quantity);
+            material.setUnit(unit);
             material.setUnitPrice(unitPrice);
             material.setNotes(notes);
             material.setTotal(quantity * unitPrice);
@@ -106,6 +111,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.Materi
                 .update(
                         "name", material.getName(),
                         "quantity", material.getQuantity(),
+                        "unit", material.getUnit(),
                         "unitPrice", material.getUnitPrice(),
                         "notes", material.getNotes(),
                         "total", material.getTotal()
