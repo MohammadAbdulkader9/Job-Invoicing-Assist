@@ -1,10 +1,14 @@
 package com.mdu.jobinvoicing.data.network.financeApi;
 
+import android.net.Uri;
+
 import com.google.gson.annotations.SerializedName;
 
 
 
 public class InvoiceResponse {
+    @SerializedName("@url")
+    private String Url;
     @SerializedName("Address1")
     private String Address1;
     @SerializedName("City")
@@ -39,6 +43,11 @@ public class InvoiceResponse {
         this.CustomerId = CustomerId;
         this.Total = Total;
         this.TotalToPay = TotalToPay;
+    }
+
+    public String getId() {
+        Uri uri = Uri.parse(this.Url);
+        return uri.getLastPathSegment();
     }
 
     public String getAddress1() {
