@@ -3,63 +3,29 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/workplan_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     tools:context=".WorkPlanDetailsActivity">
 
     <!-- Top bar -->
-    <LinearLayout
+    <include
         android:id="@+id/topBar"
-        android:layout_width="0dp"
+        layout="@layout/view_top_bar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="#F5F5F5"
-        android:padding="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/back_button"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/back_button_border"
-                android:contentDescription="@string/back"
-                android:padding="8dp"
-                android:src="@drawable/ic_baseline_arrow_back_24"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/titleText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="2dp"
-                android:text="Work Plan Details"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@id/back_button"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
+        />
 
     <!-- Middle section -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@id/topBar"
-        app:layout_constraintBottom_toTopOf="@id/bottomBar"
+        app:layout_constraintBottom_toBottomOf="@id/bottomBar"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/topBar">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -72,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:text="Client Name"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/customerNameEditText"
@@ -87,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:text="Work Title"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/workTitleEditText"
@@ -103,16 +69,17 @@
                 android:layout_marginTop="16dp"
                 android:text="Work Description"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
+
             <EditText
                 android:id="@+id/workDescriptionEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:gravity="top"
                 android:inputType="textMultiLine"
                 android:minLines="3"
-                android:gravity="top"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -120,14 +87,15 @@
                 android:layout_marginTop="16dp"
                 android:text="Work Location"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
+
             <EditText
                 android:id="@+id/addressEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:inputType="textPostalAddress"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -135,15 +103,16 @@
                 android:layout_marginTop="16dp"
                 android:text="Date"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
+
             <EditText
                 android:id="@+id/dateEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:focusable="false"
                 android:clickable="true"
-                android:textSize="16sp"/>
+                android:focusable="false"
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -151,7 +120,7 @@
                 android:layout_marginTop="16dp"
                 android:text="Status"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <RadioGroup
                 android:id="@+id/statusRadioGroup"
@@ -202,10 +171,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="Save Changes"
-                android:textSize="18sp"
                 android:background="@drawable/button_rectangle"
-                android:textColor="@android:color/white"/>
+                android:text="Save Changes"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/timeEntriesRecyclerView"
@@ -256,8 +225,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
-                    />
+                    android:src="@drawable/ic_baseline_keyboard_arrow_down_24" />
             </RelativeLayout>
 
             <LinearLayout
@@ -286,17 +254,17 @@
                     android:id="@+id/timeEntryNotesEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="top"
                     android:hint="Notes"
                     android:inputType="textMultiLine"
-                    android:minLines="2"
-                    android:gravity="top"/>
+                    android:minLines="2" />
 
                 <Button
                     android:id="@+id/addTimeEntryButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add Time Entry"
-                    android:layout_gravity="end"/>
+                    android:layout_gravity="end"
+                    android:text="Add Time Entry" />
 
             </LinearLayout>
 
@@ -316,7 +284,7 @@
                     android:layout_centerVertical="true"
                     android:text="Material"
                     android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/materialToggle"
@@ -324,8 +292,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
-                    />
+                    android:src="@drawable/ic_baseline_keyboard_arrow_down_24" />
             </RelativeLayout>
 
             <LinearLayout
@@ -368,17 +335,17 @@
                     android:id="@+id/materialNotesEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="top"
                     android:hint="Notes"
                     android:inputType="textMultiLine"
-                    android:minLines="2"
-                    android:gravity="top"/>
+                    android:minLines="2" />
 
                 <Button
                     android:id="@+id/addMaterialButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add Material"
-                    android:layout_gravity="end"/>
+                    android:layout_gravity="end"
+                    android:text="Add Material" />
 
             </LinearLayout>
 
@@ -398,7 +365,7 @@
                     android:layout_centerVertical="true"
                     android:text="Service"
                     android:textSize="18sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/serviceItemToggle"
@@ -406,8 +373,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
-                    />
+                    android:src="@drawable/ic_baseline_keyboard_arrow_down_24" />
             </RelativeLayout>
 
             <LinearLayout
@@ -436,17 +402,17 @@
                     android:id="@+id/serviceItemNotesEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="top"
                     android:hint="Notes"
                     android:inputType="textMultiLine"
-                    android:minLines="2"
-                    android:gravity="top"/>
+                    android:minLines="2" />
 
                 <Button
                     android:id="@+id/addServiceItemButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add Service"
-                    android:layout_gravity="end"/>
+                    android:layout_gravity="end"
+                    android:text="Add Service" />
 
             </LinearLayout>
 

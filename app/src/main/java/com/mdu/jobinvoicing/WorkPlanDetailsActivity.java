@@ -12,12 +12,17 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -43,7 +48,6 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
 
     private EditText customerNameEditText, workTitleEditText, workDescriptionEditText, locationEditText, dateEditText;
     private Button saveButton, addTimeEntryButton, addMaterialButton, addServiceItemButton;
-    private ImageView backButton;
     private RadioGroup statusRadioGroup;
     private RadioButton statusOpen, statusInProgress, statusClosed;
 
@@ -66,6 +70,10 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
     private ArrayList<Material> materialList = new ArrayList<>();
     private ArrayList<ServiceItem> serviceItemList = new ArrayList<>();
 
+    private NetworkHelper networkHelper;
+    private TextView statusText;
+    private ImageView statusDot;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +88,6 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
         locationEditText = findViewById(R.id.addressEditText);
         dateEditText = findViewById(R.id.dateEditText);
         saveButton = findViewById(R.id.saveButton);
-        backButton = findViewById(R.id.back_button);
         statusRadioGroup = findViewById(R.id.statusRadioGroup);
         statusOpen = findViewById(R.id.statusOpen);
         statusInProgress = findViewById(R.id.statusInProgress);
@@ -114,9 +121,9 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
         serviceItemFeeEditText = findViewById(R.id.serviceItemFeeEditText);
         serviceItemNotesEditText = findViewById(R.id.serviceItemNotesEditText);
 
+
         setupRecyclerViews();
 
-        backButton.setOnClickListener(v -> finish());
         dateEditText.setOnClickListener(v -> showDatePickerDialog());
         saveButton.setOnClickListener(v -> saveWorkPlanChanges());
 
@@ -136,6 +143,26 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
                 fetchSubCollections(currentWorkPlanId);
             }
         }
+        // Apply padding for system bars (status bar / navigation bar)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.workplan_details), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        MaterialToolbar toolbar = findViewById(R.id.top_bar);
+        if (toolbar != null) {
+            toolbar.setTitle("Work Plan Details");
+            toolbar.setNavigationOnClickListener(v -> finish());
+        }
+
+        // offline-online functionality
+        statusText = findViewById(R.id.SyncText);
+        statusDot = findViewById(R.id.statusDot);
+
+        networkHelper = new NetworkHelper(this, statusDot, statusText);
+        networkHelper.startMonitoring();
+
     }
 
     private void setupRecyclerViews() {
@@ -413,6 +440,13 @@ public class WorkPlanDetailsActivity extends AppCompatActivity {
         } else {
             content.setVisibility(View.VISIBLE);
             toggle.animate().rotation(180).setDuration(200).start();
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (networkHelper != null) {
+            networkHelper.stopMonitoring();
         }
     }
 }
