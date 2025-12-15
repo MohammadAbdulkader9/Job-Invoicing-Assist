@@ -1,32 +1,56 @@
 package com.mdu.jobinvoicing;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.mdu.jobinvoicing.data.network.financeApi.ApiCallback;
 import com.mdu.jobinvoicing.data.network.financeApi.ApiServiceManager;
 import com.mdu.jobinvoicing.data.network.financeApi.ErrorResponse;
 import com.mdu.jobinvoicing.data.network.financeApi.InvoiceResponse;
-import com.mdu.jobinvoicing.data.network.financeApi.fortnox.FortnoxInstance;
-
-import okhttp3.ResponseBody;
-import retrofit2.Response;
 
 public class Invoices extends AppCompatActivity {
     TextView textView;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invoices);
         textView = findViewById(R.id.api_text);
+
+
+        // Apply padding for system bars (status bar / navigation bar)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.invoices), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.nav_create_invoice);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_home) {
+                Intent intent = new Intent(Invoices.this, HomePage.class);
+                startActivity(intent);
+                return true;
+            } else if (itemId == R.id.nav_create_invoice) {
+                return true;
+            } else if (itemId == R.id.nav_profile) {
+                Intent intent = new Intent(Invoices.this, OperatorProfile.class);
+                startActivity(intent);
+                return true;
+            }
+            return false;
+        });
     }
 
     public void TestApi(View v){

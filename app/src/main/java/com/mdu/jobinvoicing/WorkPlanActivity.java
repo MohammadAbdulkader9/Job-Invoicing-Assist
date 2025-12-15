@@ -6,11 +6,17 @@ import static com.google.firebase.firestore.FirebaseFirestore.*;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.mdu.jobinvoicing.data.local.entities.WorkPlanStatus;
@@ -26,6 +32,9 @@ public class WorkPlanActivity extends AppCompatActivity {
     private EditText clientNameEt, workTitleEt, workDescriptionEt, workLocationEt;
     private MaterialButton btnCreate, btnCancel;
     private ImageView backBtn;
+    private NetworkHelper networkHelper;
+    private TextView statusText;
+    private ImageView statusDot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +50,6 @@ public class WorkPlanActivity extends AppCompatActivity {
         workLocationEt = findViewById(R.id.inputJobLocation);
         btnCreate = findViewById(R.id.btnCreate);
         btnCancel = findViewById(R.id.btnCancel);
-        backBtn = findViewById(R.id.back_button);
         if (getIntent() != null) {
             String clientName = getIntent().getStringExtra("clientName");
             String workTitle = getIntent().getStringExtra("workTitle");
@@ -54,17 +62,37 @@ public class WorkPlanActivity extends AppCompatActivity {
             if (workLocation != null) workLocationEt.setText(workLocation);
         }
 
+        // Apply padding for system bars (status bar / navigation bar)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.workplan), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
 
         // ===============================
         // Back & Cancel Button Listeners
         // ===============================
-        backBtn.setOnClickListener(v -> finish());
+        // Set Top Bar Title
+        MaterialToolbar toolbar = findViewById(R.id.top_bar);
+        if (toolbar != null) {
+            toolbar.setTitle("Create Work Plan");
+            toolbar.setNavigationOnClickListener(v -> finish());
+        }
         btnCancel.setOnClickListener(v -> finish());
 
         //==============
         // Create Button Listener
         // ===============================
         btnCreate.setOnClickListener(v -> saveWorkplan());
+
+
+        // offline-online functionality
+        statusText = findViewById(R.id.SyncText);
+        statusDot = findViewById(R.id.statusDot);
+
+        networkHelper = new NetworkHelper(this, statusDot, statusText);
+        networkHelper.startMonitoring();
     }
 
     // ===============================
@@ -119,6 +147,14 @@ public class WorkPlanActivity extends AppCompatActivity {
         workTitleEt.setText("");
         workDescriptionEt.setText("");
         workLocationEt.setText("");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (networkHelper != null) {
+            networkHelper.stopMonitoring();
+        }
     }
 
 }
