@@ -6,15 +6,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
-import android.widget.Toast;
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.textfield.TextInputEditText;
 import com.mdu.jobinvoicing.data.network.financeApi.ApiCallback;
 import com.mdu.jobinvoicing.data.network.financeApi.ApiServiceManager;
+import com.mdu.jobinvoicing.data.network.financeApi.CustomerResponse;
 import com.mdu.jobinvoicing.data.network.financeApi.ErrorResponse;
 import com.mdu.jobinvoicing.data.network.financeApi.InvoiceResponse;
 import com.mdu.jobinvoicing.data.network.financeApi.fortnox.FortnoxInstance;
@@ -27,14 +23,39 @@ public class Invoices extends AppCompatActivity {
 
     TextView textView;
     AutoCompleteTextView invoice_dropdown;
+    AutoCompleteTextView customer_dropdown;
+    ArrayAdapter<InvoiceResponse> invoiceAdapter;
+    ArrayAdapter<CustomerResponse> customerAdapter;
+    InvoiceResponse activeInvoice;
+    CustomerResponse activeCustomer;
     ApiServiceManager asm;
     List<InvoiceResponse> invoices;
+    List<CustomerResponse> customers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invoices);
         asm = ApiServiceManager.getInstance();
+        asm.getAllCustomers(new ApiCallback<List<CustomerResponse>>() {
+            @Override
+            public void onSuccess(List<CustomerResponse> response) {
+                customer_dropdown = findViewById(R.id.customerDropdown);
+                //customers.addAll(response);
+                customerAdapter = new ArrayAdapter<>(
+                  Invoices.this,
+                  android.R.layout.simple_dropdown_item_1line,
+                  response
+                );
+                customer_dropdown.setAdapter(customerAdapter);
+                customer_dropdown.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        activeCustomer = (CustomerResponse) parent.getItemAtPosition(position);
+                    }
+                });
+            }
+        });
         asm.getAllInvoices(
             new ApiCallback<List<InvoiceResponse>>() {
                 @Override
@@ -42,19 +63,20 @@ public class Invoices extends AppCompatActivity {
                     invoice_dropdown = findViewById(
                         R.id.existingInvoiceDropdown
                     );
-                    ArrayAdapter<InvoiceResponse> adapter = new ArrayAdapter<
+                    //invoices.addAll(response);
+                    invoiceAdapter = new ArrayAdapter<
                         InvoiceResponse
                     >(
                         Invoices.this,
                         android.R.layout.simple_dropdown_item_1line,
                         response
                     );
-                    invoice_dropdown.setAdapter(adapter);
+                    invoice_dropdown.setAdapter(invoiceAdapter);
                     invoice_dropdown.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            InvoiceResponse invoice = (InvoiceResponse) parent.getItemAtPosition(position);
-                            fillForm(invoice);
+                            activeInvoice = (InvoiceResponse) parent.getItemAtPosition(position);
+                            fillForm(activeInvoice);
                         }
                     });
                 }
@@ -69,6 +91,15 @@ public class Invoices extends AppCompatActivity {
         TextInputEditText commentsEText = findViewById(R.id.etComments);
         TextInputEditText totalEText = findViewById(R.id.etTotal);
         TextInputEditText totaltpEText = findViewById(R.id.etTotalToPay);
+
+        String targetCustomerId = invoice.getCustomerId();
+        for (int i =0; i<customerAdapter.getCount();i++){
+            CustomerResponse item = customerAdapter.getItem(i);
+            if(item != null && item.getCustomerNumber().equals(targetCustomerId)){
+                customer_dropdown.setText(item.toString(), false);
+                break;
+            }
+        }
 
         addrEText.setText(invoice.getAddress1());
         cityEText.setText(invoice.getCity());

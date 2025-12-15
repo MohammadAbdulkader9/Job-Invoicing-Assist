@@ -106,4 +106,7 @@ public class ApiServiceManager {
     public void getCustomerById(String id, ApiCallback<CustomerResponse> callback){
         api.getCustomerById(id, callback);
     }
+    public void getAllCustomers(ApiCallback<List<CustomerResponse>> callback){
+        api.getAllCustomers(callback);
+    }
 }
