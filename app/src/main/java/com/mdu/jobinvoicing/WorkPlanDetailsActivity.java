@@ -27,9 +27,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -69,7 +73,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
     private static final String TAG = "WorkPlanDetailsActivity";
 
     private EditText customerNameEditText, workTitleEditText, workDescriptionEditText, locationEditText, dateEditText;
-    private Button saveButton, saveTimeEntryButton, addMaterialButton, addServiceItemButton, importFromTimerButton, addDistanceButton, addWeightButton;
+    private Button saveButton,saveTimeEntryButton, addTimeEntryButton, addMaterialButton, addServiceItemButton, importFromTimerButton, addDistanceButton, addWeightButton;
     private ImageView backButton;
     private RadioGroup statusRadioGroup;
     private RadioButton statusOpen, statusInProgress, statusClosed;
@@ -109,6 +113,10 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
     private Runnable autoSaveRunnable;
     private boolean isProgrammaticChange = false;
 
+    private NetworkHelper networkHelper;
+    private TextView statusText;
+    private ImageView statusDot;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +131,6 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         locationEditText = findViewById(R.id.addressEditText);
         dateEditText = findViewById(R.id.dateEditText);
         saveButton = findViewById(R.id.saveButton);
-        backButton = findViewById(R.id.back_button);
         statusRadioGroup = findViewById(R.id.statusRadioGroup);
         statusOpen = findViewById(R.id.statusOpen);
         statusInProgress = findViewById(R.id.statusInProgress);
@@ -179,7 +186,6 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         setupRecyclerViews();
         setupAutoSave(); // auto-save feature
 
-        backButton.setOnClickListener(v -> finish());
         dateEditText.setOnClickListener(v -> showDatePickerDialog());
 
         timeEntryHeader.setOnClickListener(v -> toggleSection(timeEntryContent, timeEntryToggle));
@@ -205,6 +211,26 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
                 fetchSubCollections(currentWorkPlanId);
             }
         }
+        // Apply padding for system bars (status bar / navigation bar)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.workplan_details), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        MaterialToolbar toolbar = findViewById(R.id.top_bar);
+        if (toolbar != null) {
+            toolbar.setTitle("Work Plan Details");
+            toolbar.setNavigationOnClickListener(v -> finish());
+        }
+
+        // offline-online functionality
+        statusText = findViewById(R.id.SyncText);
+        statusDot = findViewById(R.id.statusDot);
+
+        networkHelper = new NetworkHelper(this, statusDot, statusText);
+        networkHelper.startMonitoring();
+
     }
     // auto-save feature
     private void setupAutoSave() {
@@ -885,5 +911,8 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         if (distancesListener != null) distancesListener.remove();
         if (weightsListener != null) weightsListener.remove();
         super.onDestroy();
+        if (networkHelper != null) {
+            networkHelper.stopMonitoring();
+        }
     }
 }

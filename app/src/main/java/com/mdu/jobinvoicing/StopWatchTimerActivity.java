@@ -10,15 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mdu.jobinvoicing.data.local.AppDatabase;
@@ -47,6 +52,10 @@ public class StopWatchTimerActivity extends AppCompatActivity {
     private ExecutorService executor;
     private StopWatchTimerItemDao stopWatchTimerItemDao;
     private final AtomicLong newTimerId = new AtomicLong(-1);
+
+    private NetworkHelper networkHelper;
+    private TextView statusText;
+    private ImageView statusDot;
 
     private final Runnable runnable = new Runnable() {
         @Override
@@ -78,9 +87,31 @@ public class StopWatchTimerActivity extends AppCompatActivity {
         startPauseButton = findViewById(R.id.stopwatch_start_pause);
         resetButton = findViewById(R.id.stopwatch_reset);
 
+        // Set Top Bar Title
+        MaterialToolbar toolbar = findViewById(R.id.top_bar);
+        if (toolbar != null) {
+            toolbar.setTitle("Timers");
+            toolbar.setNavigationOnClickListener(v -> finish());
+        }
+
+        // Apply padding for system bars (status bar / navigation bar)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.stopwatch), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
         // Initialize bottom-half views
         timersRecyclerView = findViewById(R.id.timers_recycler_view);
         addEntryFab = findViewById(R.id.add_entry_fab);
+
+        // offline-online functionality
+        statusText = findViewById(R.id.SyncText);
+        statusDot = findViewById(R.id.statusDot);
+
+        networkHelper = new NetworkHelper(this, statusDot, statusText);
+        networkHelper.startMonitoring();
+
 
         // Set up RecyclerView
         timersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -181,6 +212,9 @@ public class StopWatchTimerActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (networkHelper != null) {
+            networkHelper.stopMonitoring();
+        }
         handler.removeCallbacks(runnable);
         executor.shutdown();
     }
