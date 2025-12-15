@@ -120,6 +120,7 @@
             <EditText
                 android:id="@+id/etEmail"
                 android:hint="Enter your email address"
+                android:inputType="textEmailAddress"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:paddingLeft="12dp"
@@ -134,6 +135,7 @@
                 android:id="@+id/lblPhone"
                 android:text="Phone Number *"
                 android:textStyle="bold"
+
                 android:layout_marginTop="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -142,7 +144,11 @@
 
             <EditText
                 android:id="@+id/etPhone"
-                android:hint="Enter your mobile number"
+
+                android:inputType="phone"
+                android:maxLength="13"
+                android:hint="+46 7XXXXXXXX"
+                android:text="+46"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:paddingLeft="12dp"
