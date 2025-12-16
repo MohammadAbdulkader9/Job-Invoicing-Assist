@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.mdu.jobinvoicing.data.local.entities.Operator;
 
 import java.util.List;
@@ -18,6 +20,9 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorAdapter.Operat
 
     private List<Operator> operatorList;
     private OnOperatorClickListener listener;
+
+    private FirebaseFirestore db;
+    private String userId;
 
     public interface OnOperatorClickListener {
         void onSetActive(Operator operator);
@@ -28,6 +33,10 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorAdapter.Operat
     public OperatorAdapter(List<Operator> operatorList, OnOperatorClickListener listener) {
         this.operatorList = operatorList;
         this.listener = listener;
+        this.db = FirebaseFirestore.getInstance();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            this.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
     }
 
     @NonNull

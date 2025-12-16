@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mdu.jobinvoicing.data.local.entities.Material;
 
@@ -25,6 +26,8 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.Materi
     private List<Material> materials;
     private OnDeleteClickListener onDeleteClickListener;
     private final String workPlanId;
+    private FirebaseFirestore db;
+    private String userId;
 
     public interface OnDeleteClickListener {
         void onDeleteClick(Material material);
@@ -34,6 +37,10 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.Materi
         this.materials = materials;
         this.workPlanId = workPlanId;
         this.onDeleteClickListener = onDeleteClickListener;
+        this.db = FirebaseFirestore.getInstance();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            this.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
     }
 
     @NonNull
@@ -113,7 +120,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.Materi
 
     private void updateMaterialInFirebase(Material material) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("workplans").document(workPlanId)
+        db.collection("users").document(userId).collection("workplans").document(workPlanId)
                 .collection("materials").document(material.getId())
                 .update(
                         "name", material.getName(),

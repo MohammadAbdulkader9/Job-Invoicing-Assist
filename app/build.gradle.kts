@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.lifecycle.livedata)
     implementation(libs.core.i18n)
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
