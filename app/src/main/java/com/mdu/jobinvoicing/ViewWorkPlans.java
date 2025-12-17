@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -48,6 +49,8 @@ public class ViewWorkPlans extends AppCompatActivity {
 
     private String currentSort = "DateDesc"; // Default sort
     private WorkPlanStatus currentStatusFilter = null;
+    private String userId;
+
 
 
     @Override
@@ -63,6 +66,9 @@ public class ViewWorkPlans extends AppCompatActivity {
         });
 
         db = FirebaseFirestore.getInstance();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            this.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
 
         workPlansRecyclerView = findViewById(R.id.workPlansRecyclerView);
         workPlansRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -112,7 +118,7 @@ public class ViewWorkPlans extends AppCompatActivity {
     }
 
     private void fetchWorkPlans() {
-        db.collection("workplans")
+        db.collection("users").document(userId).collection("workplans")
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {
