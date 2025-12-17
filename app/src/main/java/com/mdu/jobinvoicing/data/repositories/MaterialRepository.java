@@ -48,7 +48,7 @@ public class MaterialRepository {
         executor.execute(() -> {
             dao.insert(material);
             if (enqueueSync) {
-                enqueueSync(material.id, gson.toJson(material), "CREATE");
+                enqueueSync(material.getId(), gson.toJson(material), "CREATE");
             }
         });
     }
@@ -61,7 +61,7 @@ public class MaterialRepository {
         executor.execute(() -> {
             dao.update(material);
             if (enqueueSync) {
-                enqueueSync(material.id, gson.toJson(material), "UPDATE");
+                enqueueSync(material.getId(), gson.toJson(material), "UPDATE");
             }
         });
     }
@@ -74,7 +74,7 @@ public class MaterialRepository {
         executor.execute(() -> {
             dao.delete(material);
             if (enqueueSync) {
-                enqueueSync(material.id, gson.toJson(material), "DELETE");
+                enqueueSync(material.getId(), gson.toJson(material), "DELETE");
             }
         });
     }

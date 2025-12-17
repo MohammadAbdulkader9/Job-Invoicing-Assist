@@ -1,9 +1,15 @@
 package com.mdu.jobinvoicing;
 
+import android.content.ComponentName;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.os.IBinder;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,20 +21,49 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.mdu.jobinvoicing.data.network.financeApi.ApiServiceManager;
 
 public class HomePage extends AppCompatActivity {
 
-    // synced
-    private TextView syncedUnsynced;
-    private ImageView syncedDot;
+
+    private TextView statusText;
+    private ImageView statusDot;
+    private NetworkHelper networkHelper;
 
     // Middle cards
     private MaterialCardView cardCreateWorkPlan, cardViewJobs, cardTimeTracking;
 
     // Bottom navigation items
-    private LinearLayout navNewJobs, navCreateInvoices, navSyncNow;
+    private BottomNavigationView bottomNavigationView;
+
+    private MockLoadAssistService service;
+    private boolean bound = false;
+    private final ServiceConnection conn = new ServiceConnection(){
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder binder) {
+            MockLoadAssistService.LocalBinder b = (MockLoadAssistService.LocalBinder) binder;
+            service = b.getService();
+
+            // Set listener to feed tickets into repository in real-time
+            service.setOnReceiptCompletedListener(ticket -> TicketRepository.addTicket(ticket));
+
+            bound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            bound = false;
+        }
+    };
+
+    private FirebaseAuth mAuth;
+    private static final String TAG = "HomePage";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,82 +71,130 @@ public class HomePage extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_homepage);
 
+        mAuth = FirebaseAuth.getInstance();
+
         // Init ApiService Manager, This should only be done ones through out the app
         // Refer to README.md under FinanceApi for examples of how to make api calls
         ApiServiceManager.createInstance(ApiServiceManager.ApiProvider.FORTNOX);
 
         // Apply padding for system bars (status bar / navigation bar)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.workplan_details), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
+        // Set Top Bar Title
+        MaterialToolbar toolbar = findViewById(R.id.top_bar);
+        if (toolbar != null) {
+            toolbar.setTitle("Home");
+            toolbar.setNavigationIcon(null);
+        }
+
         // ----- Find views -----
         cardCreateWorkPlan = findViewById(R.id.cardCreateWorkPlan);
-        cardViewJobs       = findViewById(R.id.cardViewJobs);
+        cardViewJobs       = findViewById(R.id.cardViewWorkPlans);
         //cardTimeTracking   = findViewById(R.id.cardTimeTracking);
 
-        navNewJobs         = findViewById(R.id.navNewJobs);
-        navCreateInvoices  = findViewById(R.id.navCreateInvoices);
-        navSyncNow         = findViewById(R.id.navSyncNow);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
-        syncedUnsynced = findViewById((R.id.SyncText));
-        syncedDot = findViewById((R.id.statusDot));
+        //offline-online functionality
+        statusText = findViewById(R.id.SyncText);
+        statusDot = findViewById(R.id.statusDot);
+
+        networkHelper = new NetworkHelper(this, statusDot, statusText);
+        networkHelper.startMonitoring();
+
 
         // ----- Middle cards: main actions -----
 
-        cardCreateWorkPlan.setOnClickListener(v -> {
-            // TODO: Navigate to "Create Work Plan" screen.
-            // Example when you create the activity:
-            // Intent intent = new Intent(HomePage.this, CreateWorkPlanActivity.class);
-            // startActivity(intent);
-            Toast.makeText(this, "Create Work plan clicked", Toast.LENGTH_SHORT).show();
-        });
         MaterialCardView  cardCreateWorkPlan = findViewById(R.id.cardCreateWorkPlan);
         cardCreateWorkPlan.setOnClickListener(v -> {
-            Intent intent = new Intent(HomePage.this, Workplan.class);
+            Intent intent = new Intent(HomePage.this, WorkPlanActivity.class);
             startActivity(intent);
         });
 
         MaterialCardView cardTimeTracking = findViewById(R.id.cardTimeTracking);
         cardTimeTracking.setOnClickListener(v -> {
-            Intent intent = new Intent(HomePage.this, StopWatchTimer.class);
+            Intent intent = new Intent(HomePage.this, StopWatchTimerActivity.class);
             startActivity(intent);
         });
 
-        MaterialCardView cardViewJobs = findViewById(R.id.cardViewJobs);
+        MaterialCardView cardViewJobs = findViewById(R.id.cardViewWorkPlans);
         cardViewJobs.setOnClickListener(v -> {
-            Intent intent = new Intent(HomePage.this, ViewJobs.class);
+            Intent intent = new Intent(HomePage.this, ViewWorkPlans.class);
             startActivity(intent);
         });
+
+        MaterialCardView cardLoadTicket = findViewById(R.id.cardLoadTicket);
+        cardLoadTicket.setOnClickListener(v -> {
+            Intent intent = new Intent(HomePage.this, TicketListActivity.class);
+            startActivity(intent);
+        });
+
 
 
         // ----- Bottom navigation bar -----
 
-        navNewJobs.setOnClickListener(v -> {
-            // TODO: Bottom navigation destination: NewJobsActivity.
-            // Steps:
-            // 1) Create NewJobsActivity in package com.mdu.jobinvoicing
-            // 2) Make sure it is added to AndroidManifest.xml
-            // 3) Then use:
-            //    Intent intent = new Intent(HomePage.this, NewJobsActivity.class);
-            //    startActivity(intent);
-            Toast.makeText(this, "Bottom: New Jobs", Toast.LENGTH_SHORT).show();
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_home) {
+                // Already on Home, do nothing
+                return true;
+            } else if (itemId == R.id.nav_create_invoice) {
+                Intent intent = new Intent(HomePage.this, Invoices.class);
+                startActivity(intent);
+                return true;
+            } else if (itemId == R.id.nav_profile) {
+                Intent intent = new Intent(HomePage.this, OperatorProfile.class);
+                startActivity(intent);
+                return true;
+            }
+            return false;
         });
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Bind the MockLoadAssistService to start reading CSV
+        Intent intent = new Intent(this, MockLoadAssistService.class);
+        bindService(intent, conn, BIND_AUTO_CREATE);
 
-        navCreateInvoices.setOnClickListener(v -> {
-            // TODO: Bottom navigation destination: CreateInvoicesActivity.
-            Intent intent = new Intent(HomePage.this, Invoices.class);
-            startActivity(intent);
-            //Toast.makeText(this, "Bottom: Create Invoices", Toast.LENGTH_SHORT).show();
-        });
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            signInAnonymously();
+        }
+    }
 
-        navSyncNow.setOnClickListener(v -> {
-            // TODO: Call your sync logic here (e.g., ViewModel → Repository → API).
-            syncedDot.setImageTintList(ColorStateList.valueOf(Color.GREEN));
-            syncedUnsynced.setText("Synced");
-            Toast.makeText(this, "Bottom: Sync Now", Toast.LENGTH_SHORT).show();
-        });
+    private void signInAnonymously() {
+        mAuth.signInAnonymously()
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInAnonymously:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInAnonymously:failure", task.getException());
+                        Toast.makeText(HomePage.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (bound) unbindService(conn);
+        bound = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (networkHelper != null) {
+            networkHelper.stopMonitoring();
+        }
     }
 }

@@ -30,15 +30,17 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
-        <activity android:name=".StopWatchTimer" />
-        <activity android:name=".Workplan"/>
+        <activity android:name=".OperatorProfile"/>
+        <activity android:name=".StopWatchTimerActivity" />
+        <activity android:name=".WorkPlanActivity"/>
         <activity android:name=".Invoices"/>
-        <activity android:name=".ViewJobs"/>
-        <activity android:name=".JobDetailsActivity"/>
-        <activity android:name=".Workplan">
+        <activity android:name=".ViewWorkPlans"/>
+        <activity android:name=".WorkPlanDetailsActivity"/>
+        <activity android:name=".TicketListActivity" >
+
+
 
         </activity>
-
     </application>
 
 </manifest>

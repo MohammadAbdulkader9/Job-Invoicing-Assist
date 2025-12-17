@@ -1,0 +1,24 @@
+package com.mdu.jobinvoicing;
+
+import java.io.Serializable;
+
+public class LoadTicket implements Serializable {
+    public String created, targetName, creatorTargetName, operator, weight, freeText;
+    public String materialNames, loadCount, localId, customer, projectReference;
+
+    public LoadTicket(String created, String targetName, String creatorTargetName,
+                      String operator, String weight, String freeText, String materialNames,
+                      String loadCount, String localId, String customer, String projectReference) {
+        this.created = created;
+        this.targetName = targetName;
+        this.creatorTargetName = creatorTargetName;
+        this.operator = operator;
+        this.weight = weight;
+        this.freeText = freeText;
+        this.materialNames = materialNames;
+        this.loadCount = loadCount;
+        this.localId = localId;
+        this.customer = customer;
+        this.projectReference = projectReference;
+    }
+}

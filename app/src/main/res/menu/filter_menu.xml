@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/sort_date_asc"
+        android:title="Sort by Date Ascending" />
+    <item
+        android:id="@+id/sort_date_desc"
+        android:title="Sort by Date Descending" />
+
+    <item
+        android:id="@+id/status_open"
+        android:title="Status: Open" />
+    <item
+        android:id="@+id/status_in_progress"
+        android:title="Status: In Progress" />
+    <item
+        android:id="@+id/status_closed"
+        android:title="Status: Closed" />
+
+    <item
+        android:id="@+id/clear_filter"
+        android:title="Clear Filter" />
+
+</menu>

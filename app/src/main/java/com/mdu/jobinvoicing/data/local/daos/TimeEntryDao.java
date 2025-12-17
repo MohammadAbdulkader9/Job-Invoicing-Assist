@@ -18,11 +18,8 @@ import java.util.List;
  */
 @Dao
 public interface TimeEntryDao {
-    @Query("SELECT * FROM time_entries WHERE workPlanId = :workPlanId ORDER BY startTimeMillis DESC")
+    @Query("SELECT * FROM time_entries WHERE workPlanId = :workPlanId")
     LiveData<List<TimeEntry>> getForWorkPlan(String workPlanId);
-
-    @Query("SELECT * FROM time_entries WHERE operatorId = :operatorId ORDER BY startTimeMillis DESC")
-    LiveData<List<TimeEntry>> getForOperator(String operatorId);
 
     @Query("SELECT * FROM time_entries WHERE id = :id LIMIT 1")
     LiveData<TimeEntry> getTimeEntryById(String id);

@@ -29,9 +29,6 @@ public class TimeEntryRepository {
         return dao.getForWorkPlan(workPlanId);
     }
 
-    public LiveData<List<TimeEntry>> getForOperator(String operatorId) {
-        return dao.getForOperator(operatorId);
-    }
 
     public LiveData<TimeEntry> getTimeEntryById(String id) {
         return dao.getTimeEntryById(id);
@@ -48,7 +45,7 @@ public class TimeEntryRepository {
         executor.execute(() -> {
             dao.insert(entry);
             if (enqueueSync) {
-                enqueueSync(entry.id, gson.toJson(entry), "CREATE");
+                enqueueSync(entry.getId(), gson.toJson(entry), "CREATE");
             }
         });
     }
@@ -61,7 +58,7 @@ public class TimeEntryRepository {
         executor.execute(() -> {
             dao.update(entry);
             if (enqueueSync) {
-                enqueueSync(entry.id, gson.toJson(entry), "UPDATE");
+                enqueueSync(entry.getId(), gson.toJson(entry), "UPDATE");
             }
         });
     }
@@ -74,7 +71,7 @@ public class TimeEntryRepository {
         executor.execute(() -> {
             dao.delete(entry);
             if (enqueueSync) {
-                enqueueSync(entry.id, gson.toJson(entry), "DELETE");
+                enqueueSync(entry.getId(), gson.toJson(entry), "DELETE");
             }
         });
     }

@@ -19,23 +19,66 @@ import androidx.room.PrimaryKey;
 public class ServiceItem {
     @PrimaryKey
     @NonNull
-    public String id;
+    private String id;
 
-    public String workPlanId;
-    public String description;
-    public double quantity;
-    public String unit; // e.g., "hour", "service"
-    public double unitPrice;
-    public String notes;
+    private String workPlanId;
+    private String description;
+
+    private double serviceFee;
+
+    private String notes;
+
+    public ServiceItem() {
+        // No-argument constructor required for Firestore deserialization
+    }
 
     public ServiceItem(@NonNull String id, String workPlanId, String description,
-                       double quantity, String unit, double unitPrice, String notes) {
+                       double serviceFee, String notes) {
         this.id = id;
         this.workPlanId = workPlanId;
         this.description = description;
-        this.quantity = quantity;
-        this.unit = unit;
-        this.unitPrice = unitPrice;
+        this.serviceFee = serviceFee;
+        this.notes = notes;
+    }
+
+    @NonNull
+    public String getId() {
+        return id;
+    }
+
+    public void setId(@NonNull String id) {
+        this.id = id;
+    }
+
+    public String getWorkPlanId() {
+        return workPlanId;
+    }
+
+    public void setWorkPlanId(String workPlanId) {
+        this.workPlanId = workPlanId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public double getServiceFee() {
+        return serviceFee;
+    }
+
+    public void setServiceFee(double serviceFee) {
+        this.serviceFee = serviceFee;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
         this.notes = notes;
     }
 }
