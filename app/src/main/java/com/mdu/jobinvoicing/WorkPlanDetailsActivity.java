@@ -75,7 +75,6 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
 
     private EditText customerNameEditText, workTitleEditText, workDescriptionEditText, locationEditText, dateEditText;
     private Button saveButton, addTimeEntryButton, addMaterialButton, addServiceItemButton, importFromTimerButton, addDistanceButton, addWeightButton;
-    private ImageView backButton;
     private RadioGroup statusRadioGroup;
     private RadioButton statusOpen, statusInProgress, statusClosed;
 
@@ -87,6 +86,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
     private ListenerRegistration weightsListener;
     private String currentWorkPlanId;
     private String userId;
+    private String operatorId;
 
     private RelativeLayout timeEntryHeader, materialHeader, serviceItemHeader, distanceHeader, weightHeader;
     private LinearLayout timeEntryContent, materialContent, serviceItemContent, distanceContent, weightContent;
@@ -209,9 +209,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         if (intent != null && intent.hasExtra("WORK_PLAN_ID")) {
             currentWorkPlanId = intent.getStringExtra("WORK_PLAN_ID");
             if (currentWorkPlanId != null && !currentWorkPlanId.isEmpty()) {
-                setupRecyclerViews(); //Re-initialize adapters with the work plan ID
-                loadWorkPlanData(currentWorkPlanId);
-                fetchSubCollections(currentWorkPlanId);
+                findActiveOperator();
             }
         }
         // Apply padding for system bars (status bar / navigation bar)
@@ -235,6 +233,30 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         networkHelper.startMonitoring();
 
     }
+
+    private void findActiveOperator() {
+        db.collection("users").document(userId)
+                .collection("operators")
+                .whereEqualTo("isActive", true)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        operatorId = queryDocumentSnapshots.getDocuments().get(0).getId();
+                        setupRecyclerViews(); //Re-initialize adapters with the work plan ID
+                        loadWorkPlanData(currentWorkPlanId);
+                        fetchSubCollections(currentWorkPlanId);
+                    } else {
+                        Log.e(TAG, "No active operator found for user: " + userId);
+                        Toast.makeText(this, "No active operator found.", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error finding active operator", e);
+                    Toast.makeText(this, "Error finding operator: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
+    }
+
     // auto-save feature
     private void setupAutoSave() {
         saveButton.setVisibility(View.GONE);
@@ -291,7 +313,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
 
         weightsRecyclerView = findViewById(R.id.weightsRecyclerView);
         weightsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        weightAdapter = new WeightAdapter(weightList,currentWorkPlanId, this);
+        weightAdapter = new WeightAdapter(weightList, currentWorkPlanId, this);
         weightsRecyclerView.setAdapter(weightAdapter);
     }
 
@@ -326,7 +348,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
             return;
         }
 
-        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId).collection("time_entries").document(timeEntry.getId())
+        db.collection("users").document(userId).collection("operators").document(operatorId).collection("workplans").document(currentWorkPlanId).collection("time_entries").document(timeEntry.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                     int indexToRemove = -1;
@@ -353,7 +375,10 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
             return;
         }
 
-        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId).collection("materials").document(material.getId())
+        db.collection("users").document(userId).
+                collection("operators").document(operatorId).
+                collection("workplans").
+                document(currentWorkPlanId).collection("materials").document(material.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                     int indexToRemove = -1;
@@ -380,7 +405,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
             return;
         }
 
-        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId).collection("service_items").document(serviceItem.getId())
+        db.collection("users").document(userId).collection("operators").document(operatorId).collection("workplans").document(currentWorkPlanId).collection("service_items").document(serviceItem.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                     int indexToRemove = -1;
@@ -407,7 +432,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
             return;
         }
 
-        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId).collection("distances").document(distance.getId())
+        db.collection("users").document(userId).collection("operators").document(operatorId).collection("workplans").document(currentWorkPlanId).collection("distances").document(distance.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                     int indexToRemove = -1;
@@ -434,7 +459,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
             return;
         }
 
-        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId).collection("weights").document(weight.getId())
+        db.collection("users").document(userId).collection("operators").document(operatorId).collection("workplans").document(currentWorkPlanId).collection("weights").document(weight.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                     int indexToRemove = -1;
@@ -456,7 +481,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
     }
 
     private void loadWorkPlanData(String workPlanId) {
-        DocumentReference docRef = db.collection("users").document(userId).collection("workplans").document(workPlanId);
+        DocumentReference docRef = db.collection("users").document(userId).collection("operators").document(operatorId).collection("workplans").document(workPlanId);
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
@@ -529,7 +554,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
             }
         }
 
-        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId)
+        db.collection("users").document(userId).collection("operators").document(operatorId).collection("workplans").document(currentWorkPlanId)
                 .update(updatedWorkPlan)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(WorkPlanDetailsActivity.this, "Work plan updated successfully!", Toast.LENGTH_SHORT).show();
@@ -558,7 +583,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         timeEntry.put("notes", timeEntryNotesEditText.getText().toString());
         timeEntry.put("createdAt", new Timestamp(new Date()));
 
-        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId).collection("time_entries").add(timeEntry).addOnSuccessListener(documentReference -> {
+        db.collection("users").document(userId).collection("operators").document(operatorId).collection("workplans").document(currentWorkPlanId).collection("time_entries").add(timeEntry).addOnSuccessListener(documentReference -> {
             Toast.makeText(this, "Time entry added", Toast.LENGTH_SHORT).show();
             timeEntryHoursEditText.setText("");
             timeEntryHourRateEditText.setText("");
@@ -591,7 +616,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         material.put("notes", materialNotesEditText.getText().toString());
         material.put("createdAt", new Timestamp(new Date()));
 
-        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId).collection("materials").add(material).addOnSuccessListener(documentReference -> {
+        db.collection("users").document(userId).collection("operators").document(operatorId).collection("workplans").document(currentWorkPlanId).collection("materials").add(material).addOnSuccessListener(documentReference -> {
             Toast.makeText(this, "Material added", Toast.LENGTH_SHORT).show();
             materialNameEditText.setText("");
             materialQuantityEditText.setText("");
@@ -618,7 +643,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         serviceItem.put("notes", serviceItemNotesEditText.getText().toString());
         serviceItem.put("createdAt", new Timestamp(new Date()));
 
-        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId).collection("service_items").add(serviceItem).addOnSuccessListener(documentReference -> {
+        db.collection("users").document(userId).collection("operators").document(operatorId).collection("workplans").document(currentWorkPlanId).collection("service_items").add(serviceItem).addOnSuccessListener(documentReference -> {
             Toast.makeText(this, "Service item added", Toast.LENGTH_SHORT).show();
             serviceItemDescriptionEditText.setText("");
             serviceItemFeeEditText.setText("");
@@ -649,7 +674,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         distanceData.put("notes", distanceNotesEditText.getText().toString());
         distanceData.put("createdAt", new Timestamp(new Date()));
 
-        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId).collection("distances").add(distanceData).addOnSuccessListener(documentReference -> {
+        db.collection("users").document(userId).collection("operators").document(operatorId).collection("workplans").document(currentWorkPlanId).collection("distances").add(distanceData).addOnSuccessListener(documentReference -> {
             Toast.makeText(this, "Distance added", Toast.LENGTH_SHORT).show();
             distanceEditText.setText("");
             distanceUnitEditText.setText("");
@@ -681,7 +706,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         weightData.put("notes", weightNotesEditText.getText().toString());
         weightData.put("createdAt", new Timestamp(new Date()));
 
-        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId).collection("weights").add(weightData).addOnSuccessListener(documentReference -> {
+        db.collection("users").document(userId).collection("operators").document(operatorId).collection("workplans").document(currentWorkPlanId).collection("weights").add(weightData).addOnSuccessListener(documentReference -> {
             Toast.makeText(this, "Weight added", Toast.LENGTH_SHORT).show();
             weightEditText.setText("");
             weightUnitEditText.setText("");
@@ -702,7 +727,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
     private void fetchTimeEntries(String workPlanId) {
         if (timeEntriesListener != null) timeEntriesListener.remove();
 
-        timeEntriesListener = db.collection("users").document(userId).collection("workplans").document(workPlanId).collection("time_entries")
+        timeEntriesListener = db.collection("users").document(userId).collection("operators").document(operatorId).collection("workplans").document(workPlanId).collection("time_entries")
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .addSnapshotListener((snapshots, e) -> {
                     if (e != null) {
@@ -726,7 +751,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
     private void fetchMaterials(String workPlanId) {
         if (materialsListener != null) materialsListener.remove();
 
-        materialsListener = db.collection("users").document(userId).collection("workplans").document(workPlanId).collection("materials")
+        materialsListener = db.collection("users").document(userId).collection("operators").document(operatorId).collection("workplans").document(workPlanId).collection("materials")
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .addSnapshotListener((snapshots, e) -> {
                     if (e != null) {
@@ -750,7 +775,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
     private void fetchServiceItems(String workPlanId) {
         if (serviceItemsListener != null) serviceItemsListener.remove();
 
-        serviceItemsListener = db.collection("users").document(userId).collection("workplans").document(workPlanId).collection("service_items")
+        serviceItemsListener = db.collection("users").document(userId).collection("operators").document(operatorId).collection("workplans").document(workPlanId).collection("service_items")
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .addSnapshotListener((snapshots, e) -> {
                     if (e != null) {
@@ -774,7 +799,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
     private void fetchDistances(String workPlanId) {
         if (distancesListener != null) distancesListener.remove();
 
-        distancesListener = db.collection("users").document(userId).collection("workplans").document(workPlanId).collection("distances")
+        distancesListener = db.collection("users").document(userId).collection("operators").document(operatorId).collection("workplans").document(workPlanId).collection("distances")
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .addSnapshotListener((snapshots, e) -> {
                     if (e != null) {
@@ -798,7 +823,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
     private void fetchWeights(String workPlanId) {
         if (weightsListener != null) weightsListener.remove();
 
-        weightsListener = db.collection("users").document(userId).collection("workplans").document(workPlanId).collection("weights")
+        weightsListener = db.collection("users").document(userId).collection("operators").document(operatorId).collection("workplans").document(workPlanId).collection("weights")
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .addSnapshotListener((snapshots, e) -> {
                     if (e != null) {
