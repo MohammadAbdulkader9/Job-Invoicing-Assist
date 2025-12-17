@@ -16,6 +16,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mdu.jobinvoicing.data.local.entities.Weight;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,6 +26,7 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
     private List<Weight> weights;
     private final OnDeleteClickListener onDeleteClickListener;
     private final String workPlanId;
+    private final String operatorId;
     private FirebaseFirestore db;
     private String userId;
 
@@ -31,9 +34,10 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
         void onDeleteClick(Weight weight);
     }
 
-    public WeightAdapter(List<Weight> weights, String workPlanId, OnDeleteClickListener onDeleteClickListener) {
+    public WeightAdapter(List<Weight> weights, String workPlanId, String operatorId, OnDeleteClickListener onDeleteClickListener) {
         this.weights = weights;
         this.workPlanId = workPlanId;
+        this.operatorId = operatorId;
         this.onDeleteClickListener = onDeleteClickListener;
         this.db = FirebaseFirestore.getInstance();
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
@@ -53,9 +57,8 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
         Weight weight = weights.get(position);
 
         holder.weightTextView.setText("Weight: " + weight.getWeight() + " " + weight.getUnit());
-        holder.weightUnitTextView.setText("Unit: " + weight.getUnit());
-        holder.weightRateTextView.setText("Rate: " + weight.getRate() + " SEK/" + weight.getUnit());
-        holder.weightTotalTextView.setText("Total: SEK " + String.format(Locale.getDefault(), "%.2f", weight.getWeight() * weight.getRate()));
+        holder.weightRateTextView.setText("Rate: SEK " + weight.getRate() + "/" + weight.getUnit());
+        holder.weightTotalTextView.setText("Total: SEK " + String.format(Locale.getDefault(), "%.2f", weight.getTotal()));
         holder.weightNotesTextView.setText("Notes: " + weight.getNotes());
 
         holder.deleteButton.setOnClickListener(v -> {
@@ -82,45 +85,48 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
         View dialogView = inflater.inflate(R.layout.dialog_edit_weight, null);
         builder.setView(dialogView);
 
-        final TextInputEditText editWeightEditText = dialogView.findViewById(R.id.editWeight);
-        final TextInputEditText editUnitEditText = dialogView.findViewById(R.id.editWeightUnit);
-        final TextInputEditText editRateEditText = dialogView.findViewById(R.id.editWeightRatePrice);
-        final TextInputEditText editNotesEditText = dialogView.findViewById(R.id.editWeightNotes);
+        final TextInputEditText editWeight = dialogView.findViewById(R.id.editWeight);
+        final TextInputEditText editUnit = dialogView.findViewById(R.id.editWeightUnit);
+        final TextInputEditText editRate = dialogView.findViewById(R.id.editWeightRatePrice);
+        final TextInputEditText editNotes = dialogView.findViewById(R.id.editWeightNotes);
 
-        editWeightEditText.setText(String.valueOf(weight.getWeight()));
-        editUnitEditText.setText(weight.getUnit());
-        editRateEditText.setText(String.valueOf(weight.getRate()));
-        editNotesEditText.setText(weight.getNotes());
+        editWeight.setText(String.valueOf(weight.getWeight()));
+        editUnit.setText(weight.getUnit());
+        editRate.setText(String.valueOf(weight.getRate()));
+        editNotes.setText(weight.getNotes());
 
         builder.setPositiveButton("Save", (dialog, which) -> {
-            String weightText = editWeightEditText.getText().toString();
-            String unit = editUnitEditText.getText().toString();
-            String rate = editRateEditText.getText().toString();
-            String notesText = editNotesEditText.getText().toString();
+            BigDecimal weightValue = new BigDecimal(editWeight.getText().toString());
+            String unit = editUnit.getText().toString();
+            BigDecimal rate = new BigDecimal(editRate.getText().toString());
+            String notes = editNotes.getText().toString();
 
-            weight.setWeight(Double.parseDouble(weightText));
+            weight.setWeight(weightValue.doubleValue());
             weight.setUnit(unit);
-            weight.setRate(Double.parseDouble(rate));
-            weight.setNotes(notesText);
+            weight.setRate(rate.doubleValue());
+            weight.setNotes(notes);
+            weight.setTotal(weightValue.multiply(rate).setScale(2, RoundingMode.HALF_UP).doubleValue());
 
             updateWeightInFirebase(weight);
+
         });
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
-
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
     private void updateWeightInFirebase(Weight weight) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users").document(userId).collection("workplans").document(workPlanId)
+        db.collection("users").document(userId)
+                .collection("operators").document(operatorId)
+                .collection("workplans").document(workPlanId)
                 .collection("weights").document(weight.getId())
                 .update(
                         "weight", weight.getWeight(),
                         "unit", weight.getUnit(),
                         "rate", weight.getRate(),
-                        "total", weight.getWeight() * weight.getRate(),
-                        "notes", weight.getNotes()
+                        "notes", weight.getNotes(),
+                        "total", weight.getTotal()
                 )
                 .addOnSuccessListener(aVoid -> {
                     int index = weights.indexOf(weight);
@@ -143,7 +149,6 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
 
     static class WeightViewHolder extends RecyclerView.ViewHolder {
         TextView weightTextView;
-        TextView weightUnitTextView;
         TextView weightRateTextView;
         TextView weightTotalTextView;
         TextView weightNotesTextView;
@@ -153,7 +158,6 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
         public WeightViewHolder(@NonNull View itemView) {
             super(itemView);
             weightTextView = itemView.findViewById(R.id.weightTextView);
-            weightUnitTextView = itemView.findViewById(R.id.weightUnitTextView);
             weightRateTextView = itemView.findViewById(R.id.weightRateTextView);
             weightTotalTextView = itemView.findViewById(R.id.weightTotalTextView);
             weightNotesTextView = itemView.findViewById(R.id.weightNotesTextView);

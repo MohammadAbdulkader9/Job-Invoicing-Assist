@@ -26,6 +26,7 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
     private List<TimeEntry> timeEntries;
     private OnDeleteClickListener onDeleteClickListener;
     private final String workPlanId;
+    private final String operatorId;
 
     private FirebaseFirestore db;
     private String userId;
@@ -34,9 +35,10 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
         void onDeleteClick(TimeEntry timeEntry);
     }
 
-    public TimeEntryAdapter(List<TimeEntry> timeEntries, String workPlanId, OnDeleteClickListener onDeleteClickListener) {
+    public TimeEntryAdapter(List<TimeEntry> timeEntries, String workPlanId, String operatorId, OnDeleteClickListener onDeleteClickListener) {
         this.timeEntries = timeEntries;
         this.workPlanId = workPlanId;
+        this.operatorId = operatorId;
         this.onDeleteClickListener = onDeleteClickListener;
         this.db = FirebaseFirestore.getInstance();
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
@@ -111,7 +113,7 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
 
     private void updateTimeEntryInFirebase(TimeEntry timeEntry) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users").document(userId).collection("workplans").document(workPlanId)
+        db.collection("users").document(userId).collection("operators").document(operatorId).collection("workplans").document(workPlanId)
                 .collection("time_entries").document(timeEntry.getId())
                 .update(
                         "hours", timeEntry.getHours(),

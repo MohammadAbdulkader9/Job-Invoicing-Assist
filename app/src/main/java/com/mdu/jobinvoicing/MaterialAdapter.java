@@ -5,8 +5,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -18,14 +16,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mdu.jobinvoicing.data.local.entities.Material;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Locale;
 
 public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.MaterialViewHolder> {
 
     private List<Material> materials;
-    private OnDeleteClickListener onDeleteClickListener;
+    private final OnDeleteClickListener onDeleteClickListener;
     private final String workPlanId;
+    private final String operatorId;
     private FirebaseFirestore db;
     private String userId;
 
@@ -33,9 +34,10 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.Materi
         void onDeleteClick(Material material);
     }
 
-    public MaterialAdapter(List<Material> materials, String workPlanId, OnDeleteClickListener onDeleteClickListener) {
+    public MaterialAdapter(List<Material> materials, String workPlanId, String operatorId, OnDeleteClickListener onDeleteClickListener) {
         this.materials = materials;
         this.workPlanId = workPlanId;
+        this.operatorId = operatorId;
         this.onDeleteClickListener = onDeleteClickListener;
         this.db = FirebaseFirestore.getInstance();
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
@@ -53,6 +55,7 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.Materi
     @Override
     public void onBindViewHolder(@NonNull MaterialViewHolder holder, int position) {
         Material material = materials.get(position);
+
         holder.materialNameTextView.setText("Material: " + material.getName());
         holder.materialQuantityTextView.setText("Quantity: " + material.getQuantity() + " " + material.getUnit());
         holder.materialUnitPriceTextView.setText("Unit Price: SEK " + material.getUnitPrice() + "/" + material.getUnit());
@@ -75,7 +78,9 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.Materi
         holder.editButton.setOnClickListener(v -> {
             showEditMaterialDialog(material, holder.itemView.getContext());
         });
+
     }
+
 
     private void showEditMaterialDialog(Material material, Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -97,30 +102,32 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.Materi
 
         builder.setPositiveButton("Save", (dialog, which) -> {
             String name = editMaterialName.getText().toString();
-            double quantity = Double.parseDouble(editMaterialQuantity.getText().toString());
+            BigDecimal quantity = new BigDecimal(editMaterialQuantity.getText().toString());
             String unit = editMaterialUnit.getText().toString();
-            double unitPrice = Double.parseDouble(editMaterialUnitPrice.getText().toString());
+            BigDecimal unitPrice = new BigDecimal(editMaterialUnitPrice.getText().toString());
             String notes = editMaterialNotes.getText().toString();
 
             material.setName(name);
-            material.setQuantity(quantity);
+            material.setQuantity(quantity.doubleValue());
             material.setUnit(unit);
-            material.setUnitPrice(unitPrice);
+            material.setUnitPrice(unitPrice.doubleValue());
             material.setNotes(notes);
-            material.setTotal(quantity * unitPrice);
+            material.setTotal(quantity.multiply(unitPrice).setScale(2, RoundingMode.HALF_UP).doubleValue());
 
             updateMaterialInFirebase(material);
 
         });
+
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
         AlertDialog dialog = builder.create();
         dialog.show();
+
     }
 
     private void updateMaterialInFirebase(Material material) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users").document(userId).collection("workplans").document(workPlanId)
+        db.collection("users").document(userId).collection("operators").document(operatorId).collection("workplans").document(workPlanId)
                 .collection("materials").document(material.getId())
                 .update(
                         "name", material.getName(),
@@ -139,15 +146,17 @@ public class MaterialAdapter extends RecyclerView.Adapter<MaterialAdapter.Materi
                 });
     }
 
+
     @Override
     public int getItemCount() {
         return materials.size();
     }
 
-    public void addMaterial(Material material) {
-        materials.add(material);
-        notifyItemInserted(materials.size() - 1);
+    public void setMaterials(List<Material> materials) {
+        this.materials = materials;
+        notifyDataSetChanged();
     }
+
 
     static class MaterialViewHolder extends RecyclerView.ViewHolder {
         TextView materialNameTextView;

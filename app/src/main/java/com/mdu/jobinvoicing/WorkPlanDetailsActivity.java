@@ -293,27 +293,27 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
     private void setupRecyclerViews() {
         timeEntriesRecyclerView = findViewById(R.id.timeEntriesRecyclerView);
         timeEntriesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        timeEntryAdapter = new TimeEntryAdapter(timeEntryList, currentWorkPlanId, this);
+        timeEntryAdapter = new TimeEntryAdapter(timeEntryList, currentWorkPlanId, operatorId, this);
         timeEntriesRecyclerView.setAdapter(timeEntryAdapter);
 
         materialsRecyclerView = findViewById(R.id.materialsRecyclerView);
         materialsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        materialAdapter = new MaterialAdapter(materialList, currentWorkPlanId, this);
+        materialAdapter = new MaterialAdapter(materialList, currentWorkPlanId, operatorId, this);
         materialsRecyclerView.setAdapter(materialAdapter);
 
         serviceItemsRecyclerView = findViewById(R.id.serviceItemsRecyclerView);
         serviceItemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        serviceItemAdapter = new ServiceItemAdapter(serviceItemList, currentWorkPlanId, this);
+        serviceItemAdapter = new ServiceItemAdapter(serviceItemList, currentWorkPlanId, operatorId, this);
         serviceItemsRecyclerView.setAdapter(serviceItemAdapter);
 
         distancesRecyclerView = findViewById(R.id.distancesRecyclerView);
         distancesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        distanceAdapter = new DistanceAdapter(distanceList, currentWorkPlanId, this);
+        distanceAdapter = new DistanceAdapter(distanceList, currentWorkPlanId, operatorId, this);
         distancesRecyclerView.setAdapter(distanceAdapter);
 
         weightsRecyclerView = findViewById(R.id.weightsRecyclerView);
         weightsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        weightAdapter = new WeightAdapter(weightList, currentWorkPlanId, this);
+        weightAdapter = new WeightAdapter(weightList, currentWorkPlanId, operatorId, this);
         weightsRecyclerView.setAdapter(weightAdapter);
     }
 
@@ -481,7 +481,9 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
     }
 
     private void loadWorkPlanData(String workPlanId) {
-        DocumentReference docRef = db.collection("users").document(userId).collection("operators").document(operatorId).collection("workplans").document(workPlanId);
+        DocumentReference docRef = db.collection("users").document(userId)
+                .collection("operators").document(operatorId)
+                .collection("workplans").document(workPlanId);
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
@@ -554,7 +556,9 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
             }
         }
 
-        db.collection("users").document(userId).collection("operators").document(operatorId).collection("workplans").document(currentWorkPlanId)
+        db.collection("users").document(userId).
+                collection("operators").document(operatorId).
+                collection("workplans").document(currentWorkPlanId)
                 .update(updatedWorkPlan)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(WorkPlanDetailsActivity.this, "Work plan updated successfully!", Toast.LENGTH_SHORT).show();
