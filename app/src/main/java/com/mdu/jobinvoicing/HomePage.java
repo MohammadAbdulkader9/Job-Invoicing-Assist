@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,6 +24,8 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.mdu.jobinvoicing.data.network.financeApi.ApiServiceManager;
 
 public class HomePage extends AppCompatActivity {
@@ -58,11 +61,17 @@ public class HomePage extends AppCompatActivity {
         }
     };
 
+    private FirebaseAuth mAuth;
+    private static final String TAG = "HomePage";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_homepage);
+
+        mAuth = FirebaseAuth.getInstance();
 
         // Init ApiService Manager, This should only be done ones through out the app
         // Refer to README.md under FinanceApi for examples of how to make api calls
@@ -150,6 +159,28 @@ public class HomePage extends AppCompatActivity {
         // Bind the MockLoadAssistService to start reading CSV
         Intent intent = new Intent(this, MockLoadAssistService.class);
         bindService(intent, conn, BIND_AUTO_CREATE);
+
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            signInAnonymously();
+        }
+    }
+
+    private void signInAnonymously() {
+        mAuth.signInAnonymously()
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInAnonymously:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInAnonymously:failure", task.getException());
+                        Toast.makeText(HomePage.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override

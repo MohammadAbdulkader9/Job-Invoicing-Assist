@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -85,6 +86,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
     private ListenerRegistration distancesListener;
     private ListenerRegistration weightsListener;
     private String currentWorkPlanId;
+    private String userId;
 
     private RelativeLayout timeEntryHeader, materialHeader, serviceItemHeader, distanceHeader, weightHeader;
     private LinearLayout timeEntryContent, materialContent, serviceItemContent, distanceContent, weightContent;
@@ -124,6 +126,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_workplan_details);
 
         db = FirebaseFirestore.getInstance();
+        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         customerNameEditText = findViewById(R.id.customerNameEditText);
         workTitleEditText = findViewById(R.id.workTitleEditText);
@@ -323,7 +326,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
             return;
         }
 
-        db.collection("workplans").document(currentWorkPlanId).collection("time_entries").document(timeEntry.getId())
+        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId).collection("time_entries").document(timeEntry.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                     int indexToRemove = -1;
@@ -350,7 +353,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
             return;
         }
 
-        db.collection("workplans").document(currentWorkPlanId).collection("materials").document(material.getId())
+        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId).collection("materials").document(material.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                     int indexToRemove = -1;
@@ -377,7 +380,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
             return;
         }
 
-        db.collection("workplans").document(currentWorkPlanId).collection("service_items").document(serviceItem.getId())
+        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId).collection("service_items").document(serviceItem.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                     int indexToRemove = -1;
@@ -404,7 +407,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
             return;
         }
 
-        db.collection("workplans").document(currentWorkPlanId).collection("distances").document(distance.getId())
+        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId).collection("distances").document(distance.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                     int indexToRemove = -1;
@@ -431,7 +434,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
             return;
         }
 
-        db.collection("workplans").document(currentWorkPlanId).collection("weights").document(weight.getId())
+        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId).collection("weights").document(weight.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                     int indexToRemove = -1;
@@ -453,7 +456,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
     }
 
     private void loadWorkPlanData(String workPlanId) {
-        DocumentReference docRef = db.collection("workplans").document(workPlanId);
+        DocumentReference docRef = db.collection("users").document(userId).collection("workplans").document(workPlanId);
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
@@ -526,7 +529,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
             }
         }
 
-        db.collection("workplans").document(currentWorkPlanId)
+        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId)
                 .update(updatedWorkPlan)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(WorkPlanDetailsActivity.this, "Work plan updated successfully!", Toast.LENGTH_SHORT).show();
@@ -555,7 +558,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         timeEntry.put("notes", timeEntryNotesEditText.getText().toString());
         timeEntry.put("createdAt", new Timestamp(new Date()));
 
-        db.collection("workplans").document(currentWorkPlanId).collection("time_entries").add(timeEntry).addOnSuccessListener(documentReference -> {
+        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId).collection("time_entries").add(timeEntry).addOnSuccessListener(documentReference -> {
             Toast.makeText(this, "Time entry added", Toast.LENGTH_SHORT).show();
             timeEntryHoursEditText.setText("");
             timeEntryHourRateEditText.setText("");
@@ -588,7 +591,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         material.put("notes", materialNotesEditText.getText().toString());
         material.put("createdAt", new Timestamp(new Date()));
 
-        db.collection("workplans").document(currentWorkPlanId).collection("materials").add(material).addOnSuccessListener(documentReference -> {
+        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId).collection("materials").add(material).addOnSuccessListener(documentReference -> {
             Toast.makeText(this, "Material added", Toast.LENGTH_SHORT).show();
             materialNameEditText.setText("");
             materialQuantityEditText.setText("");
@@ -615,7 +618,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         serviceItem.put("notes", serviceItemNotesEditText.getText().toString());
         serviceItem.put("createdAt", new Timestamp(new Date()));
 
-        db.collection("workplans").document(currentWorkPlanId).collection("service_items").add(serviceItem).addOnSuccessListener(documentReference -> {
+        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId).collection("service_items").add(serviceItem).addOnSuccessListener(documentReference -> {
             Toast.makeText(this, "Service item added", Toast.LENGTH_SHORT).show();
             serviceItemDescriptionEditText.setText("");
             serviceItemFeeEditText.setText("");
@@ -646,7 +649,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         distanceData.put("notes", distanceNotesEditText.getText().toString());
         distanceData.put("createdAt", new Timestamp(new Date()));
 
-        db.collection("workplans").document(currentWorkPlanId).collection("distances").add(distanceData).addOnSuccessListener(documentReference -> {
+        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId).collection("distances").add(distanceData).addOnSuccessListener(documentReference -> {
             Toast.makeText(this, "Distance added", Toast.LENGTH_SHORT).show();
             distanceEditText.setText("");
             distanceUnitEditText.setText("");
@@ -678,7 +681,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         weightData.put("notes", weightNotesEditText.getText().toString());
         weightData.put("createdAt", new Timestamp(new Date()));
 
-        db.collection("workplans").document(currentWorkPlanId).collection("weights").add(weightData).addOnSuccessListener(documentReference -> {
+        db.collection("users").document(userId).collection("workplans").document(currentWorkPlanId).collection("weights").add(weightData).addOnSuccessListener(documentReference -> {
             Toast.makeText(this, "Weight added", Toast.LENGTH_SHORT).show();
             weightEditText.setText("");
             weightUnitEditText.setText("");
@@ -699,7 +702,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
     private void fetchTimeEntries(String workPlanId) {
         if (timeEntriesListener != null) timeEntriesListener.remove();
 
-        timeEntriesListener = db.collection("workplans").document(workPlanId).collection("time_entries")
+        timeEntriesListener = db.collection("users").document(userId).collection("workplans").document(workPlanId).collection("time_entries")
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .addSnapshotListener((snapshots, e) -> {
                     if (e != null) {
@@ -723,7 +726,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
     private void fetchMaterials(String workPlanId) {
         if (materialsListener != null) materialsListener.remove();
 
-        materialsListener = db.collection("workplans").document(workPlanId).collection("materials")
+        materialsListener = db.collection("users").document(userId).collection("workplans").document(workPlanId).collection("materials")
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .addSnapshotListener((snapshots, e) -> {
                     if (e != null) {
@@ -747,7 +750,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
     private void fetchServiceItems(String workPlanId) {
         if (serviceItemsListener != null) serviceItemsListener.remove();
 
-        serviceItemsListener = db.collection("workplans").document(workPlanId).collection("service_items")
+        serviceItemsListener = db.collection("users").document(userId).collection("workplans").document(workPlanId).collection("service_items")
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .addSnapshotListener((snapshots, e) -> {
                     if (e != null) {
@@ -771,7 +774,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
     private void fetchDistances(String workPlanId) {
         if (distancesListener != null) distancesListener.remove();
 
-        distancesListener = db.collection("workplans").document(workPlanId).collection("distances")
+        distancesListener = db.collection("users").document(userId).collection("workplans").document(workPlanId).collection("distances")
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .addSnapshotListener((snapshots, e) -> {
                     if (e != null) {
@@ -795,7 +798,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
     private void fetchWeights(String workPlanId) {
         if (weightsListener != null) weightsListener.remove();
 
-        weightsListener = db.collection("workplans").document(workPlanId).collection("weights")
+        weightsListener = db.collection("users").document(userId).collection("workplans").document(workPlanId).collection("weights")
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .addSnapshotListener((snapshots, e) -> {
                     if (e != null) {

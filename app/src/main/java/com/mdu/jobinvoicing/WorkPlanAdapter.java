@@ -8,10 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mdu.jobinvoicing.data.local.entities.WorkPlan;
 import com.mdu.jobinvoicing.data.local.entities.WorkPlanStatus;
@@ -26,10 +28,15 @@ public class WorkPlanAdapter extends RecyclerView.Adapter<WorkPlanAdapter.WorkPl
     private List<WorkPlan> workPlans;
     private Context context;
     private FirebaseFirestore db;
+    private String userId;
 
     public WorkPlanAdapter(Context context, List<WorkPlan> workPlans) {
         this.context = context;
         this.workPlans = workPlans;
+        this.db = FirebaseFirestore.getInstance();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            this.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
     }
 
     @NonNull
@@ -73,17 +80,23 @@ public class WorkPlanAdapter extends RecyclerView.Adapter<WorkPlanAdapter.WorkPl
 
         //delete icon press
         delete.setOnClickListener(v -> {
-            //TODO: ask if you really want to remove it
             AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
             AlertDialog dialog = builder.setTitle("Delete Work Plan")
                     .setMessage("Are you sure you want to delete this work plan?")
                     .setPositiveButton("Yes", (d, which) -> {
                         int actualPosition = holder.getAdapterPosition();
                         if (actualPosition != RecyclerView.NO_POSITION) {
-                            workPlans.remove(actualPosition);
-                            notifyItemRemoved(actualPosition);
-                            db = FirebaseFirestore.getInstance();
-                            db.collection("workplans").document(workPlan.id).delete();
+                            String workPlanId = workPlans.get(actualPosition).id;
+                            db.collection("users").document(userId).collection("workplans").document(workPlanId)
+                                .delete()
+                                .addOnSuccessListener(aVoid -> {
+                                    workPlans.remove(actualPosition);
+                                    notifyItemRemoved(actualPosition);
+                                    Toast.makeText(context, "Work plan deleted", Toast.LENGTH_SHORT).show();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(context, "Failed to delete work plan: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
                         }
                     })
                     .setNegativeButton("No", (d, which) -> d.dismiss())

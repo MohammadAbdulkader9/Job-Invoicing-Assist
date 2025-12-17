@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mdu.jobinvoicing.data.local.entities.Distance;
 
@@ -23,6 +24,8 @@ public class DistanceAdapter extends RecyclerView.Adapter<DistanceAdapter.Distan
     private List<Distance> distances;
     private final OnDeleteClickListener onDeleteClickListener;
     private final String workPlanId;
+    private FirebaseFirestore db;
+    private String userId;
 
     public interface OnDeleteClickListener {
         void onDeleteClick(Distance distance);
@@ -32,6 +35,10 @@ public class DistanceAdapter extends RecyclerView.Adapter<DistanceAdapter.Distan
         this.distances = distances;
         this.workPlanId = workPlanId;
         this.onDeleteClickListener = onDeleteClickListener;
+        this.db = FirebaseFirestore.getInstance();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            this.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
     }
 
     @NonNull
@@ -106,7 +113,7 @@ public class DistanceAdapter extends RecyclerView.Adapter<DistanceAdapter.Distan
 
 private void updateDistanceInFirebase(Distance distance) {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    db.collection("workplans").document(workPlanId)
+    db.collection("users").document(userId).collection("workplans").document(workPlanId)
             .collection("distances").document(distance.getId())
             .update(
                     "distance", distance.getDistance(),

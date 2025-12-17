@@ -19,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.mdu.jobinvoicing.data.local.entities.WorkPlanStatus;
 
@@ -36,11 +37,17 @@ public class WorkPlanActivity extends AppCompatActivity {
     private NetworkHelper networkHelper;
     private TextView statusText;
     private ImageView statusDot;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workplan);
+
+        // ===============================
+        // Initialize Firebase Auth
+        // ===============================
+        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         // ===============================
         // Initialize Views
@@ -131,7 +138,7 @@ public class WorkPlanActivity extends AppCompatActivity {
         // Save to Firestore
         // ===============================
         Task<DocumentReference> workplans = getInstance()
-                .collection("workplans")
+                .collection("users").document(userId).collection("workplans")
                 .add(workplan)
                 .addOnSuccessListener(doc -> {
                     Toast.makeText(this, "Work Plan Created Successfully!", Toast.LENGTH_SHORT).show();

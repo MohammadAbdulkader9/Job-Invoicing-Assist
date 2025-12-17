@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mdu.jobinvoicing.data.local.entities.TimeEntry;
 
@@ -26,6 +27,9 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
     private OnDeleteClickListener onDeleteClickListener;
     private final String workPlanId;
 
+    private FirebaseFirestore db;
+    private String userId;
+
     public interface OnDeleteClickListener {
         void onDeleteClick(TimeEntry timeEntry);
     }
@@ -34,6 +38,10 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
         this.timeEntries = timeEntries;
         this.workPlanId = workPlanId;
         this.onDeleteClickListener = onDeleteClickListener;
+        this.db = FirebaseFirestore.getInstance();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            this.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
     }
 
     @NonNull
@@ -103,7 +111,7 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
 
     private void updateTimeEntryInFirebase(TimeEntry timeEntry) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("workplans").document(workPlanId)
+        db.collection("users").document(userId).collection("workplans").document(workPlanId)
                 .collection("time_entries").document(timeEntry.getId())
                 .update(
                         "hours", timeEntry.getHours(),

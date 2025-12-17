@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -36,6 +37,7 @@ public class OperatorProfile extends AppCompatActivity {
     private Button btnSave, btnCancel;
 
     private FirebaseFirestore db;
+    private String userId;
 
     private RecyclerView recyclerView;
     private OperatorAdapter adapter;
@@ -89,6 +91,15 @@ public class OperatorProfile extends AppCompatActivity {
         btnCancel.setVisibility(View.INVISIBLE);
 
         db = FirebaseFirestore.getInstance();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        } else {
+            // Handle case where user is not logged in
+            Toast.makeText(this, "User not logged in!", Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
+
 
         // ---------------------------
         // PHONE AUTO +46 SETUP
@@ -204,7 +215,7 @@ public class OperatorProfile extends AppCompatActivity {
     // LOAD OPERATORS
     // ---------------------------------------------------
     private void loadOperatorsFromFirestore() {
-        db.collection("operators")
+        db.collection("users").document(userId).collection("operators")
                 .get()
                 .addOnSuccessListener((QuerySnapshot snapshots) -> {
                     operatorList.clear();
@@ -253,7 +264,7 @@ public class OperatorProfile extends AppCompatActivity {
         profile.put("isActive", false);
         profile.put("createdAt", FieldValue.serverTimestamp());
 
-        db.collection("operators")
+        db.collection("users").document(userId).collection("operators")
                 .add(profile)
                 .addOnSuccessListener(doc -> {
 
@@ -318,7 +329,7 @@ public class OperatorProfile extends AppCompatActivity {
         updatedData.put("email", email);
         updatedData.put("phone", phone);
 
-        db.collection("operators").document(editingOperatorId)
+        db.collection("users").document(userId).collection("operators").document(editingOperatorId)
                 .update(updatedData)
                 .addOnSuccessListener(aVoid -> {
 
@@ -356,10 +367,10 @@ public class OperatorProfile extends AppCompatActivity {
     private void setActiveOperator(Operator operator) {
 
         for (Operator op : operatorList) {
-            db.collection("operators").document(op.id).update("isActive", false);
+            db.collection("users").document(userId).collection("operators").document(op.id).update("isActive", false);
         }
 
-        db.collection("operators").document(operator.id)
+        db.collection("users").document(userId).collection("operators").document(operator.id)
                 .update("isActive", true);
 
         for (Operator op : operatorList) {
@@ -374,7 +385,7 @@ public class OperatorProfile extends AppCompatActivity {
     // ---------------------------------------------------
     private void deleteOperator(Operator operator) {
 
-        db.collection("operators").document(operator.id)
+        db.collection("users").document(userId).collection("operators").document(operator.id)
                 .delete()
                 .addOnSuccessListener(aVoid -> {
 

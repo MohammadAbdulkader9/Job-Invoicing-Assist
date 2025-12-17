@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mdu.jobinvoicing.data.local.entities.Weight;
 
@@ -23,6 +24,8 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
     private List<Weight> weights;
     private final OnDeleteClickListener onDeleteClickListener;
     private final String workPlanId;
+    private FirebaseFirestore db;
+    private String userId;
 
     public interface OnDeleteClickListener {
         void onDeleteClick(Weight weight);
@@ -32,6 +35,10 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
         this.weights = weights;
         this.workPlanId = workPlanId;
         this.onDeleteClickListener = onDeleteClickListener;
+        this.db = FirebaseFirestore.getInstance();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            this.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
     }
 
     @NonNull
@@ -48,7 +55,7 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
         holder.weightTextView.setText("Weight: " + weight.getWeight() + " " + weight.getUnit());
         holder.weightUnitTextView.setText("Unit: " + weight.getUnit());
         holder.weightRateTextView.setText("Rate: " + weight.getRate() + " SEK/" + weight.getUnit());
-        holder.weightTotalTextView.setText("Total: " + String.format(Locale.getDefault(), "%.2f", weight.getWeight() * weight.getRate()));
+        holder.weightTotalTextView.setText("Total: SEK " + String.format(Locale.getDefault(), "%.2f", weight.getWeight() * weight.getRate()));
         holder.weightNotesTextView.setText("Notes: " + weight.getNotes());
 
         holder.deleteButton.setOnClickListener(v -> {
@@ -106,7 +113,7 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
 
     private void updateWeightInFirebase(Weight weight) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("workplans").document(workPlanId)
+        db.collection("users").document(userId).collection("workplans").document(workPlanId)
                 .collection("weights").document(weight.getId())
                 .update(
                         "weight", weight.getWeight(),

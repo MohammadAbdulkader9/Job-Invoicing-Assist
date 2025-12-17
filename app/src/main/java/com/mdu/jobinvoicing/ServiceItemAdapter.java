@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mdu.jobinvoicing.data.local.entities.ServiceItem;
 
@@ -23,6 +24,8 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
     private List<ServiceItem> serviceItems;
     private OnDeleteClickListener onDeleteClickListener;
     private final String workPlanId;
+    private FirebaseFirestore db;
+    private String userId;
 
     public interface OnDeleteClickListener {
         void onDeleteClick(ServiceItem serviceItem);
@@ -32,6 +35,10 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
         this.serviceItems = serviceItems;
         this.workPlanId = workPlanId;
         this.onDeleteClickListener = onDeleteClickListener;
+        this.db = FirebaseFirestore.getInstance();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            this.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
     }
 
     @NonNull
@@ -99,7 +106,7 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
 
     private void updateServiceItemInFirebase(ServiceItem serviceItem) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("workplans").document(workPlanId)
+        db.collection("users").document(userId).collection("workplans").document(workPlanId)
                 .collection("service_items").document(serviceItem.getId())
                 .update(
                         "description", serviceItem.getDescription(),
