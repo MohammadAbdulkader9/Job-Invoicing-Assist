@@ -185,6 +185,26 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         weightRateEditText = findViewById(R.id.weightRateEditText);
         weightUnitEditText = findViewById(R.id.weightUnitEditText);
         weightNotesEditText = findViewById(R.id.weightNotesEditText);
+        Intent intent = getIntent();
+        boolean fromLoadTicket = intent.getBooleanExtra("fromLoadTicket", false);
+
+        if (fromLoadTicket) {
+            LoadTicket ticket = (LoadTicket) intent.getSerializableExtra("loadTicket");
+            if (ticket != null && ticket.weight != null && !ticket.weight.isEmpty()) {
+                // Set weight
+                weightEditText.setText(ticket.weight);
+
+                // Notes = material names from LoadTicket
+                weightNotesEditText.setText(ticket.materialNames);
+
+                // Unit and price defaults
+                weightUnitEditText.setText("kg");
+                weightRateEditText.setText("1");
+
+                // Auto-add weight using existing method
+                new Handler().post(() -> addWeightButton.performClick());
+            }
+        }
 
         setupRecyclerViews();
         setupAutoSave(); // auto-save feature
@@ -204,8 +224,6 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         addWeightButton.setOnClickListener(v -> addWeight());
         importFromTimerButton.setOnClickListener(v -> importFromTimer());
 
-
-        Intent intent = getIntent();
         if (intent != null && intent.hasExtra("WORK_PLAN_ID")) {
             currentWorkPlanId = intent.getStringExtra("WORK_PLAN_ID");
             if (currentWorkPlanId != null && !currentWorkPlanId.isEmpty()) {
