@@ -57,6 +57,7 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
         Weight weight = weights.get(position);
 
         holder.weightTextView.setText("Weight: " + weight.getWeight() + " " + weight.getUnit());
+        holder.weightUnitTextView.setText("Unit: " + weight.getUnit());
         holder.weightRateTextView.setText("Rate: SEK " + weight.getRate() + "/" + weight.getUnit());
         holder.weightTotalTextView.setText("Total: SEK " + String.format(Locale.getDefault(), "%.2f", weight.getTotal()));
         holder.weightNotesTextView.setText("Notes: " + weight.getNotes());
@@ -149,6 +150,7 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
 
     static class WeightViewHolder extends RecyclerView.ViewHolder {
         TextView weightTextView;
+        TextView weightUnitTextView;
         TextView weightRateTextView;
         TextView weightTotalTextView;
         TextView weightNotesTextView;
@@ -158,6 +160,7 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
         public WeightViewHolder(@NonNull View itemView) {
             super(itemView);
             weightTextView = itemView.findViewById(R.id.weightTextView);
+            weightUnitTextView = itemView.findViewById(R.id.weightUnitTextView);
             weightRateTextView = itemView.findViewById(R.id.weightRateTextView);
             weightTotalTextView = itemView.findViewById(R.id.weightTotalTextView);
             weightNotesTextView = itemView.findViewById(R.id.weightNotesTextView);
