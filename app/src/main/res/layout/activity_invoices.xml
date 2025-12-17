@@ -11,7 +11,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:ignore="UselessParent">
+        tools:ignore="UselessParent"
+    >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -287,4 +288,11 @@
             </GridLayout>
         </LinearLayout>
     </ScrollView>
+    <include
+        android:id="@+id/bottomNavigationView"
+        layout="@layout/view_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+    />
 </RelativeLayout>
