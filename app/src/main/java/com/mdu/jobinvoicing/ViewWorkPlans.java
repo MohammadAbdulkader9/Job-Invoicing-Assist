@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -50,7 +51,7 @@ public class ViewWorkPlans extends AppCompatActivity {
     private String currentSort = "DateDesc"; // Default sort
     private WorkPlanStatus currentStatusFilter = null;
     private String userId;
-
+    private String operatorId;
 
 
     @Override
@@ -68,6 +69,11 @@ public class ViewWorkPlans extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             this.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        } else {
+            Log.e(TAG, "No user is logged in.");
+            Toast.makeText(this, "No user is logged in.", Toast.LENGTH_LONG).show();
+            finish();
+            return;
         }
 
         workPlansRecyclerView = findViewById(R.id.workPlansRecyclerView);
@@ -98,8 +104,7 @@ public class ViewWorkPlans extends AppCompatActivity {
 
         filterButton.setOnClickListener(this::showFilterMenu);
 
-
-        fetchWorkPlans();
+        findActiveOperator();
 
         // Set Top Bar Title
         MaterialToolbar toolbar = findViewById(R.id.top_bar);
@@ -117,8 +122,37 @@ public class ViewWorkPlans extends AppCompatActivity {
         networkHelper.startMonitoring();
     }
 
+    private void findActiveOperator() {
+        db.collection("users").document(userId)
+                .collection("operators")
+                .whereEqualTo("isActive", true)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        operatorId = queryDocumentSnapshots.getDocuments().get(0).getId();
+                        fetchWorkPlans();
+                    } else {
+                        Log.e(TAG, "No active operator found for user: " + userId);
+                        Toast.makeText(this, "No active operator found.", Toast.LENGTH_SHORT).show();
+                        workPlanList.clear();
+                        workPlanAdapter.notifyDataSetChanged();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error finding active operator", e);
+                    Toast.makeText(this, "Error finding operator: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
+    }
+
     private void fetchWorkPlans() {
-        db.collection("users").document(userId).collection("workplans")
+        if (userId == null || userId.isEmpty() || operatorId == null || operatorId.isEmpty()) {
+            Log.e(TAG, "User ID or Operator ID is missing. Cannot fetch work plans.");
+            return;
+        }
+        db.collection("users").document(userId).
+                collection("operators").document(operatorId).
+                collection("workplans")
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {
