@@ -190,19 +190,24 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
 
         if (fromLoadTicket) {
             LoadTicket ticket = (LoadTicket) intent.getSerializableExtra("loadTicket");
+
             if (ticket != null && ticket.weight != null && !ticket.weight.isEmpty()) {
-                // Set weight
-                weightEditText.setText(ticket.weight);
 
-                // Notes = material names from LoadTicket
-                weightNotesEditText.setText(ticket.materialNames);
+                // Set material name(s)
+                materialNameEditText.setText(ticket.materialNames);
 
-                // Unit and price defaults
-                weightUnitEditText.setText("kg");
-                weightRateEditText.setText("1");
+                // Quantity from weight
+                materialQuantityEditText.setText(ticket.weight);
 
-                // Auto-add weight using existing method
-                new Handler().post(() -> addWeightButton.performClick());
+                // Default unit and unit price
+                materialUnitEditText.setText("kg");
+                materialUnitPriceEditText.setText("1");
+
+                // Optional: notes
+                materialNotesEditText.setText(ticket.freeText);
+
+                // Auto-add material
+                new Handler(Looper.getMainLooper()).post(() -> addMaterialButton.performClick());
             }
         }
 
