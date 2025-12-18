@@ -58,8 +58,6 @@ public class Invoices extends AppCompatActivity {
         totalEText = findViewById(R.id.etTotal);
         totaltpEText = findViewById(R.id.etTotalToPay);
 
-        textView = findViewById(R.id.api_text);
-
 
         // Apply padding for system bars (status bar / navigation bar)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.invoices), (v, insets) -> {
@@ -86,7 +84,7 @@ public class Invoices extends AppCompatActivity {
             }
             return false;
         });
-    }
+
 
 
         asm = ApiServiceManager.getInstance();
