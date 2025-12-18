@@ -51,6 +51,12 @@ public interface FortnoxService {
         @Path("id") String id
     );
 
+    @GET("/3/invoices/{id}/email")
+    Call<InvoiceResponse> sendInvoiceById(
+            @HeaderMap Map<String, String> headers,
+            @Path("id") String id
+    );
+
     // Customer Actions
     @GET("/3/customers/{id}")
     Call<CustomerResponse> getCustomerById(
