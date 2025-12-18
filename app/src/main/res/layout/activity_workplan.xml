@@ -49,6 +49,23 @@
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/searchableDropdownLayout"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/edittext_border"
+                android:hint="Enter Client Name"
+                android:textSize="20sp"
+                app:startIconDrawable="@android:drawable/ic_menu_search">
+
+                <AutoCompleteTextView
+                    android:id="@+id/searchableDropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:paddingStart="48dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
             <EditText
                 android:id="@+id/inputClientName"
                 android:layout_width="match_parent"

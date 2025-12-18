@@ -37,6 +37,9 @@ public class ApiServiceManager {
         return instance;
     }
 
+    public List<CustomerResponse> customerList;
+    public List<InvoiceResponse>  invoiceList;
+
     public static void createInstance(ApiProvider provider) {
         if (instance == null) {
             instance = new ApiServiceManager(provider);

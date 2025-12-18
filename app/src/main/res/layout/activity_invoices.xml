@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:ignore="UselessParent"
+        android:layout_above="@id/bottomNavigationView"
     >
 
         <LinearLayout
@@ -267,28 +268,31 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <GridLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_gravity="center"
+                android:layout_gravity="center_horizontal"
             >
-            <Button
+                <Button
                     android:id="@+id/btnSave"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Create Invoice"
+                    android:layout_gravity="center_horizontal"
                     style="@style/Widget.Material3.Button"
                 />
-            <Button
+                <Button
                     android:id="@+id/btnSend"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Send Invoice"
+                    android:layout_gravity="center_horizontal"
                     style="@style/Widget.Material3.Button"
                 />
             </GridLayout>
         </LinearLayout>
     </ScrollView>
+
     <include
         android:id="@+id/bottomNavigationView"
         layout="@layout/view_bottom_bar"
