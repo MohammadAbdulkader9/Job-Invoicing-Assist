@@ -58,34 +58,17 @@ public class WorkPlanActivity extends AppCompatActivity {
         workLocationEt = findViewById(R.id.inputJobLocation);
         btnCreate = findViewById(R.id.btnCreate);
         btnCancel = findViewById(R.id.btnCancel);
-        Intent intent = getIntent();
-        if (intent != null) {
-            boolean fromLoadTicket = intent.getBooleanExtra("fromLoadTicket", false);
-            if (fromLoadTicket) {
-                LoadTicket ticket = (LoadTicket) intent.getSerializableExtra("loadTicket");
-                if (ticket != null) {
-                    clientNameEt.setText(ticket.customer);
-                    workTitleEt.setText(ticket.projectReference);
-                    workDescriptionEt.setText(ticket.freeText);
-                    workLocationEt.setText(ticket.targetName);
+        if (getIntent() != null) {
+            String clientName = getIntent().getStringExtra("clientName");
+            String workTitle = getIntent().getStringExtra("workTitle");
+            String workDescription = getIntent().getStringExtra("workDescription");
+            String workLocation = getIntent().getStringExtra("workLocation");
 
-                    // Optional: pre-fill weight and material if you want them saved in WorkPlanDetails
-                    // We'll handle that in Step 3
-                }
-            } else {
-                // Existing code to handle normal intent extras
-                String clientName = intent.getStringExtra("clientName");
-                String workTitle = intent.getStringExtra("workTitle");
-                String workDescription = intent.getStringExtra("workDescription");
-                String workLocation = intent.getStringExtra("workLocation");
-
-                if (clientName != null) clientNameEt.setText(clientName);
-                if (workTitle != null) workTitleEt.setText(workTitle);
-                if (workDescription != null) workDescriptionEt.setText(workDescription);
-                if (workLocation != null) workLocationEt.setText(workLocation);
-            }
+            if (clientName != null) clientNameEt.setText(clientName);
+            if (workTitle != null) workTitleEt.setText(workTitle);
+            if (workDescription != null) workDescriptionEt.setText(workDescription);
+            if (workLocation != null) workLocationEt.setText(workLocation);
         }
-
 
         // Apply padding for system bars (status bar / navigation bar)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.workplan), (v, insets) -> {
@@ -161,12 +144,6 @@ public class WorkPlanActivity extends AppCompatActivity {
                     Toast.makeText(this, "Work Plan Created Successfully!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(WorkPlanActivity.this, WorkPlanDetailsActivity.class);
                     intent.putExtra("WORK_PLAN_ID", doc.getId());
-                    LoadTicket ticket = (LoadTicket) getIntent().getSerializableExtra("loadTicket");
-                    if (ticket != null) {
-                        intent.putExtra("loadTicket", ticket);
-                        intent.putExtra("fromLoadTicket", true);
-                    }
-
                     startActivity(intent);
                     finish();
                 })
