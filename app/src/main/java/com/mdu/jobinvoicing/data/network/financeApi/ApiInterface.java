@@ -28,6 +28,8 @@ public interface ApiInterface {
         ApiCallback<InvoiceResponse> callback
     );
 
+    public void sendInvoiceById(String id, ApiCallback<InvoiceResponse> callback);
+
     // Customer API
     public void getCustomerById(
         String id,

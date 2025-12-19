@@ -10,11 +10,13 @@ __pycache__/
 # Distribution / packaging
 .Python
 build/
+bin/
 develop-eggs/
 dist/
 downloads/
 eggs/
 .eggs/
+include/
 lib/
 lib64/
 parts/
@@ -215,3 +217,5 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+pyvenv.cfg
