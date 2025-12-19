@@ -78,9 +78,6 @@ public class TicketListActivity extends AppCompatActivity {
             intent.putExtra("workTitle", ticket.projectReference);
             intent.putExtra("workDescription", ticket.freeText);
             intent.putExtra("workLocation", ticket.targetName);
-            intent.putExtra("fromLoadTicket", true); // flag
-            intent.putExtra("loadTicket", ticket); // LoadTicket must implement Serializable
-
             startActivity(intent);
         });
 

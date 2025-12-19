@@ -68,7 +68,6 @@ public class WorkPlanActivity extends AppCompatActivity {
             if (workLocation != null) workLocationEt.setText(workLocation);
         }
 
-
         // Apply padding for system bars (status bar / navigation bar)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.workplan), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
