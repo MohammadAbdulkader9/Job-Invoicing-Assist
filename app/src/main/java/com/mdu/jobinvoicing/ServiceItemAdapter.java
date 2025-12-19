@@ -22,8 +22,9 @@ import java.util.Locale;
 public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.ServiceItemViewHolder> {
 
     private List<ServiceItem> serviceItems;
-    private OnDeleteClickListener onDeleteClickListener;
+    private final OnDeleteClickListener onDeleteClickListener;
     private final String workPlanId;
+    private final String operatorId;
     private FirebaseFirestore db;
     private String userId;
 
@@ -31,9 +32,10 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
         void onDeleteClick(ServiceItem serviceItem);
     }
 
-    public ServiceItemAdapter(List<ServiceItem> serviceItems, String workPlanId, OnDeleteClickListener onDeleteClickListener) {
+    public ServiceItemAdapter(List<ServiceItem> serviceItems, String workPlanId, String operatorId, OnDeleteClickListener onDeleteClickListener) {
         this.serviceItems = serviceItems;
         this.workPlanId = workPlanId;
+        this.operatorId = operatorId;
         this.onDeleteClickListener = onDeleteClickListener;
         this.db = FirebaseFirestore.getInstance();
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
@@ -51,9 +53,11 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
     @Override
     public void onBindViewHolder(@NonNull ServiceItemViewHolder holder, int position) {
         ServiceItem serviceItem = serviceItems.get(position);
+
         holder.serviceItemDescriptionTextView.setText("Service: " + serviceItem.getDescription());
-        holder.serviceItemCostTextView.setText("Fee: SEK " + String.format(Locale.getDefault(), "%.2f", serviceItem.getServiceFee()));
+        holder.serviceItemFeeTextView.setText("Fee: SEK " + String.format(Locale.getDefault(), "%.2f", serviceItem.getServiceFee()));
         holder.serviceItemNotesTextView.setText("Notes: " + serviceItem.getNotes());
+
         holder.deleteButton.setOnClickListener(v -> {
             new AlertDialog.Builder(holder.itemView.getContext())
                     .setTitle("Delete Service Item")
@@ -79,34 +83,33 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
         builder.setView(dialogView);
 
         final TextInputEditText editServiceItemDescription = dialogView.findViewById(R.id.editServiceItemDescription);
-        final TextInputEditText editServiceItemCost = dialogView.findViewById(R.id.editServiceItemCost);
+        final TextInputEditText editServiceItemFee = dialogView.findViewById(R.id.editServiceItemCost);
         final TextInputEditText editServiceItemNotes = dialogView.findViewById(R.id.editServiceItemNotes);
 
         editServiceItemDescription.setText(serviceItem.getDescription());
-        editServiceItemCost.setText(String.valueOf(serviceItem.getServiceFee()));
+        editServiceItemFee.setText(String.valueOf(serviceItem.getServiceFee()));
         editServiceItemNotes.setText(serviceItem.getNotes());
 
         builder.setPositiveButton("Save", (dialog, which) -> {
             String description = editServiceItemDescription.getText().toString();
-            double cost = Double.parseDouble(editServiceItemCost.getText().toString());
+            String fee = editServiceItemFee.getText().toString();
             String notes = editServiceItemNotes.getText().toString();
 
             serviceItem.setDescription(description);
-            serviceItem.setServiceFee(cost);
+            serviceItem.setServiceFee(Double.parseDouble(fee));
             serviceItem.setNotes(notes);
 
             updateServiceItemInFirebase(serviceItem);
-
         });
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
     private void updateServiceItemInFirebase(ServiceItem serviceItem) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users").document(userId).collection("workplans").document(workPlanId)
+        db.collection("users").document(userId).collection("operators").document(operatorId).collection("workplans").document(workPlanId)
                 .collection("service_items").document(serviceItem.getId())
                 .update(
                         "description", serviceItem.getDescription(),
@@ -128,14 +131,15 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
         return serviceItems.size();
     }
 
-    public void addServiceItem(ServiceItem serviceItem) {
-        serviceItems.add(serviceItem);
-        notifyItemInserted(serviceItems.size() - 1);
+    public void setServiceItems(List<ServiceItem> serviceItems) {
+        this.serviceItems = serviceItems;
+        notifyDataSetChanged();
     }
+
 
     static class ServiceItemViewHolder extends RecyclerView.ViewHolder {
         TextView serviceItemDescriptionTextView;
-        TextView serviceItemCostTextView;
+        TextView serviceItemFeeTextView;
         TextView serviceItemNotesTextView;
         ImageButton deleteButton;
         ImageButton editButton;
@@ -143,7 +147,7 @@ public class ServiceItemAdapter extends RecyclerView.Adapter<ServiceItemAdapter.
         public ServiceItemViewHolder(@NonNull View itemView) {
             super(itemView);
             serviceItemDescriptionTextView = itemView.findViewById(R.id.serviceItemDescriptionTextView);
-            serviceItemCostTextView = itemView.findViewById(R.id.serviceItemCostTextView);
+            serviceItemFeeTextView = itemView.findViewById(R.id.serviceItemCostTextView);
             serviceItemNotesTextView = itemView.findViewById(R.id.serviceItemNotesTextView);
             deleteButton = itemView.findViewById(R.id.delete_button);
             editButton = itemView.findViewById(R.id.edit_button);

@@ -1,7 +1,7 @@
 package com.mdu.jobinvoicing;
 
-import static com.google.firebase.firestore.FieldValue.*;
-import static com.google.firebase.firestore.FirebaseFirestore.*;
+import static com.google.firebase.firestore.FieldValue.serverTimestamp;
+import static com.google.firebase.firestore.FirebaseFirestore.getInstance;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,18 +9,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.mdu.jobinvoicing.data.local.entities.WorkPlanStatus;
 
 import java.util.HashMap;
@@ -33,7 +32,6 @@ public class WorkPlanActivity extends AppCompatActivity {
     // ===============================
     private EditText clientNameEt, workTitleEt, workDescriptionEt, workLocationEt;
     private MaterialButton btnCreate, btnCancel;
-    private ImageView backBtn;
     private NetworkHelper networkHelper;
     private TextView statusText;
     private ImageView statusDot;
@@ -113,7 +111,6 @@ public class WorkPlanActivity extends AppCompatActivity {
         String workLocation = workLocationEt.getText().toString().trim();
 
 
-
         // ===============================
         // Validate required fields
         // ===============================
@@ -137,17 +134,37 @@ public class WorkPlanActivity extends AppCompatActivity {
         // ===============================
         // Save to Firestore
         // ===============================
-        Task<DocumentReference> workplans = getInstance()
-                .collection("users").document(userId).collection("workplans")
-                .add(workplan)
-                .addOnSuccessListener(doc -> {
-                    Toast.makeText(this, "Work Plan Created Successfully!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(WorkPlanActivity.this, WorkPlanDetailsActivity.class);
-                    intent.putExtra("WORK_PLAN_ID", doc.getId());
-                    startActivity(intent);
-                    finish();
-                })
-                .addOnFailureListener(e -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show());
+        getInstance().collection("users").document(userId)
+                .collection("operators")
+                .whereEqualTo("isActive", true)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String operatorId = document.getId();
+                            getInstance()
+                                    .collection("users").document(userId)
+                                    .collection("operators").document(operatorId)
+                                    .collection("workplans")
+                                    .add(workplan)
+                                    .addOnSuccessListener(doc -> {
+                                        Toast.makeText(this, "Work Plan Created Successfully!", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(WorkPlanActivity.this, WorkPlanDetailsActivity.class);
+                                        intent.putExtra("WORK_PLAN_ID", doc.getId());
+                                        LoadTicket ticket = (LoadTicket) getIntent().getSerializableExtra("loadTicket");
+                                        if (ticket != null) {
+                                            intent.putExtra("loadTicket", ticket);
+                                            intent.putExtra("fromLoadTicket", true);
+                                        }
+                                        startActivity(intent);
+                                        finish();
+                                    })
+                                    .addOnFailureListener(e -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show());
+                        }
+                    } else {
+                        Toast.makeText(WorkPlanActivity.this, "No active operator found", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     // ===============================

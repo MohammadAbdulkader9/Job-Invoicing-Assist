@@ -86,17 +86,35 @@ public class WorkPlanAdapter extends RecyclerView.Adapter<WorkPlanAdapter.WorkPl
                     .setPositiveButton("Yes", (d, which) -> {
                         int actualPosition = holder.getAdapterPosition();
                         if (actualPosition != RecyclerView.NO_POSITION) {
-                            String workPlanId = workPlans.get(actualPosition).id;
-                            db.collection("users").document(userId).collection("workplans").document(workPlanId)
-                                .delete()
-                                .addOnSuccessListener(aVoid -> {
-                                    workPlans.remove(actualPosition);
-                                    notifyItemRemoved(actualPosition);
-                                    Toast.makeText(context, "Work plan deleted", Toast.LENGTH_SHORT).show();
-                                })
-                                .addOnFailureListener(e -> {
-                                    Toast.makeText(context, "Failed to delete work plan: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                });
+                            WorkPlan workPlanToDelete = workPlans.get(actualPosition);
+                            String workPlanId = workPlanToDelete.id;
+                            db.collection("users").document(userId)
+                                    .collection("operators")
+                                    .whereEqualTo("isActive", true)
+                                    .limit(1)
+                                    .get()
+                                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                                        if (!queryDocumentSnapshots.isEmpty()) {
+                                            String operatorId = queryDocumentSnapshots.getDocuments().get(0).getId();
+                                            db.collection("users").document(userId)
+                                                    .collection("operators").document(operatorId)
+                                                    .collection("workplans").document(workPlanId)
+                                                    .delete()
+                                                    .addOnSuccessListener(aVoid -> {
+                                                        workPlans.remove(workPlanToDelete);
+                                                        notifyDataSetChanged();
+                                                        Toast.makeText(context, "Work plan deleted", Toast.LENGTH_SHORT).show();
+                                                    })
+                                                    .addOnFailureListener(e -> {
+                                                        Toast.makeText(context, "Failed to delete work plan: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    });
+                                        } else {
+                                            Toast.makeText(context, "No active operator found to delete from.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(context, "Failed to get active operator: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
                         }
                     })
                     .setNegativeButton("No", (d, which) -> d.dismiss())

@@ -26,6 +26,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.mdu.jobinvoicing.data.network.financeApi.ApiServiceManager;
 
 public class HomePage extends AppCompatActivity {
@@ -34,6 +36,7 @@ public class HomePage extends AppCompatActivity {
     private TextView statusText;
     private ImageView statusDot;
     private NetworkHelper networkHelper;
+    private TextView greetingTextView;
 
     // Middle cards
     private MaterialCardView cardCreateWorkPlan, cardViewJobs, cardTimeTracking;
@@ -62,6 +65,7 @@ public class HomePage extends AppCompatActivity {
     };
 
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
     private static final String TAG = "HomePage";
 
 
@@ -72,6 +76,7 @@ public class HomePage extends AppCompatActivity {
         setContentView(R.layout.activity_homepage);
 
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         // Init ApiService Manager, This should only be done ones through out the app
         // Refer to README.md under FinanceApi for examples of how to make api calls
@@ -92,6 +97,7 @@ public class HomePage extends AppCompatActivity {
         }
 
         // ----- Find views -----
+        greetingTextView = findViewById(R.id.greetingTextView);
         cardCreateWorkPlan = findViewById(R.id.cardCreateWorkPlan);
         cardViewJobs       = findViewById(R.id.cardViewWorkPlans);
         //cardTimeTracking   = findViewById(R.id.cardTimeTracking);
@@ -153,6 +159,39 @@ public class HomePage extends AppCompatActivity {
             return false;
         });
     }
+
+    private void fetchOperatorName() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            Log.d(TAG, "Fetching operator for user ID: " + userId);
+            db.collection("users").document(userId)
+                    .collection("operators")
+                    .whereEqualTo("isActive", true)
+                    .limit(1)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            if (task.getResult().isEmpty()) {
+                                Log.d(TAG, "No active operator found for user ID: " + userId);
+                            } else {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    String fullName = document.getString("fullName");
+                                    Log.d(TAG, "Found operator: " + fullName);
+                                    greetingTextView.setText("Hello, " + fullName);
+                                }
+                            }
+                        } else {
+                            greetingTextView.setText("Please create or select a profile");
+                            Log.w(TAG, "Error getting documents: ", task.getException());
+                        }
+                    });
+        } else {
+            greetingTextView.setText("Please create or select a profile");
+            Log.d(TAG, "Cannot fetch operator, user is not signed in.");
+        }
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -164,6 +203,8 @@ public class HomePage extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
             signInAnonymously();
+        } else {
+            fetchOperatorName();
         }
     }
 
@@ -173,7 +214,7 @@ public class HomePage extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInAnonymously:success");
-                        FirebaseUser user = mAuth.getCurrentUser();
+                        fetchOperatorName();
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInAnonymously:failure", task.getException());
