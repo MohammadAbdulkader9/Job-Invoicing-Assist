@@ -8,7 +8,6 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     tools:context=".WorkPlanDetailsActivity">
-
     <!-- Top bar -->
     <include
         android:id="@+id/topBar"
@@ -18,7 +17,7 @@
         />
 
     <!-- Middle section -->
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -31,94 +30,105 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="18dp"
+            android:paddingStart="28dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Client Name"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 android:textStyle="bold"/>
 
             <EditText
                 android:id="@+id/customerNameEditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
+                android:background="@drawable/edittext_bg"
                 android:layout_marginTop="8dp"
+                android:paddingStart="14dp"
                 android:inputType="textPersonName"
-                android:textSize="16sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Work Title"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 android:textStyle="bold"/>
 
             <EditText
                 android:id="@+id/workTitleEditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:paddingStart="14dp"
+                android:layout_height="60dp"
+                android:background="@drawable/edittext_bg"
                 android:layout_marginTop="8dp"
                 android:inputType="textPersonName"
-                android:textSize="16sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Work Description"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 android:textStyle="bold"/>
 
             <EditText
                 android:id="@+id/workDescriptionEditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:paddingStart="14dp"
+                android:layout_height="60dp"
+                android:background="@drawable/edittext_bg"
                 android:layout_marginTop="8dp"
                 android:gravity="top"
                 android:inputType="textMultiLine"
                 android:minLines="3"
-                android:textSize="16sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Work Location"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 android:textStyle="bold"/>
 
             <EditText
                 android:id="@+id/addressEditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:paddingStart="14dp"
+                android:layout_height="60dp"
+                android:background="@drawable/edittext_bg"
                 android:layout_marginTop="8dp"
                 android:inputType="textPostalAddress"
-                android:textSize="16sp"/>
+                android:textSize="20sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Date"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 android:textStyle="bold"/>
             <EditText
                 android:id="@+id/dateEditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:paddingStart="14dp"
+                android:layout_height="60dp"
+                android:background="@drawable/edittext_bg"
                 android:layout_marginTop="8dp"
                 android:clickable="true"
                 android:focusable="false"
-                android:textSize="16sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Status"
-                android:textSize="18sp"
+                android:textSize="24sp"
                 android:textStyle="bold"/>
 
             <RadioGroup
@@ -137,12 +147,16 @@
                     android:button="@null"
                     android:gravity="center"
                     android:padding="12dp"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
                     android:text="Open"
                     android:textColor="@color/radio_button_text_color_selector" />
 
                 <RadioButton
                     android:id="@+id/statusInProgress"
                     android:layout_width="0dp"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/radio_button_middle_selector"
@@ -157,6 +171,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
                     android:background="@drawable/radio_button_right_selector"
                     android:button="@null"
                     android:gravity="center"
@@ -171,7 +187,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/button_rectangle"
-                android:text="Save Changes"
+                android:text="@string/save_changes"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
 
@@ -282,7 +298,10 @@
 
                     <Button
                         android:id="@+id/importFromTimerButton"
-                        style="?attr/materialButtonOutlinedStyle"
+                        android:background="@drawable/rounded_black_button"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        app:backgroundTint="@null"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
@@ -293,6 +312,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
+                        android:background="@drawable/rounded_white_border"
+                        android:textColor="#000"
+                        android:textSize="18sp"
+                        app:backgroundTint="@null"
                         android:text="Add Time Entry" />
                 </LinearLayout>
 
@@ -376,6 +399,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
+                    android:background="@drawable/rounded_black_button"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    app:backgroundTint="@null"
                     android:text="Add Material" />
 
             </LinearLayout>
@@ -443,6 +470,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
+                    android:background="@drawable/rounded_black_button"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    app:backgroundTint="@null"
                     android:text="Add Service" />
 
             </LinearLayout>
@@ -518,6 +549,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Add Distance"
+                    android:background="@drawable/rounded_black_button"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    app:backgroundTint="@null"
                     android:layout_gravity="end"/>
 
             </LinearLayout>
@@ -593,12 +628,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Add Weight"
+                    android:background="@drawable/rounded_black_button"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    app:backgroundTint="@null"
                     android:layout_gravity="end"/>
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,6 +19,7 @@
     <string name="end_time">End Time</string>
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
+    <string name="save_changes">Save Changes</string>
     <string-array name="Billing_List">
         <item>Hourly</item>
         <item>Distance</item>

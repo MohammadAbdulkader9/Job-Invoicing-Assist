@@ -5,6 +5,7 @@ import static com.google.firebase.firestore.FirebaseFirestore.*;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,7 +33,7 @@ public class WorkPlanActivity extends AppCompatActivity {
     // Views
     // ===============================
     private EditText clientNameEt, workTitleEt, workDescriptionEt, workLocationEt;
-    private MaterialButton btnCreate, btnCancel;
+    private Button btnCreate, btnCancel;
     private ImageView backBtn;
     private NetworkHelper networkHelper;
     private TextView statusText;

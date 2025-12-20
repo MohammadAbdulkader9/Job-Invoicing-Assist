@@ -10,7 +10,7 @@
     app:cardElevation="2dp"
     app:cardCornerRadius="12dp"
     app:cardBackgroundColor="@color/white"
-    app:strokeColor="#E0E0E0"
+    app:strokeColor="@color/black"
     app:strokeWidth="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +24,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Client Name"
-            android:textSize="18sp"
+            android:textSize="28sp"
             android:textStyle="bold"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,13 +35,14 @@
         <!-- Delete Icon -->
         <ImageView
             android:id="@+id/delete_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_baseline_delete_24"
-            app:tint="#757575"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_delete_red"
+            app:tint="#F44336"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/button_outline"
             android:clickable="true"
             android:focusable="true"
+            android:layout_marginStart="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,7 +52,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Work Title"
-            android:textSize="16sp"
+            android:textSize="22sp"
             android:textColor="#424242"
             android:layout_marginTop="4dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -64,7 +65,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Work Location"
-            android:textSize="14sp"
+            android:textSize="18sp"
             android:textColor="#757575"
             android:layout_marginTop="2dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -88,7 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="01/01/2023"
-            android:textSize="12sp"
+            android:textSize="16sp"
             android:textColor="#757575"
             android:layout_marginTop="12dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -111,15 +112,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="IN PROGRESS"
-                android:textSize="12sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
                 android:textColor="@color/blue"
                 android:layout_marginEnd="8dp"/>
 
             <ImageView
                 android:id="@+id/work_status_icon"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
                 android:src="@drawable/jobbs_list_status_in_progress" />
         </LinearLayout>
 
