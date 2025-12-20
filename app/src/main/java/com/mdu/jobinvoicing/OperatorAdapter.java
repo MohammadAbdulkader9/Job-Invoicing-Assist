@@ -1,5 +1,7 @@
 package com.mdu.jobinvoicing;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +75,13 @@ public class OperatorAdapter extends RecyclerView.Adapter<OperatorAdapter.Operat
         holder.btnEdit.setOnClickListener(v -> listener.onEdit(operator));
 
         holder.btnDelete.setOnClickListener(v -> listener.onDelete(operator));
+
+        holder.itemView.setOnClickListener(v -> {
+            Context context = v.getContext();
+            Intent intent = new Intent(context, ViewWorkPlans.class);
+            intent.putExtra("operatorId", operator.id);
+            context.startActivity(intent);
+        });
     }
 
     @Override

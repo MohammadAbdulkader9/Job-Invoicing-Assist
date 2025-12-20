@@ -24,6 +24,7 @@ public class DistanceAdapter extends RecyclerView.Adapter<DistanceAdapter.Distan
     private List<Distance> distances;
     private final OnDeleteClickListener onDeleteClickListener;
     private final String workPlanId;
+    private final String operatorId;
     private FirebaseFirestore db;
     private String userId;
 
@@ -31,9 +32,10 @@ public class DistanceAdapter extends RecyclerView.Adapter<DistanceAdapter.Distan
         void onDeleteClick(Distance distance);
     }
 
-    public DistanceAdapter(List<Distance> distances, String workPlanId, OnDeleteClickListener onDeleteClickListener) {
+    public DistanceAdapter(List<Distance> distances, String workPlanId, String operatorId, OnDeleteClickListener onDeleteClickListener) {
         this.distances = distances;
         this.workPlanId = workPlanId;
+        this.operatorId = operatorId;
         this.onDeleteClickListener = onDeleteClickListener;
         this.db = FirebaseFirestore.getInstance();
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
@@ -113,7 +115,9 @@ public class DistanceAdapter extends RecyclerView.Adapter<DistanceAdapter.Distan
 
 private void updateDistanceInFirebase(Distance distance) {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    db.collection("users").document(userId).collection("workplans").document(workPlanId)
+    db.collection("users").document(userId)
+            .collection("operators").document(operatorId)
+            .collection("workplans").document(workPlanId)
             .collection("distances").document(distance.getId())
             .update(
                     "distance", distance.getDistance(),
