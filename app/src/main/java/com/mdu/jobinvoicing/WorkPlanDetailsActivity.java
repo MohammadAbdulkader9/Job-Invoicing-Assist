@@ -245,6 +245,8 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
                         setupRecyclerViews(); //Re-initialize adapters with the work plan ID
                         loadWorkPlanData(currentWorkPlanId);
                         fetchSubCollections(currentWorkPlanId);
+                        handleLoadTicketIfNeeded();
+
                     } else {
                         Log.e(TAG, "No active operator found for user: " + userId);
                         Toast.makeText(this, "No active operator found.", Toast.LENGTH_LONG).show();
@@ -314,8 +316,8 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         weightsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         weightAdapter = new WeightAdapter(weightList, currentWorkPlanId, operatorId, this);
         weightsRecyclerView.setAdapter(weightAdapter);
-    }
 
+    }
     @Override
     public void onDeleteClick(TimeEntry timeEntry) {
         deleteTimeEntry(timeEntry);
@@ -628,6 +630,25 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
             materialNotesEditText.setText("");
         }).addOnFailureListener(e -> Toast.makeText(this, "Error adding material", Toast.LENGTH_SHORT).show());
         fetchSubCollections(currentWorkPlanId);
+    }
+    private void handleLoadTicketIfNeeded() {
+        Intent intent = getIntent();
+        boolean fromLoadTicket = intent.getBooleanExtra("fromLoadTicket", false);
+
+        if (!fromLoadTicket) return;  // Not coming from a ticket
+
+        LoadTicket ticket = (LoadTicket) intent.getSerializableExtra("loadTicket");
+        if (ticket == null || ticket.weight == null || ticket.weight.isEmpty()) return;
+
+        // Set material fields
+        materialNameEditText.setText(ticket.materialNames);
+        materialQuantityEditText.setText(ticket.weight);
+        materialUnitEditText.setText("kg");
+        materialUnitPriceEditText.setText("1");
+        materialNotesEditText.setText(ticket.freeText);
+
+        // ✅ Directly call addMaterial() instead of clicking button
+        addMaterial();
     }
 
     private void addServiceItem() {
