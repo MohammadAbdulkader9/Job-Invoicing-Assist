@@ -36,17 +36,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- TITLE -->
-            <TextView
-                android:id="@+id/tvTitle"
-                android:text="@string/log_new_job"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                android:paddingTop="10dp"
-                android:paddingBottom="24dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
 
             <!-- FORM CARD -->
             <androidx.constraintlayout.widget.ConstraintLayout

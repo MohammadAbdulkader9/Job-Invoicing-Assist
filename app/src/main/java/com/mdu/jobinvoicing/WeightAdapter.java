@@ -2,6 +2,7 @@ package com.mdu.jobinvoicing;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,16 +64,22 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
         holder.weightNotesTextView.setText("Notes: " + weight.getNotes());
 
         holder.deleteButton.setOnClickListener(v -> {
-            new AlertDialog.Builder(holder.itemView.getContext())
+            AlertDialog dialog = new AlertDialog.Builder(holder.itemView.getContext())
                     .setTitle("Delete Weight")
                     .setMessage("Are you sure you want to delete this weight?")
-                    .setPositiveButton("Delete", (dialog, which) -> {
+                    .setPositiveButton("Delete", (d, which) -> {
                         if (onDeleteClickListener != null) {
                             onDeleteClickListener.onDeleteClick(weight);
                         }
                     })
                     .setNegativeButton("Cancel", null)
                     .show();
+            // Set button text colors AFTER show()
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                    .setTextColor(Color.BLACK);
+
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                    .setTextColor(Color.BLACK);
         });
 
         holder.editButton.setOnClickListener(v -> {
@@ -114,6 +121,12 @@ public class WeightAdapter extends RecyclerView.Adapter<WeightAdapter.WeightView
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
         AlertDialog dialog = builder.create();
         dialog.show();
+        // ✅ Set button text color AFTER show()
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                .setTextColor(Color.BLACK);
+
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                .setTextColor(Color.BLACK);
     }
 
     private void updateWeightInFirebase(Weight weight) {

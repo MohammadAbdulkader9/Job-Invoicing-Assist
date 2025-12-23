@@ -34,7 +34,6 @@ public class WorkPlanActivity extends AppCompatActivity {
     private EditText clientNameEt, workTitleEt, workDescriptionEt, workLocationEt;
     private Button btnCreate, btnCancel;
     private ImageView backBtn;
-    private MaterialButton btnCreate, btnCancel;
     private NetworkHelper networkHelper;
     private TextView statusText;
     private ImageView statusDot;

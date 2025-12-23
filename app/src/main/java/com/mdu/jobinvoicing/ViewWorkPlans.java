@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -227,7 +228,14 @@ public class ViewWorkPlans extends AppCompatActivity {
     }
 
     private void showFilterMenu(View v) {
-        PopupMenu popup = new PopupMenu(this, v);
+        PopupMenu popup = new PopupMenu(
+                this,
+                v,
+                Gravity.END,
+                0,
+                R.style.FilterPopupMenuStyle
+        );
+
         popup.getMenuInflater().inflate(R.menu.filter_menu, popup.getMenu());
 
         popup.setOnMenuItemClickListener(item -> {

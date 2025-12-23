@@ -15,5 +15,9 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+    <style name="FilterPopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/filter_popup_bg</item>
+    </style>
+
 
 </resources>
