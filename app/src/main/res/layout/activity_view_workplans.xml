@@ -53,17 +53,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Search"
+                    android:textSize="20sp"
                     android:drawableStart="@android:drawable/ic_menu_search"
                     android:drawablePadding="12dp"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
                 android:id="@+id/filterButton"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="8dp"
+                android:tint="@color/black"
                 android:src="@drawable/ic_filter_list"
-                android:contentDescription="Filter"/>
+                android:contentDescription="Filter"
+                tools:ignore="UseAppTint" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView

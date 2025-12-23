@@ -1,6 +1,7 @@
 package com.mdu.jobinvoicing;
 
 import android.app.AlertDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -318,16 +319,28 @@ public class StopWatchTimerActivity extends AppCompatActivity {
     }
 
     private void showDeleteConfirmationDialog(final int position) {
-        new AlertDialog.Builder(this)
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Confirm Delete")
-                .setMessage("Are you sure you want to delete '" + timers.get(position).getName() + "'?")
-                .setPositiveButton("Delete", (dialog, which) -> {
+                .setMessage("Are you sure you want to delete '"
+                        + timers.get(position).getName() + "'?")
+                .setPositiveButton("Delete", (d, which) -> {
                     executor.execute(() -> stopWatchTimerItemDao.delete(timers.get(position)));
-                    Toast.makeText(this, "Entry deleted.", Toast.LENGTH_SHORT).show();
+                    runOnUiThread(() ->
+                            Toast.makeText(this, "Entry deleted.", Toast.LENGTH_SHORT).show()
+                    );
                 })
                 .setNegativeButton("Cancel", null)
-                .show();
+                .show();   // 👈 dialog is created HERE
+
+        // ✅ NOW dialog exists → no red error
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                .setTextColor(Color.BLACK);
+
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                .setTextColor(Color.BLACK);
     }
+
 
     // --- RecyclerView Adapter --- //
 

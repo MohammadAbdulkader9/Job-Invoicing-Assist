@@ -2,6 +2,7 @@ package com.mdu.jobinvoicing;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,18 +62,26 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
         holder.timeEntryTotalTextView.setText("Total: SEK " + String.format(Locale.getDefault(), "%.2f", timeEntry.getTotal()));
         holder.timeEntryNotesTextView.setText("Notes: " + timeEntry.getNotes());
         holder.deleteButton.setOnClickListener(v -> {
-            new AlertDialog.Builder(holder.itemView.getContext())
+            AlertDialog dialog = new AlertDialog.Builder(holder.itemView.getContext())
                     .setTitle("Delete Time Entry")
                     .setMessage("Are you sure you want to delete this time entry?")
-                    .setPositiveButton("Delete", (dialog, which) -> {
+                    .setPositiveButton("Delete", (d, which) -> {
                         if (onDeleteClickListener != null) {
                             onDeleteClickListener.onDeleteClick(timeEntry);
                         }
                     })
                     .setNegativeButton("Cancel", null)
-                    .show();
-        });
+                    .create();
 
+            dialog.show();
+
+            // Set button text colors AFTER show()
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                    .setTextColor(Color.BLACK);
+
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                    .setTextColor(Color.BLACK);
+        });
         holder.editButton.setOnClickListener(v -> {
             showEditTimeEntryDialog(timeEntry, holder.itemView.getContext());
         });
@@ -109,6 +118,12 @@ public class TimeEntryAdapter extends RecyclerView.Adapter<TimeEntryAdapter.Time
 
         AlertDialog dialog = builder.create();
         dialog.show();
+        // ✅ Set button text color AFTER show()
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                .setTextColor(Color.BLACK);
+
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                .setTextColor(Color.BLACK);
     }
 
     private void updateTimeEntryInFirebase(TimeEntry timeEntry) {

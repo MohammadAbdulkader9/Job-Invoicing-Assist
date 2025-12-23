@@ -8,8 +8,11 @@
     android:layout_marginTop="4dp"
     android:layout_marginEnd="8dp"
     android:layout_marginBottom="4dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@color/white"
+    app:strokeColor="@color/black"
+    app:strokeWidth="1dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -27,7 +30,7 @@
                 android:id="@+id/serviceItemDescriptionTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
                 tools:text="Service: Plumbing" />
 
@@ -36,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 tools:text="Fee: $200" />
 
             <TextView
@@ -44,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 tools:text="Notes: Fixed the leaky faucet." />
 
         </LinearLayout>
@@ -54,7 +57,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/ic_baseline_edit_24"
-            android:contentDescription="Edit Service Entry"
+            android:contentDescription="Edit service Entry"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_toStartOf="@id/delete_button"
             android:layout_centerVertical="true" />
@@ -63,8 +66,9 @@
             android:id="@+id/delete_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@drawable/ic_baseline_delete_24"
-            android:contentDescription="Delete Service Entry"
+            android:src="@drawable/ic_delete_red"
+            app:tint="#F44336"
+            android:contentDescription="Delete service Entry"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true" />

@@ -3,6 +3,7 @@ package com.mdu.jobinvoicing;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -120,8 +121,8 @@ public class WorkPlanAdapter extends RecyclerView.Adapter<WorkPlanAdapter.WorkPl
                     .setNegativeButton("No", (d, which) -> d.dismiss())
                     .show();
             
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(android.graphics.Color.GREEN);
-            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(android.graphics.Color.RED);
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK);
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
         });
 
 
