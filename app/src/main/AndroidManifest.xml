@@ -30,12 +30,15 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
-        <activity android:name=".OperatorProfile"/>
+        <activity android:name=".OperatorProfile"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".StopWatchTimerActivity" />
         <activity android:name=".WorkPlanActivity"/>
-        <activity android:name=".Invoices"/>
+        <activity android:name=".Invoices"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".ViewWorkPlans"/>
-        <activity android:name=".WorkPlanDetailsActivity"/>
+        <activity android:name=".WorkPlanDetailsActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".TicketListActivity" >
 
 
