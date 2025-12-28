@@ -25,7 +25,7 @@
         <TextView
             android:id="@+id/tvTitle"
             android:text="Operator Profile"
-            android:textSize="22sp"
+            android:textSize="28sp"
             android:textStyle="bold"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
@@ -35,7 +35,7 @@
         <TextView
             android:id="@+id/tvSubtitle"
             android:text="Manage your personal information"
-            android:textSize="14sp"
+            android:textSize="18sp"
             android:textColor="#777"
             android:paddingBottom="20dp"
             android:layout_width="wrap_content"
@@ -53,6 +53,7 @@
             <TextView
                 android:id="@+id/lblFullName"
                 android:text="Full Name *"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -62,6 +63,8 @@
             <EditText
                 android:id="@+id/etFullName"
                 android:hint="Enter your full name"
+
+                android:textSize="20sp"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="6dp"
@@ -75,6 +78,7 @@
             <TextView
                 android:id="@+id/lblRole"
                 android:text="Role *"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -86,6 +90,8 @@
                 android:id="@+id/etRole"
                 android:hint="Operator"
                 android:enabled="false"
+
+                android:textSize="20sp"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="6dp"
@@ -111,6 +117,7 @@
                 android:id="@+id/lblEmail"
                 android:text="Email Address *"
                 android:textStyle="bold"
+                android:textSize="24sp"
                 android:layout_marginTop="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -120,6 +127,8 @@
             <EditText
                 android:id="@+id/etEmail"
                 android:hint="Enter your email address"
+
+                android:textSize="20sp"
                 android:inputType="textEmailAddress"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
@@ -135,7 +144,7 @@
                 android:id="@+id/lblPhone"
                 android:text="Phone Number *"
                 android:textStyle="bold"
-
+                android:textSize="24sp"
                 android:layout_marginTop="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -145,6 +154,7 @@
             <EditText
                 android:id="@+id/etPhone"
 
+                android:textSize="20sp"
                 android:inputType="phone"
                 android:maxLength="13"
                 android:hint="+46 7XXXXXXXX"
@@ -172,22 +182,25 @@
                 <!-- CANCEL -->
                 <Button
                     android:id="@+id/btnCancel"
-                    android:text="Cancel"
-                    android:backgroundTint="#888888"
-                    android:textColor="@android:color/white"
-
                     android:layout_width="0dp"
-                    android:layout_height="50dp"
+                    android:layout_height="60dp"
+                    android:background="@drawable/rounded_white_border"
+                    android:text="@string/cancel"
+                    android:textColor="#000"
+                    android:textSize="26sp"
+                    app:backgroundTint="@null"
                     android:layout_weight="1" />
 
                 <!-- SAVE -->
                 <Button
                     android:id="@+id/btnSave"
-                    android:text="Create Profile"
-                    android:backgroundTint="#000000"
-                    android:textColor="@android:color/white"
                     android:layout_width="0dp"
-                    android:layout_height="50dp"
+                    android:layout_height="60dp"
+                    android:text="Create Profile"
+                    android:background="@drawable/rounded_black_button"
+                    android:textColor="@android:color/white"
+                    android:textSize="26sp"
+                    app:backgroundTint="@null"
                     android:layout_weight="1" />
             </LinearLayout>
 

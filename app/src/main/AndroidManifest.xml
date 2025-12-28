@@ -15,15 +15,19 @@
         android:theme="@style/Theme.JobInvoicingAssist"
         android:usesCleartextTraffic="true">
         <!-- ^^Needed for api test^^ -->
-
-        <!-- HomePage is now the launcher -->
+        <!-- Splash Screen -->
         <activity
-            android:name=".HomePage"
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <!-- HomePage is now the launcher -->
+        <activity
+            android:name=".HomePage"
+            android:exported="false">
         </activity>
 
         <!-- MainActivity is now just a regular activity, should be safe to remove -->
