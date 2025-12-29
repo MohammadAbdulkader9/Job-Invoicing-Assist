@@ -17,15 +17,57 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Created -->
         <TextView
-            android:id="@+id/tvCreated"
+            android:id="@+id/tvCustomer"
+            android:layout_width="wrap_content"
+            android:textColor="@color/blue"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_height="wrap_content"
+            android:text="Customer: NorthStone AG"
+            android:layout_marginTop="6dp" />
+
+        <TextView
+            android:id="@+id/tvProjectRef"
+            android:textColor="@color/blue"
+            android:textStyle="bold"
+            android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Created: 2025-01-18T11:47:59Z"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:text="Project Ref: PRJ-4821"
+             />
+
+        <!-- Divider -->
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey_500"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/tvMaterials"
+            android:layout_width="wrap_content"
+            android:textSize="16sp"
+            android:layout_height="wrap_content"
+            android:text="Materials: Limestone"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/tvWeight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Weight: 15800"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvOperator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="Operator: Carl Johnson"
+            android:layout_marginTop="8dp"/>
 
         <TextView
             android:id="@+id/tvTargetName"
@@ -43,21 +85,6 @@
             android:text="Creator Target: Loader B" />
 
         <TextView
-            android:id="@+id/tvOperator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="Operator: Carl Johnson" />
-
-        <TextView
-            android:id="@+id/tvWeight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Weight: 15800"
-            android:textSize="16sp" />
-
-        <TextView
             android:id="@+id/tvNotes"
             android:layout_width="wrap_content"
             android:textSize="16sp"
@@ -65,38 +92,15 @@
             android:text="Notes: Operator noted minor contamination"
             android:layout_marginTop="4dp" />
 
+        <!-- Created -->
         <TextView
-            android:id="@+id/tvMaterials"
+            android:id="@+id/tvCreated"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Created: 2025-01-18T11:47:59Z"
+            android:textColor="@color/black"
             android:textSize="16sp"
-            android:layout_height="wrap_content"
-            android:text="Materials: Limestone" />
-        <!-- Divider -->
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/grey_500"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/workLocationTextView"/>
-
-        <TextView
-            android:id="@+id/tvCustomer"
-            android:layout_width="wrap_content"
-            android:textColor="@color/blue"
-            android:textStyle="bold"
-            android:layout_height="wrap_content"
-            android:text="Customer: NorthStone AG"
-            android:layout_marginTop="6dp" />
-
-        <TextView
-            android:id="@+id/tvProjectRef"
-            android:textColor="@color/blue"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Project Ref: PRJ-4821"
-             />
+            android:layout_marginTop="12dp"/>
 
     </LinearLayout>
 

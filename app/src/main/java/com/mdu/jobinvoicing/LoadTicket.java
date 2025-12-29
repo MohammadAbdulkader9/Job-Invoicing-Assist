@@ -9,16 +9,17 @@ public class LoadTicket implements Serializable {
     public LoadTicket(String created, String targetName, String creatorTargetName,
                       String operator, String weight, String freeText, String materialNames,
                       String loadCount, String localId, String customer, String projectReference) {
-        this.created = created;
-        this.targetName = targetName;
-        this.creatorTargetName = creatorTargetName;
-        this.operator = operator;
-        this.weight = weight;
-        this.freeText = freeText;
-        this.materialNames = materialNames;
-        this.loadCount = loadCount;
-        this.localId = localId;
         this.customer = customer;
         this.projectReference = projectReference;
+        this.materialNames = materialNames;
+        this.weight = weight;
+        this.operator = operator;
+        this.targetName = targetName;
+        this.creatorTargetName = creatorTargetName;
+        this.freeText = freeText;
+        this.loadCount = loadCount;
+        this.localId = localId;
+        this.created = created;
+
     }
 }

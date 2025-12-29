@@ -20,6 +20,6 @@ public class SplashActivity extends AppCompatActivity {
             Intent intent = new Intent(SplashActivity.this, HomePage.class);
             startActivity(intent);
             finish();
-        }, 1500); // 2 seconds
+        }, 800);
     }
 }
