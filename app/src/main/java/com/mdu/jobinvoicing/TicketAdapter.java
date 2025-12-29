@@ -38,17 +38,14 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketView
     @Override
     public void onBindViewHolder(@NonNull TicketViewHolder holder, int position) {
         LoadTicket t = tickets.get(position);
-
-        holder.tvCreated.setText("Created: " + t.created);
-        holder.tvTargetName.setText("Target Name: " + t.targetName);
-
-        holder.tvOperator.setText("Operator: " + t.operator);
-        holder.tvWeight.setText("Weight: " + t.weight);
-        holder.tvNotes.setText("Notes: " + t.freeText);
-        holder.tvMaterials.setText("Materials: " + t.materialNames);
         holder.tvCustomer.setText("Customer: " + t.customer);
         holder.tvProject.setText("Project Ref: " + t.projectReference);
-
+        holder.tvMaterials.setText("Materials: " + t.materialNames);
+        holder.tvWeight.setText("Weight: " + t.weight);
+        holder.tvOperator.setText("Operator: " + t.operator);
+        holder.tvTargetName.setText("Target Name: " + t.targetName);
+        holder.tvNotes.setText("Notes: " + t.freeText);
+        holder.tvCreated.setText("Created: " + t.created);
         holder.itemView.setOnClickListener(v -> {
             if (listener != null && holder.getAdapterPosition() != RecyclerView.NO_POSITION) {
                 listener.onItemClick(tickets.get(holder.getAdapterPosition()));
