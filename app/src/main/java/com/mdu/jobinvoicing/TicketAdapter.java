@@ -1,6 +1,5 @@
 package com.mdu.jobinvoicing;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import java.util.List;
 public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketViewHolder> {
 
     private final List<LoadTicket> tickets;
-    private OnItemClickListener listener; // Listener interface
+    private OnItemClickListener listener;
 
     public TicketAdapter(List<LoadTicket> tickets) {
         this.tickets = tickets;
@@ -25,7 +24,6 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketView
         void onItemClick(LoadTicket ticket);
     }
 
-    // Method to set the listener
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
@@ -40,22 +38,14 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketView
     @Override
     public void onBindViewHolder(@NonNull TicketViewHolder holder, int position) {
         LoadTicket t = tickets.get(position);
-
-        holder.tvDetails.setText(
-                "Created: " + t.created + "\n" +
-                        "Target Name: " + t.targetName + "\n" +
-                        "Creator Target: " + t.creatorTargetName + "\n" +
-                        "Operator: " + t.operator + "\n" +
-                        "Weight: " + t.weight + "\n" +
-                        "Notes: " + t.freeText + "\n" +
-                        "Materials: " + t.materialNames + "\n" +
-                        "Load Count: " + t.loadCount + "\n" +
-                        "Local ID: " + t.localId + "\n" +
-                        "Customer: " + t.customer + "\n" +
-                        "Project Ref: " + t.projectReference
-        );
-
-        // Set click listener on the entire item
+        holder.tvCustomer.setText("Customer: " + t.customer);
+        holder.tvProject.setText("Project Ref: " + t.projectReference);
+        holder.tvMaterials.setText("Materials: " + t.materialNames);
+        holder.tvWeight.setText("Weight: " + t.weight);
+        holder.tvOperator.setText("Operator: " + t.operator);
+        holder.tvTargetName.setText("Target Name: " + t.targetName);
+        holder.tvNotes.setText("Notes: " + t.freeText);
+        holder.tvCreated.setText("Created: " + t.created);
         holder.itemView.setOnClickListener(v -> {
             if (listener != null && holder.getAdapterPosition() != RecyclerView.NO_POSITION) {
                 listener.onItemClick(tickets.get(holder.getAdapterPosition()));
@@ -69,11 +59,21 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketView
     }
 
     static class TicketViewHolder extends RecyclerView.ViewHolder {
-        TextView tvDetails;
 
-        public TicketViewHolder(@NonNull View itemView) {
+        TextView tvCreated, tvTargetName, tvTarget, tvOperator, tvWeight,
+                tvNotes, tvMaterials, tvCustomer, tvProject;
+
+        TicketViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvDetails = itemView.findViewById(R.id.tvTicketItem);
+            tvCreated = itemView.findViewById(R.id.tvCreated);
+            tvTargetName = itemView.findViewById(R.id.tvTargetName);
+            tvTarget = itemView.findViewById(R.id.tvTarget);
+            tvOperator = itemView.findViewById(R.id.tvOperator);
+            tvWeight = itemView.findViewById(R.id.tvWeight);
+            tvNotes = itemView.findViewById(R.id.tvNotes);
+            tvMaterials = itemView.findViewById(R.id.tvMaterials);
+            tvCustomer = itemView.findViewById(R.id.tvCustomer);
+            tvProject = itemView.findViewById(R.id.tvProject);
         }
     }
 }

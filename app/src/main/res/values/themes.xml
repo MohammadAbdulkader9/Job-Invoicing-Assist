@@ -18,6 +18,36 @@
     <style name="FilterPopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
         <item name="android:popupBackground">@drawable/filter_popup_bg</item>
     </style>
+    <style name="CustomExposedDropdownStyle"
+        parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+
+        <!-- Focused (pressed/clicked) → DARK GREY -->  <item name="boxStrokeColor">@color/text_input_stroke</item>
+
+        <!-- Hint text -->
+        <item name="hintTextColor">@color/black</item>
+
+        <!-- Dropdown arrow icon -->
+        <item name="endIconTint">@color/grey_600</item>
+
+    </style>
+    <style name="Theme.MyApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorControlActivated">@color/grey_700</item>
+    </style>
+    <style name="CustomOutlinedBoxStyle"
+        parent="Widget.Material3.TextInputLayout.OutlinedBox">
+
+        <!-- Stroke color with states -->
+        <item name="boxStrokeColor">@color/text_input_outline_stroke</item>
+
+        <!-- Hint -->
+        <item name="hintTextColor">@color/grey_500</item>
+
+    </style>
+    <style name="InvoiceHintText"
+        parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textSize">20sp</item>
+    </style>
 
 
 </resources>
