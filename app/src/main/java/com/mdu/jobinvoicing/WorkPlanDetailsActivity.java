@@ -211,12 +211,6 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
                 findActiveOperator();
             }
         }
-        // Apply padding for system bars (status bar / navigation bar)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.workplan_details), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
         MaterialToolbar toolbar = findViewById(R.id.top_bar);
         if (toolbar != null) {
