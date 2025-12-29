@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/invoices"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -15,6 +16,9 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/bottomNavigationView"
     >
+        android:layout_height="match_parent"
+        android:paddingBottom="72dp"
+        android:clipToPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,20 +31,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Invoice"
+                android:textSize="34sp"
                 android:layout_marginBottom="24dp"
                 android:textAppearance="@style/TextAppearance.Material3.DisplaySmall"
                 android:textStyle="bold"
-                android:textColor="?attr/colorOnSurface"
+                android:textColor="@color/black"
             />
 
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/existingInvoiceLayout"
                 android:layout_width="match_parent"
+                app:hintTextAppearance="@style/InvoiceHintText"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:hint="Select Existing Invoice"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                style="@style/CustomExposedDropdownStyle"
             >
 
                 <AutoCompleteTextView
@@ -48,6 +54,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
+
                 />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -57,7 +64,9 @@
                 android:text="Details"
                 android:layout_marginBottom="8dp"
                 android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                android:textColor="?attr/colorPrimary"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:textColor="@color/black"
             />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -65,8 +74,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:hint="Address"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            >
+                app:hintTextAppearance="@style/InvoiceHintText"
+                style="@style/CustomOutlinedBoxStyle">
+
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etAddress"
@@ -81,8 +91,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:hint="City"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            >
+                app:hintTextAppearance="@style/InvoiceHintText"
+                style="@style/CustomOutlinedBoxStyle">
+
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etCity"
@@ -93,11 +104,12 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                style="@style/CustomOutlinedBoxStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:hint="Country Code"
+                app:hintTextAppearance="@style/InvoiceHintText"
                 app:helperText="e.g. SE, UK, US"
             >
 
@@ -116,8 +128,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:hint="Comments"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            >
+                app:hintTextAppearance="@style/InvoiceHintText"
+                style="@style/CustomOutlinedBoxStyle">
+
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etComments"
@@ -136,16 +149,23 @@
                 android:layout_marginBottom="16dp"
                 app:helperText="required"
                 android:hint="Select Customer"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                style="@style/CustomExposedDropdownStyle"
             >
 
                 <AutoCompleteTextView
                     android:id="@+id/customerDropdown"
+                    app:hintTextAppearance="@style/InvoiceHintText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
                 />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etTotal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -154,7 +174,8 @@
                 android:focusable="false"
                 android:cursorVisible="false"
                 android:hint="Email"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                app:hintTextAppearance="@style/InvoiceHintText"
+                style="@style/CustomOutlinedBoxStyle"
             >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -177,8 +198,9 @@
                 android:layout_marginBottom="16dp"
                 android:hint="Your Order Number"
                 app:helperText="optional"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            >
+                app:hintTextAppearance="@style/InvoiceHintText"
+                style="@style/CustomOutlinedBoxStyle">
+
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etYourOrderNr"
@@ -194,9 +216,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:hint="Your Reference"
+                app:hintTextAppearance="@style/InvoiceHintText"
                 app:helperText="optional"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            >
+                style="@style/CustomOutlinedBoxStyle">
+
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etYourRef"
@@ -218,9 +241,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:hint="Currency Code"
+                app:hintTextAppearance="@style/InvoiceHintText"
                 app:helperText="e.g. SEK, USD, EUR"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            >
+                style="@style/CustomOutlinedBoxStyle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etCurrency"
@@ -237,16 +260,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:hint="Total"
+                app:hintTextAppearance="@style/InvoiceHintText"
                 app:prefixText="$"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            >
+                style="@style/CustomOutlinedBoxStyle">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etTotal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -255,8 +272,8 @@
                 android:layout_marginBottom="24dp"
                 android:hint="Total to Pay"
                 app:prefixText="$"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            >
+                app:hintTextAppearance="@style/InvoiceHintText"
+                style="@style/CustomOutlinedBoxStyle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etTotalToPay"
@@ -266,30 +283,43 @@
                     android:textStyle="bold"
                 />
             </com.google.android.material.textfield.TextInputLayout>
-
-            <GridLayout
-                android:layout_width="wrap_content"
+            <!-- BUTTON ROW -->
+            <LinearLayout
+                android:id="@+id/layoutButtons"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="center"
-            >
-            <Button
+                android:layout_marginTop="26dp"
+                android:orientation="horizontal">
+
+                <Button
                     android:id="@+id/btnSave"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="40dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_white_border"
                     android:text="Create Invoice"
-                    style="@style/Widget.Material3.Button"
-                />
-            <Button
+                    android:textColor="#000"
+                    android:textSize="20sp"
+                    app:backgroundTint="@null" />
+
+                <Space
+                    android:layout_width="24dp"
+                    android:layout_height="match_parent" />
+
+                <Button
                     android:id="@+id/btnSend"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Send Invoice"
-                    style="@style/Widget.Material3.Button"
-                />
-            </GridLayout>
+                    android:layout_width="40dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_black_button"
+                    android:text="Send"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    app:backgroundTint="@null" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
     <include
         android:id="@+id/bottomNavigationView"
         layout="@layout/view_bottom_bar"

@@ -16,4 +16,10 @@
     <color name="blue">#295FC3</color>
     <color name="card_color">#F7F7FF</color>
     <color name="nav_bar_color">#39393E</color>
+    <color name="grey_400">#BDBDBD</color>
+    <color name="grey_500">#9E9E9E</color>
+    <color name="grey_600">#757575</color>
+    <color name="grey_700">#616161</color>
+
+
 </resources>
