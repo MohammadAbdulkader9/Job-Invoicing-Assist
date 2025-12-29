@@ -6,7 +6,7 @@
     android:id="@+id/workplan_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/white"
     tools:context=".HomePage">
 
     <!-- Top bar using the _view_top_bar.xml  DO LIKE THIS ON ALL PAGES-->
@@ -253,7 +253,8 @@
         layout="@layout/view_bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent">
-    </include>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
