@@ -138,7 +138,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_height="0dp"/>
 
-                <!-- Job Location -->
+                <!-- Work Location -->
                 <TextView
                     android:id="@+id/lblPhone"
                     android:text="Work Location"
@@ -152,7 +152,6 @@
 
                 <EditText
                     android:id="@+id/inputJobLocation"
-                    android:maxLength="13"
                     android:hint="@string/enter_location"
                     android:inputType="textCapWords"
                     android:drawableStart="@drawable/ic_baseline_add_location_24"
