@@ -147,6 +147,13 @@ Each item:
 - UI design created in Figma before implementation
 - Shared understanding of layouts and navigation before coding
 
+### Testing
+- Acceptance tests derived directly from user stories
+- Manual acceptance testing conducted in multiple test sessions
+- Test cases documented and maintained in an external Excel file: https://docs.google.com/spreadsheets/d/1-NLYmWiQiYDf3scuub2BlemMuZ29jdX2y0JnMHXvuF0/edit?usp=sharing
+- Core functionalities tested incrementally during development
+- Failed tests documented and added back to the product backlog as future work
+
 ---
 
 ## Branching Strategy
@@ -185,6 +192,7 @@ Note: Firebase configuration requires a valid google-services.json file.
 
 - Using a real 3rd party financial system instead a mock API integration.
 - Add functionality print the invoice as a receipt.
+- Offline create and manage work plans
 
 ---
 
