@@ -21,7 +21,7 @@
     <style name="CustomExposedDropdownStyle"
         parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
-
+        <item name="boxBackgroundColor">@color/white_color_state_list</item>
         <!-- Focused (pressed/clicked) → DARK GREY -->  <item name="boxStrokeColor">@color/text_input_stroke</item>
 
         <!-- Hint text -->
