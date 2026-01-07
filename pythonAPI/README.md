@@ -1,11 +1,19 @@
 ## Usage
 
-activate venv in ./bin/activate
-python3 flask --app <provider> run
+Navigate to the project directory (`Job-Invoicing-Assist/pythonAPI`) and run the following commands:
 
-## Alternative Usage, Unix
+```
+python3 -m venv ./.venv
+source ./.venv/bin/activate.ps1 for windows and ./.venv/bin/activate for unix
+pip3 install flask
+python3 flask --app fortnox.py run
+```
 
+## Alternative Usage, dont need to activate virtual environment (venv)
+
+```
 ./bin/flask --app fortnox.py run
+```
 
 ## Features
 
@@ -15,10 +23,14 @@ python3 flask --app <provider> run
 - [x] Create invoice
 - [x] Delete invoice
 
-- [ ] Send invoice
+- [x] Send invoice
 
-- [ ] Get customer by id
-- [ ] Get all customers
-- [ ] Update customer by id
-- [ ] Create customer
-- [ ] Delete customer
+- [x] Get customer by id
+- [x] Get all customers
+- [x] Update customer by id
+- [x] Create customer
+- [x] Delete customer
+
+```
+
+```
