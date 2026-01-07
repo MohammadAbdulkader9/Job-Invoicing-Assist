@@ -56,7 +56,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
-                <EditText
+                <AutoCompleteTextView
                     android:id="@+id/inputClientName"
                     android:hint="@string/enter_client"
                     android:layout_width="0dp"
@@ -65,11 +65,14 @@
                     android:layout_marginTop="6dp"
                     android:paddingLeft="12dp"
                     tools:ignore="Autofill"
+                    android:completionThreshold="1"
                     android:inputType="textPersonName"
                     android:background="@drawable/edittext_bg"
+                    android:drawableEnd="@android:drawable/arrow_down_float"
                     app:layout_constraintTop_toBottomOf="@id/lblFullName"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintEnd_toEndOf="parent"  />
+
 
                 <!-- Workplan Title -->
                 <TextView

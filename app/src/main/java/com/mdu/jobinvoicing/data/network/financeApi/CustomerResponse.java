@@ -190,6 +190,7 @@ public class CustomerResponse {
     public String toString() {
         return this.name; // Or whatever field name holds your Invoice ID
     }
+    public CustomerResponse(){}
     public CustomerResponse(boolean active, String address1, String address2, String city, String comments,
                             String costCenter, String country, String countryCode, String currency,
                             String customerNumber, String deliveryAddress1, String deliveryAddress2,

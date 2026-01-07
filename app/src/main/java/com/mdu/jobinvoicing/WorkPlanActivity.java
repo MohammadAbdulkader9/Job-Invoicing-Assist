@@ -5,6 +5,10 @@ import static com.google.firebase.firestore.FirebaseFirestore.getInstance;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,8 +26,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.mdu.jobinvoicing.data.local.entities.WorkPlanStatus;
+import com.mdu.jobinvoicing.data.network.financeApi.ApiCallback;
+import com.mdu.jobinvoicing.data.network.financeApi.ApiServiceManager;
+import com.mdu.jobinvoicing.data.network.financeApi.CustomerResponse;
+import com.mdu.jobinvoicing.data.network.financeApi.InvoiceResponse;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class WorkPlanActivity extends AppCompatActivity {
@@ -31,13 +40,18 @@ public class WorkPlanActivity extends AppCompatActivity {
     // ===============================
     // Views
     // ===============================
-    private EditText clientNameEt, workTitleEt, workDescriptionEt, workLocationEt;
+    private EditText workTitleEt, workDescriptionEt, workLocationEt;
     private Button btnCreate, btnCancel;
     private ImageView backBtn;
     private NetworkHelper networkHelper;
     private TextView statusText;
     private ImageView statusDot;
     private String userId;
+
+    private AutoCompleteTextView clientNameDd;
+    private ArrayAdapter<CustomerResponse> customerAdapter;
+    private CustomerResponse activeCustomer;
+    ApiServiceManager asm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +66,7 @@ public class WorkPlanActivity extends AppCompatActivity {
         // ===============================
         // Initialize Views
         // ===============================
-        clientNameEt = findViewById(R.id.inputClientName);
+        clientNameDd = findViewById(R.id.inputClientName);
         workTitleEt = findViewById(R.id.inputWorkPlanTitle);
         workDescriptionEt = findViewById(R.id.inputJobDescription);
         workLocationEt = findViewById(R.id.inputJobLocation);
@@ -64,7 +78,7 @@ public class WorkPlanActivity extends AppCompatActivity {
             if (fromLoadTicket) {
                 LoadTicket ticket = (LoadTicket) intent.getSerializableExtra("loadTicket");
                 if (ticket != null) {
-                    clientNameEt.setText(ticket.customer);
+                    clientNameDd.setText(ticket.customer);
                     workTitleEt.setText(ticket.projectReference);
                     workDescriptionEt.setText(ticket.freeText);
                     workLocationEt.setText(ticket.targetName);
@@ -76,7 +90,7 @@ public class WorkPlanActivity extends AppCompatActivity {
                 String workDescription = getIntent().getStringExtra("workDescription");
                 String workLocation = getIntent().getStringExtra("workLocation");
 
-                if (clientName != null) clientNameEt.setText(clientName);
+                if (clientName != null) clientNameDd.setText(clientName);
                 if (workTitle != null) workTitleEt.setText(workTitle);
                 if (workDescription != null) workDescriptionEt.setText(workDescription);
                 if (workLocation != null) workLocationEt.setText(workLocation);
@@ -114,13 +128,45 @@ public class WorkPlanActivity extends AppCompatActivity {
 
         networkHelper = new NetworkHelper(this, statusDot, statusText);
         networkHelper.startMonitoring();
+        
+        asm = ApiServiceManager.getInstance();
+        asm.getAllCustomers(
+                new ApiCallback<List<CustomerResponse>>() {
+                    @Override
+                    public void onSuccess(List<CustomerResponse> response) {
+                        // customers.addAll(response);
+                        customerAdapter = new ArrayAdapter<>(
+                                WorkPlanActivity.this,
+                                android.R.layout.simple_dropdown_item_1line,
+                                response
+                        );
+                        clientNameDd.setAdapter(customerAdapter);
+                        clientNameDd.setOnItemClickListener(
+                                new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(
+                                            AdapterView<?> parent,
+                                            View view,
+                                            int position,
+                                            long id
+                                    ) {
+                                        activeCustomer =
+                                                (CustomerResponse) parent.getItemAtPosition(
+                                                        position
+                                                );
+                                    }
+                                }
+                        );
+                    }
+                }
+        );
     }
 
     // ===============================
     // Save Workplan to Firestore
     // ===============================
     private void saveWorkplan() {
-        String clientName = clientNameEt.getText().toString().trim();
+        String clientName = clientNameDd.getText().toString().trim();
         String workTitle = workTitleEt.getText().toString().trim();
         String workDescription = workDescriptionEt.getText().toString().trim();
         String workLocation = workLocationEt.getText().toString().trim();
@@ -186,7 +232,7 @@ public class WorkPlanActivity extends AppCompatActivity {
     // Reset Form Fields
     // ===============================
     private void resetForm() {
-        clientNameEt.setText("");
+        clientNameDd.setText("");
         workTitleEt.setText("");
         workDescriptionEt.setText("");
         workLocationEt.setText("");

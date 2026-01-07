@@ -74,7 +74,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
     private static final String TAG = "WorkPlanDetailsActivity";
 
     private EditText customerNameEditText, workTitleEditText, workDescriptionEditText, locationEditText, dateEditText;
-    private Button saveButton, addTimeEntryButton, addMaterialButton, addServiceItemButton, importFromTimerButton, addDistanceButton, addWeightButton;
+    private Button saveButton, addTimeEntryButton, addMaterialButton, addServiceItemButton, importFromTimerButton, addDistanceButton, addWeightButton, createInvoiceButton;
     private RadioGroup statusRadioGroup;
     private RadioButton statusOpen, statusInProgress, statusClosed;
 
@@ -161,6 +161,8 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         importFromTimerButton = findViewById(R.id.importFromTimerButton);
         addDistanceButton = findViewById(R.id.addDistanceButton);
         addWeightButton = findViewById(R.id.addWeightButton);
+        createInvoiceButton = findViewById(R.id.createInvoiceButton);
+
 
         timeEntryHoursEditText = findViewById(R.id.timeEntryHoursEditText);
         timeEntryHourRateEditText = findViewById(R.id.timeEntryHourRateEditText);
@@ -203,6 +205,7 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         addDistanceButton.setOnClickListener(v -> addDistance());
         addWeightButton.setOnClickListener(v -> addWeight());
         importFromTimerButton.setOnClickListener(v -> importFromTimer());
+        createInvoiceButton.setOnClickListener(v -> createInvoice());
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("WORK_PLAN_ID")) {
@@ -281,6 +284,11 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
         statusRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             if (!isProgrammaticChange) {
                 saveWorkPlanChanges();
+            }
+            if (checkedId == statusClosed.getId()){
+                createInvoiceButton.setVisibility(View.VISIBLE);
+            } else {
+                createInvoiceButton.setVisibility(View.GONE);
             }
         });
     }
@@ -732,6 +740,30 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
             weightNotesEditText.setText("");
         }).addOnFailureListener(e -> Toast.makeText(this, "Error adding weight", Toast.LENGTH_SHORT).show());
         fetchSubCollections(currentWorkPlanId);
+    }
+
+    private void createInvoice(){
+        Intent intent = new Intent(WorkPlanDetailsActivity.this, Invoices.class);
+        Float totalAmount = 0.0F;
+        for (int i = 0; i < materialList.size(); i++){
+            totalAmount += (float) materialList.get(i).getTotal();
+        }
+        for (int i = 0; i < serviceItemList.size(); i++){
+            totalAmount += (float) serviceItemList.get(i).getServiceFee();
+        }
+        for (int i = 0; i< distanceList.size(); i++){
+            totalAmount += (float) distanceList.get(i).getTotal();
+        }
+        for (int i = 0; i < weightList.size(); i++){
+            totalAmount += (float) weightList.get(i).getTotal();
+        }
+        System.out.println(totalAmount);
+        intent.putExtra("total", totalAmount);
+        intent.putExtra("clientName", customerNameEditText.getText().toString());
+        intent.putExtra("location", locationEditText.getText().toString());
+        intent.putExtra("workplan", true);
+
+        startActivity(intent);
     }
 
     private void fetchSubCollections(String workPlanId) {

@@ -93,9 +93,11 @@ def sendInvoiceByEmail(invoice_id):
 @app.route("/3/customers", methods=["POST", "GET"])
 def postCustomer():
     if request.method == "POST":
-        last_id = customers["Customers"][-1]["CustomerNumber"]
+        parts = customers["Customers"][-1]["CustomerNumber"].split("-")
+        last_id = int(parts[1]) if parts else 0
+        last_id = last_id + 1
         new_customer = json.loads(json.dumps(request.json))
-        new_customer["CustomerNumber"] = last_id + 1
+        new_customer["CustomerNumber"] = f"CUST-{last_id}"
         if new_customer["CustomerNumber"] == "":
             return jsonify(errorResponse), 400
         customers["Customers"].append(new_customer)

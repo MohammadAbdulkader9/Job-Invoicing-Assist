@@ -110,6 +110,7 @@ public class Invoices extends AppCompatActivity {
                             }
                         }
                     );
+                    fillForm();
                 }
             }
         );
@@ -184,9 +185,13 @@ public class Invoices extends AppCompatActivity {
                 }
         );
         sendButton.setEnabled(false);
+
     }
 
     private void createInvoice() {
+        if (activeCustomer == null) {
+            return;
+        }
         InvoiceResponse invoice = new InvoiceResponse(
             addrEText.getText().toString(),
             cityEText.getText().toString(),
@@ -238,7 +243,7 @@ public class Invoices extends AppCompatActivity {
         );
     }
 
-    public void fillForm(InvoiceResponse invoice) {
+    private void fillForm(InvoiceResponse invoice) {
         String targetCustomerId = invoice.getCustomerId();
         for (int i = 0; i < customerAdapter.getCount(); i++) {
             CustomerResponse item = customerAdapter.getItem(i);
@@ -260,5 +265,43 @@ public class Invoices extends AppCompatActivity {
         currencyEText.setText(invoice.getCurrency());
         totalEText.setText(String.valueOf(invoice.getTotal()));
         totaltpEText.setText(String.valueOf(invoice.getTotalToPay()));
+    }
+    private void fillForm() {
+        Intent intent = getIntent();
+        if (!intent.getBooleanExtra("workplan", false)){
+            return;
+        }
+        findViewById(R.id.existingInvoiceLayout).setEnabled(false);
+        String clientName = intent.getStringExtra("clientName");
+
+        addrEText.setText(intent.getStringExtra("location"));
+        for (int i = 0; i < customerAdapter.getCount(); i++) {
+            CustomerResponse item = customerAdapter.getItem(i);
+            if (
+                    item != null &&
+                            item.getName().equals(clientName)
+            ) {
+                customer_dropdown.setText(item.toString(), false);
+                activeCustomer = item;
+                break;
+            }
+        }
+        if (activeCustomer == null) {
+            CustomerResponse customer = new CustomerResponse();
+            customer.setName(clientName);
+            asm.postCustomer(customer, new ApiCallback<CustomerResponse>() {
+                @Override
+                public void onSuccess(CustomerResponse response) {
+                    activeCustomer = response;
+                    customer_dropdown.setText(activeCustomer.getName().toString(), false);
+                }
+            });
+        }
+        else {
+            emailEText.setText(activeCustomer.getEmail());
+        }
+        currencyEText.setText("SEK");
+        totalEText.setText(String.valueOf(intent.getFloatExtra("total", 0.0F)));
+        totaltpEText.setText(String.valueOf(intent.getFloatExtra("total", 0.0F)));
     }
 }
