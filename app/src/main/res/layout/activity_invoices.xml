@@ -243,7 +243,6 @@
                 android:layout_marginBottom="16dp"
                 android:hint="Currency Code"
                 app:hintTextAppearance="@style/InvoiceHintText"
-                app:helperText="e.g. SEK, USD, EUR"
                 style="@style/CustomOutlinedBoxStyle">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -262,7 +261,7 @@
                 android:layout_marginBottom="16dp"
                 android:hint="Total"
                 app:hintTextAppearance="@style/InvoiceHintText"
-                app:prefixText="$"
+                app:prefixText="SEK"
                 style="@style/CustomOutlinedBoxStyle">
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -272,7 +271,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:hint="Total to Pay"
-                app:prefixText="$"
+                app:prefixText="SEK"
                 app:hintTextAppearance="@style/InvoiceHintText"
                 style="@style/CustomOutlinedBoxStyle">
 
