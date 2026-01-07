@@ -196,8 +196,8 @@ Note: Firebase configuration requires a valid google-services.json file.
     "py -m venv ./.venv"
 (click enter)
 
-3. Paste in terminal
-    ".\.venv\Scripts\activate"
+3. Paste in terminal (add \ between the two dots .. before the venv)
+    "..venv\Scripts\activate"
 (click enter)
 
 4. Paste in terminal
