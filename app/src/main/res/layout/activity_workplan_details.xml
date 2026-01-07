@@ -636,6 +636,19 @@
                     android:layout_gravity="end"/>
 
             </LinearLayout>
+            <Space
+                android:layout_width="24dp"
+                android:layout_height="match_parent" />
+            <Button
+                android:id="@+id/createInvoiceButton"
+                android:text="@string/create"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_black_button"
+                android:textColor="@android:color/white"
+                android:textSize="26sp"
+                app:backgroundTint="@null" />
 
         </LinearLayout>
 
