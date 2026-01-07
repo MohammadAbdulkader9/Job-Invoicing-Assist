@@ -115,6 +115,12 @@ public class Invoices extends AppCompatActivity {
                     );
                     fillForm();
                 }
+                @Override
+                public void onError(String errorMessage, ErrorResponse err){
+                    Toast toast = Toast.makeText(Invoices.this, "Could not reach the server", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 0);
+                    toast.show();
+                }
             }
         );
         asm.getAllInvoices(
