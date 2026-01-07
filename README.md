@@ -187,6 +187,32 @@ Changes are only merged into `main` after review.
 Note: Firebase configuration requires a valid google-services.json file.
 
 ---
+## Run the mock API (python script)
+
+1. Find folder "pythonAPI" -> (right click) -> open in -> terminal
+- folder path in terminal should be [...\JobInvoicingAssist\pythonAPI>]
+   
+2. Paste in terminal
+    "py -m venv ./.venv"
+(click enter)
+
+3. Paste in terminal
+    ".\.venv\Scripts\activate"
+(click enter)
+
+4. Paste in terminal
+   "pip install flask"
+(click enter)
+
+5. Paste in terminal
+    "flask  --app fortnox.py run"
+(click enter)
+
+if you see below
+ * Running on http://127.0.0.1:5000
+
+then you ran the script successfully 
+---
 
 ## Future Improvements
 
