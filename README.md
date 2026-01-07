@@ -150,7 +150,7 @@ Each item:
 ### Testing
 - Acceptance tests derived directly from user stories
 - Manual acceptance testing conducted in multiple test sessions
-- Test cases documented and maintained in an external Excel file
+- Test cases documented and maintained in an external Excel file: https://docs.google.com/spreadsheets/d/1-NLYmWiQiYDf3scuub2BlemMuZ29jdX2y0JnMHXvuF0/edit?usp=sharing
 - Core functionalities tested incrementally during development
 - Failed tests documented and added back to the product backlog as future work
 
