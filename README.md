@@ -210,7 +210,6 @@ Note: Firebase configuration requires a valid google-services.json file.
 
 if you see below
  * Running on http://127.0.0.1:5000
-
 then you ran the script successfully 
 ---
 
