@@ -2,6 +2,7 @@ package com.mdu.jobinvoicing;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -20,6 +22,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.mdu.jobinvoicing.data.network.financeApi.ApiCallback;
 import com.mdu.jobinvoicing.data.network.financeApi.ApiServiceManager;
 import com.mdu.jobinvoicing.data.network.financeApi.CustomerResponse;
+import com.mdu.jobinvoicing.data.network.financeApi.ErrorResponse;
 import com.mdu.jobinvoicing.data.network.financeApi.InvoiceResponse;
 import java.util.List;
 
@@ -111,6 +114,12 @@ public class Invoices extends AppCompatActivity {
                         }
                     );
                     fillForm();
+                }
+                @Override
+                public void onError(String errorMessage, ErrorResponse err){
+                    Toast toast = Toast.makeText(Invoices.this, "Could not reach the server", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 0);
+                    toast.show();
                 }
             }
         );
@@ -294,6 +303,12 @@ public class Invoices extends AppCompatActivity {
                 public void onSuccess(CustomerResponse response) {
                     activeCustomer = response;
                     customer_dropdown.setText(activeCustomer.getName().toString(), false);
+                }
+                @Override
+                public void onError(String errorMessage, ErrorResponse err){
+                    Toast toast = Toast.makeText(Invoices.this, "Could not reach the server", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 0);
+                    toast.show();
                 }
             });
         }

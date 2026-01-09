@@ -745,6 +745,9 @@ public class WorkPlanDetailsActivity extends AppCompatActivity implements
     private void createInvoice(){
         Intent intent = new Intent(WorkPlanDetailsActivity.this, Invoices.class);
         Float totalAmount = 0.0F;
+        for (int i = 0; i < timeEntryList.size(); i++){
+            totalAmount += (float) timeEntryList.get(i).getTotal();
+        }
         for (int i = 0; i < materialList.size(); i++){
             totalAmount += (float) materialList.get(i).getTotal();
         }
