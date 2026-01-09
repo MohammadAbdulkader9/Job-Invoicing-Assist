@@ -58,7 +58,6 @@ public class Invoices extends AppCompatActivity {
         commentsEText = findViewById(R.id.etComments);
         emailEText = findViewById(R.id.etEmail);
         currencyEText = findViewById(R.id.etCurrency);
-        totalEText = findViewById(R.id.etTotal);
         totaltpEText = findViewById(R.id.etTotalToPay);
 
 
