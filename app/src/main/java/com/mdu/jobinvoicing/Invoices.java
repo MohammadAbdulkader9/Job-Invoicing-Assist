@@ -208,7 +208,7 @@ public class Invoices extends AppCompatActivity {
             currencyEText.getText().toString(),
             activeCustomer.getName(),
             activeCustomer.getCustomerNumber(),
-            Float.parseFloat(totalEText.getText().toString()),
+            0,
             Float.parseFloat(totaltpEText.getText().toString())
         );
 
@@ -229,9 +229,7 @@ public class Invoices extends AppCompatActivity {
         activeInvoice.setCountry(countryEText.getText().toString());
         activeInvoice.setComments(commentsEText.getText().toString());
         activeInvoice.setCurrency(currencyEText.getText().toString());
-        activeInvoice.setTotal(
-            Float.parseFloat(totalEText.getText().toString())
-        );
+        activeInvoice.setTotal(0        );
         activeInvoice.setTotalToPay(
             Float.parseFloat(totaltpEText.getText().toString())
         );
@@ -271,7 +269,7 @@ public class Invoices extends AppCompatActivity {
         commentsEText.setText(invoice.getComments());
         emailEText.setText(activeCustomer.getEmail());
         currencyEText.setText(invoice.getCurrency());
-        totalEText.setText(String.valueOf(invoice.getTotal()));
+        //totalEText.setText(String.valueOf(invoice.getTotal()));
         totaltpEText.setText(String.valueOf(invoice.getTotalToPay()));
     }
     private void fillForm() {
@@ -315,7 +313,7 @@ public class Invoices extends AppCompatActivity {
             emailEText.setText(activeCustomer.getEmail());
         }
         currencyEText.setText("SEK");
-        totalEText.setText(String.valueOf(intent.getFloatExtra("total", 0.0F)));
+        //totalEText.setText(String.valueOf(intent.getFloatExtra("total", 0.0F)));
         totaltpEText.setText(String.valueOf(intent.getFloatExtra("total", 0.0F)));
     }
 }
